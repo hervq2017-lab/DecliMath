@@ -1,0 +1,137 @@
+// Propriétés du manuel CIAM 5ème (reformulées, avec la page du manuel). Voir proprietes-ciam.ts.
+import { nid } from "../curriculum";
+import type { LivreCiam, ProprieteCiam } from "./proprietes-ciam";
+
+const m5 = (title: string) => nid("maths", "5e", title);
+const P = (titre: string, enonce: string, page: string): ProprieteCiam => ({ titre, enonce, page });
+
+export const LIVRE_5E: LivreCiam = {
+  livre: "CIAM 5ème",
+  chapitres: [
+    { numero: 1, chapitre: "Distance", notionId: m5("Cercles"), items: [
+      P("Cordes d'un cercle", "Dans un cercle, les cordes les plus longues sont les diamètres.", "12"),
+      P("Intérieur et extérieur d'un cercle", "Cercle de centre A et de rayon r : si AM < r, M est à l'intérieur ; si AM = r, M est sur le cercle ; si AM > r, M est à l'extérieur.", "13"),
+      P("Disque", "Le disque de centre A et de rayon r est l'ensemble des points M du plan tels que AM < r ou AM = r.", "14"),
+      P("Inégalité triangulaire", "Dans un triangle, la mesure d'un côté est plus petite que la somme des mesures des deux autres.", "14"),
+      P("Point d'un segment", "Si un point M appartient à un segment [AB], alors AM + MB = AB.", "15"),
+      P("Réciproque", "Si AM + MB = AB, alors M appartient au segment [AB].", "16"),
+    ] },
+    { numero: 2, chapitre: "Figures symétriques par rapport à un point", notionId: m5("Figures symétriques par rapport à un point"), items: [
+      P("Définition", "A et B sont symétriques par rapport à O signifie que O est le milieu de [AB]. Le point O est son propre symétrique.", "24"),
+      P("Points alignés", "Si des points sont alignés, leurs symétriques par rapport à un point sont alignés.", "24"),
+      P("Droite", "Le symétrique d'une droite par rapport à un point est une droite qui lui est parallèle.", "24"),
+      P("Segment et angle", "Le symétrique d'un segment est un segment de même longueur ; le symétrique d'un angle est un angle de même mesure.", "24"),
+      P("Cercle", "Le symétrique d'un cercle de centre O et de rayon r par rapport à un point I est le cercle de centre O' (symétrique de O) et de même rayon.", "25"),
+      P("Milieu d'un segment", "Le symétrique du milieu d'un segment est le milieu du symétrique de ce segment.", "26"),
+      P("Droites perpendiculaires", "Les symétriques par rapport à un point de deux droites perpendiculaires sont deux droites perpendiculaires.", "27"),
+      P("Droites parallèles", "Les symétriques par rapport à un point de deux droites parallèles sont deux droites parallèles.", "28"),
+    ] },
+    { numero: 3, chapitre: "Angles", notionId: m5("Angles"), items: [
+      P("Angles supplémentaires", "Deux angles sont supplémentaires si la somme de leurs mesures est 180°.", "34"),
+      P("Angles complémentaires", "Deux angles sont complémentaires si la somme de leurs mesures est 90°.", "35"),
+      P("Angles opposés par le sommet", "Deux angles opposés par le sommet ont la même mesure.", "36"),
+      P("Alternes-internes", "Si deux angles alternes-internes sont formés par deux droites parallèles et une sécante, alors ils ont même mesure.", "38"),
+      P("Correspondants", "Si deux angles correspondants sont formés par deux droites parallèles et une sécante, alors ils ont même mesure.", "38"),
+      P("Réciproques", "Si deux droites forment avec une sécante deux angles alternes-internes (ou correspondants) de même mesure, alors elles sont parallèles.", "39"),
+      P("Somme des angles d'un triangle", "Dans un triangle, la somme des mesures des angles est 180°.", "41"),
+      P("Triangles superposables", "Deux triangles sont superposables s'ils ont les trois côtés respectivement de même longueur, ou un angle de même mesure compris entre deux côtés respectivement de même longueur, ou un côté de même longueur compris entre deux angles respectivement de même mesure.", "42"),
+    ] },
+    { numero: 4, chapitre: "Figures symétriques par rapport à une droite", notionId: m5("Figures symétriques par rapport à une droite"), items: [
+      P("Définition", "A et B sont symétriques par rapport à (D) signifie que (D) est la médiatrice de [AB]. Chaque point de (D) est son propre symétrique.", "50"),
+      P("Points alignés", "Si des points sont alignés, leurs symétriques par rapport à une droite sont alignés.", "50"),
+      P("Droite sécante", "Si une droite (L) coupe (D) en I, alors son symétrique (L') coupe (D) en I.", "50"),
+      P("Segment et angle", "Le symétrique d'un segment par rapport à une droite est un segment de même longueur ; le symétrique d'un angle est un angle de même mesure.", "50"),
+      P("Cercle", "Le symétrique d'un cercle de centre O et de rayon r par rapport à une droite est le cercle de centre O' (symétrique de O) et de même rayon.", "51"),
+      P("Milieu d'un segment", "Le symétrique du milieu d'un segment par rapport à une droite est le milieu du symétrique de ce segment.", "52"),
+    ] },
+    { numero: 5, chapitre: "Médiatrice d'un segment", notionId: m5("Segments"), items: [
+      P("Médiatrice et équidistance", "Si un point appartient à la médiatrice d'un segment, alors il est équidistant des extrémités de ce segment.", "60"),
+      P("Réciproque", "Si un point est équidistant des extrémités d'un segment, alors il appartient à la médiatrice de ce segment.", "61"),
+      P("Régionnement du plan", "La médiatrice de [AB] détermine deux demi-plans : si M est dans celui qui contient A, MA < MB ; sur la médiatrice, MA = MB ; dans celui qui contient B, MA > MB.", "68-69"),
+    ] },
+    { numero: 6, chapitre: "Triangles particuliers", notionId: m5("Triangles"), items: [
+      P("Triangle isocèle", "Un triangle isocèle a deux angles de même mesure (les angles à la base).", "75"),
+      P("Triangle équilatéral", "Si un triangle a ses trois angles de même mesure, alors il est équilatéral. Un triangle isocèle qui a un angle de 60° est équilatéral.", "81"),
+      P("Angles aigus du triangle rectangle", "Les angles aigus d'un triangle rectangle sont complémentaires.", "81"),
+      P("Cercle circonscrit", "Si ABC est rectangle en A, alors le cercle de diamètre [BC] passe par A.", "82"),
+      P("Hypoténuse", "L'hypoténuse d'un triangle rectangle est le côté le plus long de ce triangle.", "82"),
+      P("Reconnaître un triangle rectangle", "Si un triangle a deux angles complémentaires, alors il est rectangle. Si A est un point du cercle de diamètre [BC], alors le triangle ABC est rectangle en A.", "83-84"),
+    ] },
+    { numero: 7, chapitre: "Parallélogrammes", notionId: m5("Parallélogrammes particuliers"), items: [
+      P("Angles d'un parallélogramme", "Dans un parallélogramme, les angles de sommets opposés ont même mesure et les angles de deux sommets consécutifs sont supplémentaires.", "90"),
+      P("Reconnaître un parallélogramme", "Un quadrilatère est un parallélogramme s'il a ses côtés opposés de supports parallèles, ou ses côtés opposés de même longueur, ou deux côtés opposés de même longueur et de supports parallèles, ou ses diagonales qui se coupent en leur milieu.", "91"),
+      P("Rectangle : diagonales", "Les diagonales d'un rectangle ont même longueur.", "92"),
+      P("Rectangle : axes de symétrie", "Dans un rectangle, les médiatrices des côtés sont des axes de symétrie.", "93"),
+      P("Reconnaître un rectangle", "Un quadrilatère qui a trois angles droits est un rectangle ; un parallélogramme qui a un angle droit est un rectangle ; un parallélogramme dont les diagonales ont même longueur est un rectangle.", "93-94"),
+      P("Reconnaître un losange", "Un quadrilatère qui a ses quatre côtés de même longueur est un losange ; un parallélogramme dont les diagonales ont des supports perpendiculaires est un losange ; un parallélogramme qui a deux côtés consécutifs de même longueur est un losange.", "95-97"),
+      P("Losange : diagonales", "Dans un losange, les supports des diagonales sont des axes de symétrie et les diagonales sont perpendiculaires.", "97"),
+      P("Carré", "Un carré est à la fois un rectangle et un losange.", "98"),
+    ] },
+    { numero: 8, chapitre: "Polygones particuliers", notionId: m5("Polygones particuliers"), items: [
+      P("Trapèze", "Un trapèze est un quadrilatère qui a deux côtés de supports parallèles (les bases) ; les deux autres côtés ont des supports sécants.", "104"),
+      P("Trapèze rectangle", "Un trapèze rectangle est un trapèze qui a un angle droit.", "105"),
+      P("Trapèze isocèle", "Un trapèze isocèle est un trapèze dont les côtés de supports sécants ont même longueur ; il a un axe de symétrie, la médiatrice de ses bases. Un trapèze qui a deux angles à la base de même mesure est isocèle.", "105-106"),
+      P("Aire d'un trapèze", "A = (a + b) × h ÷ 2, où a est la petite base, b la grande base et h la hauteur.", "107"),
+      P("Hexagone régulier", "Un hexagone régulier est un polygone inscrit dans un cercle, ayant ses six côtés de même longueur ; son côté est égal au rayon du cercle.", "108"),
+    ] },
+    { numero: 9, chapitre: "Prisme droit, pyramide", notionId: m5("Prisme droit"), items: [
+      P("Prisme droit", "Dans un prisme droit, les faces latérales sont des rectangles et les deux autres faces, les bases, sont des polygones superposables.", "116"),
+      P("Volume d'un prisme droit", "V = B × h, où B est l'aire d'une base et h la hauteur du prisme.", "118"),
+      P("Aires d'un prisme droit", "L'aire latérale est la somme des aires des faces latérales ; l'aire totale est la somme de l'aire latérale et des aires des bases.", "118"),
+      P("Pyramide", "Toutes les faces latérales d'une pyramide sont des triangles qui ont un sommet commun ; la face qui ne contient pas ce sommet est la base.", "120"),
+    ] },
+    { numero: 10, chapitre: "Nombres décimaux relatifs", notionId: m5("Nombres décimaux relatifs"), items: [
+      P("Entiers et décimaux relatifs", "ℤ désigne l'ensemble des entiers relatifs, D celui des décimaux relatifs. 0 est le seul nombre à la fois positif et négatif.", "133-134"),
+      P("Opposés", "Deux nombres sont opposés quand ce sont les abscisses de deux points symétriques par rapport à l'origine d'une droite graduée.", "135"),
+      P("Distance à zéro", "Deux nombres décimaux relatifs opposés ont la même distance à zéro.", "137"),
+      P("Comparer deux négatifs", "Si deux nombres décimaux relatifs sont négatifs, le plus petit est celui qui a la plus grande distance à zéro.", "138"),
+      P("Signes contraires", "Si deux nombres décimaux relatifs sont de signes contraires, le plus petit est le nombre négatif.", "138"),
+      P("Opposés et ordre", "Si deux nombres décimaux relatifs sont dans un ordre donné, alors leurs opposés sont dans l'ordre contraire.", "139"),
+    ] },
+    { numero: 11, chapitre: "Somme et différence de nombres décimaux relatifs", notionId: m5("Nombres décimaux relatifs"), items: [
+      P("Somme, même signe", "Pour additionner deux relatifs de même signe : on prend leur signe et on additionne les distances à zéro.", "145"),
+      P("Somme, signes contraires", "Pour additionner deux relatifs de signes contraires : on prend le signe de celui qui a la plus grande distance à zéro et on soustrait la plus petite distance de la plus grande.", "145"),
+      P("Somme de deux opposés", "La somme de deux nombres décimaux relatifs opposés est égale à 0.", "145"),
+      P("Différence", "La différence de deux nombres décimaux relatifs a et b est la somme de a et de l'opposé de b : a − b = a + opp b.", "147"),
+      P("Équation x + b = a", "L'équation x + b = a, d'inconnue x, admet la solution a − b.", "149"),
+    ] },
+    { numero: 12, chapitre: "Puissance entière d'un nombre entier naturel", notionId: m5("Puissances d'un nombre entier naturel"), items: [
+      P("Définition", "Pour a entier naturel et n entier naturel plus grand que 1, aⁿ est le produit de n facteurs égaux à a. On lit « a exposant n ».", "155"),
+      P("0 et 1", "0ⁿ = 0 et 1ⁿ = 1 (n entier naturel plus grand que 1).", "155"),
+      P("Priorité", "Dans une suite d'opérations sans parenthèses, les calculs de puissances sont prioritaires sur les multiplications, les additions et les soustractions.", "156"),
+      P("(a × b)ᵖ", "aᵖ × bᵖ = (a × b)ᵖ.", "158"),
+      P("aᵐ × aⁿ", "aᵐ × aⁿ = aᵐ⁺ⁿ.", "158"),
+    ] },
+    { numero: 13, chapitre: "Division dans ℕ, nombres premiers", notionId: m5("Nombres premiers"), items: [
+      P("Division euclidienne", "Si a et b sont des entiers naturels (b ≠ 0), on peut trouver des entiers q et r tels que a = b × q + r avec r < b.", "165"),
+      P("Encadrement par des multiples", "Si a n'est pas un multiple de b, alors a peut être encadré par deux multiples consécutifs de b : b × q < a < b × (q + 1).", "165"),
+      P("Nombre premier", "Un nombre premier est un nombre entier naturel non nul qui admet exactement deux diviseurs : 1 et lui-même. 1 n'est pas premier.", "166"),
+      P("Reconnaître un nombre premier", "On divise le nombre par les nombres premiers successifs pris dans l'ordre croissant, jusqu'à trouver un reste nul (le nombre n'est pas premier) ou un quotient plus petit ou égal au diviseur (il est premier).", "167"),
+      P("Décomposition", "Si un nombre entier naturel plus grand que 1 n'est pas premier, alors il admet une décomposition en un produit de facteurs premiers.", "168"),
+      P("PPCM", "Le plus petit commun multiple non nul de deux nombres est noté PPCM(a ; b) ; on l'obtient avec leurs décompositions en facteurs premiers.", "169"),
+    ] },
+    { numero: 14, chapitre: "Fractions", notionId: m5("Fractions"), items: [
+      P("Simplifier", "Simplifier une fraction, c'est trouver une fraction égale en divisant numérateur et dénominateur par un ou plusieurs diviseurs communs différents de 1.", "174"),
+      P("Fraction irréductible", "Une fraction est irréductible lorsque 1 est l'unique diviseur commun de son numérateur et de son dénominateur. On divise par le PGCD pour la rendre irréductible.", "174-175"),
+      P("Somme, même dénominateur", "a/d + b/d = (a + b)/d et a/d − b/d = (a − b)/d (a > b).", "176"),
+      P("Somme, dénominateurs différents", "On réduit les fractions au même dénominateur (par exemple le PPCM des dénominateurs), puis on additionne ou on soustrait.", "177"),
+      P("Comparer, même dénominateur", "Si deux fractions ont le même dénominateur, la plus petite est celle qui a le plus petit numérateur. Si le numérateur est 1, la plus petite fraction est celle qui a le plus grand dénominateur.", "178-179"),
+      P("Comparer avec 1", "a/b < 1 si a < b ; a/b = 1 si a = b ; a/b > 1 si a > b.", "180"),
+      P("Partie entière", "Toute fraction a/b s'écrit q + r/b, où q est le quotient et r le reste de la division de a par b.", "180"),
+      P("Produit", "k × a/b = (k × a)/b et (a/b) × (c/d) = (a × c)/(b × d).", "182-183"),
+      P("Puissance", "(a/b)ⁿ désigne le produit de n facteurs égaux à a/b ; (a/b)ⁿ = aⁿ/bⁿ.", "184"),
+    ] },
+    { numero: 15, chapitre: "Proportionnalité", notionId: m5("Proportionnalité"), items: [
+      P("Vitesse moyenne", "La vitesse moyenne est le quotient de la distance par la durée.", "190"),
+      P("Débit moyen", "Le débit moyen est le quotient du volume de liquide écoulé par la durée.", "191"),
+      P("Masse volumique", "La masse volumique d'un corps est le quotient de la masse d'une certaine quantité de ce corps par le volume occupé par cette quantité.", "191"),
+      P("Échelle", "L'échelle d'une carte est le quotient d'une distance sur cette carte par la distance réelle correspondante.", "192"),
+      P("Pourcentage", "Le nombre a est x pour cent du nombre b signifie a = (x/100) × b.", "193"),
+      P("Représentation graphique", "Si tous les points représentant les colonnes d'un tableau sont sur une droite qui passe par l'origine du repère, alors ce tableau est un tableau de proportionnalité.", "195"),
+    ] },
+    { numero: 16, chapitre: "Produit de nombres décimaux relatifs", notionId: m5("Nombres décimaux relatifs"), items: [
+      P("Même signe", "Le produit de deux nombres décimaux relatifs de même signe est positif : on multiplie les distances à zéro.", "200"),
+      P("Signes contraires", "Le produit de deux nombres décimaux relatifs de signes contraires est négatif : on multiplie les distances à zéro.", "200"),
+    ] },
+  ],
+};

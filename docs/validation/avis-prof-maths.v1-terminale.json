@@ -1,0 +1,63 @@
+{
+  "avertissement": "AVIS de relecture, pas une validation. Rien n'est validé : seul un humain clique « Valider ». Référentiel du projet = ivoirien (DPFC-CI + CIAM) ; aucune conformité au programme béninois n'est affirmée.",
+  "date": "2026-10-13",
+  "perimetre": "Terminale (48 cours, séries A1, A2, C, D). Les 122 autres cours de maths n'ont reçu que le contrôle automatique (0 erreur détectée), ce qui ne vaut pas relecture.",
+  "methode": "Outil scripts/revue-cours.ts (170 cours, 0 détecté ; auto-contrôle 35/35) puis relecture de fond ; chaque calcul des exemples recalculé à la main.",
+  "avis": [
+    {
+      "ids": ["maths:tle:loi-binomiale", "maths:tle:systemes-lineaires-dans-couples-serie-a1", "maths:tle:systemes-lineaires-dans-couples-serie-a2", "maths:tle:etude-de-fonctions-polynomes-et-de-fonctions-rationnelles-serie-a1", "maths:tle:etude-de-fonctions-polynomes-et-de-fonctions-rationnelles-serie-a2", "maths:tle:primitives-et-calcul-integral-serie-a1", "maths:tle:fonction-logarithme-neperien-serie-a1", "maths:tle:fonction-logarithme-neperien-serie-a2", "maths:tle:fonction-exponentielle-neperienne-serie-a1", "maths:tle:fonction-exponentielle-neperienne-serie-a2", "maths:tle:statistique-a-deux-variables-serie-a1", "maths:tle:statistique-a-deux-variables-serie-a2", "maths:tle:probabilites-serie-a1", "maths:tle:probabilites-serie-a2", "maths:tle:nombres-complexes-serie-c", "maths:tle:nombres-complexes-serie-d", "maths:tle:limites-et-continuite-serie-c", "maths:tle:limites-et-continuite-serie-d", "maths:tle:derivabilite-et-etude-de-fonctions-serie-c", "maths:tle:derivabilite-et-etude-de-fonctions-serie-d", "maths:tle:primitives-serie-c", "maths:tle:primitives-serie-d", "maths:tle:fonctions-logarithmes-serie-c", "maths:tle:fonctions-logarithmes-serie-d", "maths:tle:fonctions-exponentielles-et-fonctions-puissances-serie-c", "maths:tle:fonctions-exponentielles-et-fonctions-puissances-serie-d", "maths:tle:calcul-integral-serie-c", "maths:tle:calcul-integral-serie-d", "maths:tle:equations-differentielles-serie-c", "maths:tle:equations-differentielles-serie-d", "maths:tle:statistiques-a-deux-variables-serie-c", "maths:tle:statistiques-a-deux-variables-serie-d", "maths:tle:coniques-serie-c", "maths:tle:geometrie-analytique-dans-l-espace-serie-c", "maths:tle:similitudes-directes-du-plan-serie-c", "maths:tle:nombres-complexes-et-transformations-du-plan-serie-c", "maths:tle:nombres-complexes-et-geometrie-du-plan-serie-d", "maths:tle:ppcm-et-pgcd-de-deux-entiers-relatifs-serie-c"],
+      "verdict": "recommande-validation",
+      "motif": "Exactitude : tous les exemples recalculés sont justes (ex. C(4,2)·0,25² = 0,375 ; f(−1)=2, f(1)=−2 ; ∫₀²x² = 8/3 ; ∫₁ᵉ ln x = 1 ; centre de z'=2iz+1−i = (3+i)/5, vérifié point fixe ; 7¹⁰ ≡ 4 [5] ; PGCD(84,36)=12, PPCM=252 ; y²=8x : foyer (2;0), directrice x=−2).",
+      "remarques": [
+        "ln : préciser « pour a, b > 0 » dans ln(ab) = ln a + ln b.",
+        "Cours d'exponentielle : le « piège » (eˣ = −2) est un bon réflexe, mais c'est un énoncé, pas une erreur d'élève nommée.",
+        "Exemples très courts ; ajouter un exemple en situation (FCFA, population, moto) améliorerait la clarté."
+      ]
+    },
+    {
+      "ids": ["maths:tle:suites-numeriques-serie-a1", "maths:tle:suites-numeriques-serie-a2", "maths:tle:suites-numeriques-serie-c", "maths:tle:suites-numeriques-serie-d"],
+      "verdict": "a-corriger",
+      "motif": "L'introduction annonce « leurs limites » mais aucune étape ne les traite ; la somme géométrique (1−qⁿ⁺¹)/(1−q) est absente ; le piège « confondre le rang et la valeur du terme » est trop vague.",
+      "corrections": [
+        "Ajouter une étape « Limite » : qⁿ → 0 si |q| < 1 ; uₙ → ±∞ si q > 1 pour u₀ > 0.",
+        "Préciser la somme : nombre de termes = (dernier rang − premier rang + 1).",
+        "Piège nommé : u₁₀ = 3 + 10×4 suppose u₀ = 3 ; si le premier terme est u₁, u₁₀ = 3 + 9×4 = 39."
+      ]
+    },
+    {
+      "ids": ["maths:tle:probabilite-conditionnelle-et-variable-aleatoire-serie-c", "maths:tle:probabilite-conditionnelle-et-variable-aleatoire-serie-d"],
+      "verdict": "a-corriger",
+      "motif": "L'introduction annonce probabilité conditionnelle et loi binomiale ; les étapes ne traitent que loi, espérance, variance. Le piège (somme = 1) est réel mais ne couvre pas la conditionnelle.",
+      "corrections": ["Ajouter P(B|A) = P(A∩B)/P(A) et un renvoi vers le cours loi-binomiale.", "Ajouter un exemple de variance (ex. X ∈ {0 ; 10} équiprobables : V = 50 − 25 = 25)."]
+    },
+    {
+      "ids": ["maths:tle:barycentre-et-lignes-de-niveaux-serie-c"],
+      "verdict": "a-corriger",
+      "motif": "Formule Σ aᵢ MAᵢ = (Σ aᵢ) MG : ce sont des vecteurs (flèches absentes) et elle suppose Σ aᵢ ≠ 0 (G n'existe pas sinon). L'exemple est juste : MA²+MB² = 2MI²+AB²/2.",
+      "corrections": ["Écrire les vecteurs avec flèches et poser Σ aᵢ ≠ 0.", "Exemple : préciser k > AB²/2 → cercle ; k = AB²/2 → point I ; k < AB²/2 → ensemble vide."]
+    },
+    {
+      "ids": ["maths:tle:isometries-du-plan-serie-c"],
+      "verdict": "a-corriger",
+      "motif": "Étape « Reconnaître = on étudie les points fixes » trop vague : aucun critère (0 pt fixe → translation ou symétrie glissée ; 1 → rotation ; droite → symétrie axiale ; tout le plan → identité). L'exemple (symétrie axiale : infinité de points fixes) est juste mais trivial.",
+      "corrections": ["Ajouter le tableau des points fixes ci-dessus.", "Exemple de composée : deux symétries d'axes parallèles = translation."]
+    },
+    {
+      "ids": ["maths:tle:divisibilite-dans-serie-c"],
+      "verdict": "a-corriger",
+      "motif": "Calcul juste (7¹⁰ ≡ 2¹⁰ = 1024 ≡ 4 [5]) mais le piège « additionner les congruences de façon incorrecte » ne nomme aucune vraie erreur ; la méthode « réduire modulo n » n'est pas expliquée.",
+      "corrections": ["Piège réel : simplifier une congruence par un facteur non premier avec n (6 ≡ 0 [6] mais on ne peut pas « diviser par 6 »).", "Astuce : 2¹⁰ = (2⁴)²·2² avec 2⁴ ≡ 1 [5] pour éviter 1024."]
+    },
+    {
+      "ids": ["maths:tle:composees-de-transformations-serie-d"],
+      "verdict": "a-corriger",
+      "motif": "L'étape « Identifier » cite translation, rotation, symétrie mais omet la symétrie glissée alors que le chapitre voisin (isométries) la mentionne. L'exemple est trivial.",
+      "corrections": ["Compléter la liste et ajouter : deux rotations de même centre = rotation d'angle somme."]
+    }
+  ],
+  "constats_transversaux": [
+    "Les cours d'une même matière sont dupliqués mot pour mot entre séries (A1 = A2 ; C = D pour limites, dérivation, primitives, logarithmes, exponentielles, intégrales, suites, équations différentielles, statistiques) : si la série change le programme, ce n'est pas reflété. À confirmer avec un enseignant de la série.",
+    "Les cours de séries A1/A2 n'ont ni limites ni exercices de croissances comparées : le périmètre réel des séries littéraires n'est pas sourcé.",
+    "Aucun cours n'est contextualisé (marché, FCFA, moto, champ) comme le demande la grille ; à ajouter en exemple secondaire."
+  ]
+}

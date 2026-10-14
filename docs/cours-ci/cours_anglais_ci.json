@@ -1,0 +1,4242 @@
+[
+ {
+  "id": "anglais:6e:greetings",
+  "lv": "6e",
+  "chapitre": "At school",
+  "titre": "Greetings",
+  "principe": "On salue, on se présente et on prend congé avec des formules simples. Le choix de la formule dépend du moment de la journée.",
+  "etapes": [
+   {
+    "titre": "Saluer",
+    "corps": "Good morning (le matin), Good afternoon (l'après-midi), Good evening (le soir), Hello / Hi (à tout moment)."
+   },
+   {
+    "titre": "Se présenter",
+    "corps": "I am Awa. My name is Awa. Nice to meet you."
+   },
+   {
+    "titre": "Prendre congé",
+    "corps": "Goodbye, See you tomorrow, Good night (au coucher)."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comment se présenter à un camarade ?",
+   "solution": "Hello! I am Koffi. What is your name? — I am Awa. Nice to meet you."
+  },
+  "pieges": "Dire Good night pour saluer le soir : Good night sert seulement à dire au revoir avant de dormir.",
+  "proprietes": [
+   {
+    "titre": "To be au présent",
+    "enonce": "I am, you are, he/she/it is, we are, you are, they are."
+   },
+   {
+    "titre": "Moments de la journée",
+    "enonce": "Good morning, Good afternoon, Good evening."
+   },
+   {
+    "titre": "Formes contractées",
+    "enonce": "I am = I'm ; you are = you're ; she is = she's."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:in-the-classroom",
+  "lv": "6e",
+  "chapitre": "At school",
+  "titre": "In the classroom",
+  "principe": "On nomme les objets de la classe et on pose des questions pour identifier et localiser personnes et objets.",
+  "etapes": [
+   {
+    "titre": "Nommer",
+    "corps": "a book, a pen, a desk, a blackboard, a bag."
+   },
+   {
+    "titre": "Questionner",
+    "corps": "What is this ? It is a book. Who is he ? He is my teacher."
+   },
+   {
+    "titre": "Localiser",
+    "corps": "Where is the book ? It is on the desk."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comment demander et dire où est le stylo ?",
+   "solution": "Where is my pen ? — It is under the book."
+  },
+  "pieges": "Oublier l'article : on dit a pen, pas pen.",
+  "proprietes": [
+   {
+    "titre": "Article indéfini",
+    "enonce": "a devant une consonne (a book) ; an devant une voyelle (an egg)."
+   },
+   {
+    "titre": "Question avec to be",
+    "enonce": "On inverse : Is this a pen ? Yes, it is. / No, it isn't."
+   },
+   {
+    "titre": "Prépositions de lieu",
+    "enonce": "in, on, under, behind, near, between."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:numbers-and-school-things",
+  "lv": "6e",
+  "chapitre": "At school",
+  "titre": "Numbers and school things",
+  "principe": "On compte de 0 à 20 et on met les noms de fournitures au pluriel.",
+  "etapes": [
+   {
+    "titre": "Les nombres",
+    "corps": "0 zero, 1 one, 2 two... 10 ten, 11 eleven, 12 twelve, 13 thirteen... 20 twenty."
+   },
+   {
+    "titre": "Le pluriel",
+    "corps": "On ajoute -s : pen → pens. Après s, x, ch, sh : -es (box → boxes)."
+   },
+   {
+    "titre": "Demander la quantité",
+    "corps": "How many pens are there ? There are five pens."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire qu'il y a douze cahiers sur le bureau.",
+   "solution": "There are twelve exercise books on the desk."
+  },
+  "pieges": "Dire two pen : après un nombre supérieur à un, le nom prend un -s.",
+  "proprietes": [
+   {
+    "titre": "Pluriels réguliers",
+    "enonce": "nom + s ; nom en -s, -x, -ch, -sh + es ; consonne + y → ies (baby → babies)."
+   },
+   {
+    "titre": "Pluriels irréguliers",
+    "enonce": "man → men ; woman → women ; child → children ; foot → feet."
+   },
+   {
+    "titre": "There is / There are",
+    "enonce": "There is + singulier ; There are + pluriel."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:my-family",
+  "lv": "6e",
+  "chapitre": "At home",
+  "titre": "My family",
+  "principe": "On présente les membres de sa famille, on dit son âge et on compte jusqu'à 100.",
+  "etapes": [
+   {
+    "titre": "Les membres",
+    "corps": "father, mother, brother, sister, grandfather, grandmother, uncle, aunt."
+   },
+   {
+    "titre": "L'âge",
+    "corps": "How old are you ? I am twelve years old."
+   },
+   {
+    "titre": "Avoir",
+    "corps": "I have a brother. She has two sisters."
+   }
+  ],
+  "exemple": {
+   "probleme": "Présenter sa famille en deux phrases.",
+   "solution": "I have a sister and a brother. My father is forty years old."
+  },
+  "pieges": "Dire I have twelve years : en anglais on utilise to be pour l'âge (I am twelve).",
+  "proprietes": [
+   {
+    "titre": "To have",
+    "enonce": "I have, you have, he/she/it has, we have, they have."
+   },
+   {
+    "titre": "Âge",
+    "enonce": "I am + nombre + years old."
+   },
+   {
+    "titre": "Nombres de 21 à 100",
+    "enonce": "twenty-one, thirty, forty, fifty... one hundred."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:my-house",
+  "lv": "6e",
+  "chapitre": "At home",
+  "titre": "My house",
+  "principe": "On décrit sa maison : pièces, meubles et appareils.",
+  "etapes": [
+   {
+    "titre": "Les pièces",
+    "corps": "a bedroom, a living room, a kitchen, a bathroom."
+   },
+   {
+    "titre": "Décrire",
+    "corps": "There is a bed in the bedroom. The kitchen is big."
+   },
+   {
+    "titre": "Identifier",
+    "corps": "This is my room. That is the kitchen."
+   }
+  ],
+  "exemple": {
+   "probleme": "Décrire sa chambre.",
+   "solution": "My bedroom is small. There is a bed and a table."
+  },
+  "pieges": "Confondre this (proche) et that (loin).",
+  "proprietes": [
+   {
+    "titre": "This / that",
+    "enonce": "this (près), that (loin) au singulier ; these / those au pluriel."
+   },
+   {
+    "titre": "Adjectif",
+    "enonce": "L'adjectif est invariable et se place avant le nom : a big house."
+   },
+   {
+    "titre": "There is / are",
+    "enonce": "Pour dire qu'un objet existe dans un lieu."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:in-the-kitchen",
+  "lv": "6e",
+  "chapitre": "At home",
+  "titre": "In the kitchen",
+  "principe": "On parle de ce qu'on fait en ce moment dans la cuisine avec le présent progressif.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a pot, a knife, a spoon, a plate, a cup, a fork."
+   },
+   {
+    "titre": "Forme",
+    "corps": "be + verbe en -ing : I am cooking."
+   },
+   {
+    "titre": "Usage",
+    "corps": "Il décrit une action en cours : She is washing the plates."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire que maman prépare le riz.",
+   "solution": "Mum is cooking rice."
+  },
+  "pieges": "Oublier to be : I cooking est faux.",
+  "proprietes": [
+   {
+    "titre": "Présent progressif",
+    "enonce": "sujet + am / is / are + verbe-ing."
+   },
+   {
+    "titre": "Négation",
+    "enonce": "I am not cooking ; she is not (isn't) cooking."
+   },
+   {
+    "titre": "Question",
+    "enonce": "Are you cooking ? Yes, I am. / No, I am not."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:the-date",
+  "lv": "6e",
+  "chapitre": "Time and date",
+  "titre": "The date",
+  "principe": "On dit les jours, les mois et la date, et on rédige un petit texte simple.",
+  "etapes": [
+   {
+    "titre": "Les jours",
+    "corps": "Monday, Tuesday... Sunday."
+   },
+   {
+    "titre": "Les mois",
+    "corps": "January, February... December."
+   },
+   {
+    "titre": "La date",
+    "corps": "Today is Monday, the first of March."
+   }
+  ],
+  "exemple": {
+   "probleme": "Demander puis donner la date.",
+   "solution": "What is the date today ? It is the fifth of May."
+  },
+  "pieges": "Écrire les jours et les mois sans majuscule : en anglais ils prennent une majuscule.",
+  "proprietes": [
+   {
+    "titre": "Nombres ordinaux",
+    "enonce": "first, second, third, fourth... twentieth."
+   },
+   {
+    "titre": "Question",
+    "enonce": "What day is it today ? What is the date ?"
+   },
+   {
+    "titre": "Majuscules",
+    "enonce": "Les jours et les mois prennent une majuscule."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:the-time",
+  "lv": "6e",
+  "chapitre": "Time and date",
+  "titre": "The time",
+  "principe": "On demande et on donne l'heure, et on parle de ses activités quotidiennes.",
+  "etapes": [
+   {
+    "titre": "Demander",
+    "corps": "What time is it ? What's the time ?"
+   },
+   {
+    "titre": "Répondre",
+    "corps": "It is seven o'clock. It is half past seven. It is a quarter to eight."
+   },
+   {
+    "titre": "Activités",
+    "corps": "I get up at six. I go to school at seven."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire qu'il est huit heures et demie.",
+   "solution": "It is half past eight."
+  },
+  "pieges": "Dire seven o'clock pour 7 h 30 : o'clock s'emploie seulement pour l'heure pile.",
+  "proprietes": [
+   {
+    "titre": "Heure pile",
+    "enonce": "It is five o'clock."
+   },
+   {
+    "titre": "Demi, quart",
+    "enonce": "half past (et demie) ; a quarter past (et quart) ; a quarter to (moins le quart)."
+   },
+   {
+    "titre": "Prépositions",
+    "enonce": "at + heure ; in + moment (in the morning)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:the-time-table",
+  "lv": "6e",
+  "chapitre": "Time and date",
+  "titre": "The time table",
+  "principe": "On parle de l'emploi du temps avec le présent simple et des adverbes de fréquence.",
+  "etapes": [
+   {
+    "titre": "Matières",
+    "corps": "Maths, English, French, History, Science."
+   },
+   {
+    "titre": "Présent simple",
+    "corps": "I study English on Monday. She studies maths."
+   },
+   {
+    "titre": "Fréquence",
+    "corps": "always, usually, often, sometimes, never."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire qu'on a toujours maths le lundi.",
+   "solution": "I always have maths on Monday."
+  },
+  "pieges": "Oublier le -s à la troisième personne : he studies, pas he study.",
+  "proprietes": [
+   {
+    "titre": "Présent simple",
+    "enonce": "sujet + verbe ; he/she/it + verbe-s."
+   },
+   {
+    "titre": "Place de l'adverbe",
+    "enonce": "Il se place avant le verbe (I often play) mais après to be (I am always late)."
+   },
+   {
+    "titre": "Prépositions de temps",
+    "enonce": "on + jour ; at + heure ; in + mois."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:jobs-and-occupations",
+  "lv": "6e",
+  "chapitre": "Jobs and occupations",
+  "titre": "Jobs and occupations",
+  "principe": "On nomme des métiers et on pose des questions pour les identifier, avec les adjectifs possessifs.",
+  "etapes": [
+   {
+    "titre": "Les métiers",
+    "corps": "a teacher, a doctor, a farmer, a driver, a nurse."
+   },
+   {
+    "titre": "Question",
+    "corps": "What does your father do ? He is a driver."
+   },
+   {
+    "titre": "Possessifs",
+    "corps": "my, your, his, her, our, their."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire que sa mère est infirmière.",
+   "solution": "My mother is a nurse."
+  },
+  "pieges": "Oublier l'article devant un métier : on dit He is a driver.",
+  "proprietes": [
+   {
+    "titre": "Adjectifs possessifs",
+    "enonce": "my, your, his, her, its, our, your, their."
+   },
+   {
+    "titre": "Question sur le métier",
+    "enonce": "What do you do ? / What does she do ?"
+   },
+   {
+    "titre": "Article avec un métier",
+    "enonce": "He is a teacher (a obligatoire)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:tools",
+  "lv": "6e",
+  "chapitre": "Jobs and occupations",
+  "titre": "Tools",
+  "principe": "On nomme les outils de travail et on exprime la possession avec le cas possessif.",
+  "etapes": [
+   {
+    "titre": "Les outils",
+    "corps": "a hammer, a saw, a pen, a computer."
+   },
+   {
+    "titre": "Cas possessif",
+    "corps": "Awa's book = le livre d'Awa."
+   },
+   {
+    "titre": "Possession",
+    "corps": "Whose pen is this ? It is Kofi's."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire que le marteau est celui du menuisier.",
+   "solution": "The hammer is the carpenter's."
+  },
+  "pieges": "Écrire the book of Awa : on préfère Awa's book.",
+  "proprietes": [
+   {
+    "titre": "Cas possessif singulier",
+    "enonce": "nom + 's (the teacher's pen)."
+   },
+   {
+    "titre": "Cas possessif pluriel",
+    "enonce": "nom en -s + ' (the students' books)."
+   },
+   {
+    "titre": "Whose",
+    "enonce": "Whose + nom + to be ... ? demande à qui appartient un objet."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:work-places",
+  "lv": "6e",
+  "chapitre": "Jobs and occupations",
+  "titre": "Work places",
+  "principe": "On nomme les lieux où l'on travaille et on les décrit.",
+  "etapes": [
+   {
+    "titre": "Les lieux",
+    "corps": "a hospital, a school, a market, a farm, an office."
+   },
+   {
+    "titre": "Associer",
+    "corps": "A nurse works in a hospital."
+   },
+   {
+    "titre": "Décrire",
+    "corps": "The market is big and noisy."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire où travaille un enseignant.",
+   "solution": "A teacher works in a school."
+  },
+  "pieges": "Utiliser at ou to au lieu de in pour dire dans quel lieu une personne travaille.",
+  "proprietes": [
+   {
+    "titre": "Travailler dans",
+    "enonce": "work in + lieu."
+   },
+   {
+    "titre": "Pronoms",
+    "enonce": "A doctor works in a hospital. He treats sick people."
+   },
+   {
+    "titre": "Adjectifs",
+    "enonce": "big, small, old, new, clean, noisy."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:clothes",
+  "lv": "6e",
+  "chapitre": "Clothes and colours",
+  "titre": "Clothes",
+  "principe": "On nomme les vêtements et on demande ou dit ce que l'on porte.",
+  "etapes": [
+   {
+    "titre": "Les vêtements",
+    "corps": "a shirt, a dress, trousers, shoes, a cap."
+   },
+   {
+    "titre": "Demander",
+    "corps": "What are you wearing ?"
+   },
+   {
+    "titre": "Répondre",
+    "corps": "I am wearing a blue shirt."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire ce que porte Awa.",
+   "solution": "Awa is wearing a red dress."
+  },
+  "pieges": "Dire a trousers : trousers est toujours pluriel.",
+  "proprietes": [
+   {
+    "titre": "Wear",
+    "enonce": "wear = porter ; présent progressif : I am wearing."
+   },
+   {
+    "titre": "Noms toujours pluriels",
+    "enonce": "trousers, shorts, glasses."
+   },
+   {
+    "titre": "Ordre",
+    "enonce": "article + couleur + nom : a red dress."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:clothes-and-colours",
+  "lv": "6e",
+  "chapitre": "Clothes and colours",
+  "titre": "Clothes and colours",
+  "principe": "On associe vêtements et couleurs et on demande la couleur.",
+  "etapes": [
+   {
+    "titre": "Les couleurs",
+    "corps": "red, blue, green, yellow, black, white, brown."
+   },
+   {
+    "titre": "Demander",
+    "corps": "What colour is your shirt ?"
+   },
+   {
+    "titre": "Répondre",
+    "corps": "It is green."
+   }
+  ],
+  "exemple": {
+   "probleme": "Demander puis dire la couleur d'une casquette.",
+   "solution": "What colour is the cap ? It is black."
+  },
+  "pieges": "Placer la couleur après le nom, comme en français : on dit a green bag.",
+  "proprietes": [
+   {
+    "titre": "Adjectif de couleur",
+    "enonce": "Il est invariable et se place avant le nom."
+   },
+   {
+    "titre": "Question",
+    "enonce": "What colour is / are ... ?"
+   },
+   {
+    "titre": "Pluriel",
+    "enonce": "The shirts are white (l'adjectif ne prend pas de -s)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:buying-clothes",
+  "lv": "6e",
+  "chapitre": "Clothes and colours",
+  "titre": "Buying clothes",
+  "principe": "On achète des vêtements : nombres au-delà de 100, prix et préférences.",
+  "etapes": [
+   {
+    "titre": "Les grands nombres",
+    "corps": "one hundred, two hundred, one thousand."
+   },
+   {
+    "titre": "Demander le prix",
+    "corps": "How much is this shirt ? How much are these shoes ?"
+   },
+   {
+    "titre": "Préférences",
+    "corps": "I like the blue one. I prefer the red one."
+   }
+  ],
+  "exemple": {
+   "probleme": "Demander le prix et dire sa préférence.",
+   "solution": "How much is this shirt ? — It is 5,000 francs. I prefer the white one."
+  },
+  "pieges": "Utiliser How many pour demander un prix : on utilise How much.",
+  "proprietes": [
+   {
+    "titre": "How much",
+    "enonce": "Pour le prix et les quantités indénombrables."
+   },
+   {
+    "titre": "Like / prefer",
+    "enonce": "I like ... ; I prefer ... to ..."
+   },
+   {
+    "titre": "Pronom one",
+    "enonce": "one remplace un nom déjà cité (the red one)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:meals-and-drinks",
+  "lv": "6e",
+  "chapitre": "Food and drinks",
+  "titre": "Meals and drinks",
+  "principe": "On nomme repas, plats et boissons et on exprime ses préférences.",
+  "etapes": [
+   {
+    "titre": "Les repas",
+    "corps": "breakfast, lunch, dinner."
+   },
+   {
+    "titre": "Les plats",
+    "corps": "rice, bread, fish, beans, water, juice."
+   },
+   {
+    "titre": "Préférences",
+    "corps": "I like rice. I don't like beans. My favourite food is attiéké."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire ce qu'on aime manger au déjeuner.",
+   "solution": "I like rice and fish for lunch."
+  },
+  "pieges": "Oublier do dans la négation : on dit I don't like, pas I no like.",
+  "proprietes": [
+   {
+    "titre": "Négation du présent simple",
+    "enonce": "I / you / we / they + do not (don't) ; he / she / it + does not (doesn't)."
+   },
+   {
+    "titre": "Question",
+    "enonce": "Do you like fish ? Yes, I do. / No, I don't."
+   },
+   {
+    "titre": "Préférence",
+    "enonce": "My favourite ... is ... ."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:fruit-and-vegetables",
+  "lv": "6e",
+  "chapitre": "Food and drinks",
+  "titre": "Fruit and vegetables",
+  "principe": "On nomme fruits et légumes, on compare et on exprime des quantités.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "an orange, a banana, a mango, a tomato, an onion."
+   },
+   {
+    "titre": "Comparer",
+    "corps": "A mango is bigger than an orange."
+   },
+   {
+    "titre": "Quantités",
+    "corps": "some, a lot of, a little, a few, how much, how many."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comparer le prix d'une banane et d'une mangue.",
+   "solution": "A mango is more expensive than a banana."
+  },
+  "pieges": "Utiliser more avec un adjectif court : on dit bigger, pas more big.",
+  "proprietes": [
+   {
+    "titre": "Comparatif court",
+    "enonce": "adjectif court + -er + than : taller than."
+   },
+   {
+    "titre": "Comparatif long",
+    "enonce": "more + adjectif + than : more expensive than."
+   },
+   {
+    "titre": "Some / any",
+    "enonce": "some dans les phrases affirmatives ; any dans les questions et négations."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:recipes",
+  "lv": "6e",
+  "chapitre": "Food and drinks",
+  "titre": "Recipes",
+  "principe": "On donne des instructions pour préparer un plat, avec des connecteurs d'ordre.",
+  "etapes": [
+   {
+    "titre": "Impératif",
+    "corps": "Wash the rice. Boil the water."
+   },
+   {
+    "titre": "Connecteurs",
+    "corps": "First, then, next, after that, finally."
+   },
+   {
+    "titre": "Ingrédients",
+    "corps": "Two cups of rice, some salt, a little oil."
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner deux étapes pour faire du riz.",
+   "solution": "First, wash the rice. Then, boil it for twenty minutes."
+  },
+  "pieges": "Ajouter un sujet à l'impératif : on dit Wash the rice, pas You wash the rice.",
+  "proprietes": [
+   {
+    "titre": "Impératif",
+    "enonce": "Verbe à la forme de base : Cut the onion."
+   },
+   {
+    "titre": "Impératif négatif",
+    "enonce": "Don't + verbe : Don't add too much salt."
+   },
+   {
+    "titre": "Connecteurs chronologiques",
+    "enonce": "first, then, next, after that, finally."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:hygiene-and-the-parts-of-the-body",
+  "lv": "6e",
+  "chapitre": "Health and environment",
+  "titre": "Hygiene and the parts of the body",
+  "principe": "On nomme les parties du corps et on exprime l'obligation pour l'hygiène.",
+  "etapes": [
+   {
+    "titre": "Le corps",
+    "corps": "head, hand, arm, leg, foot, eye, ear, mouth."
+   },
+   {
+    "titre": "Hygiène",
+    "corps": "wash your hands, brush your teeth, take a bath."
+   },
+   {
+    "titre": "Obligation",
+    "corps": "You must wash your hands. You should brush your teeth."
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner un conseil d'hygiène.",
+   "solution": "You must wash your hands before meals."
+  },
+  "pieges": "Ajouter to après must : on dit You must go, pas You must to go.",
+  "proprietes": [
+   {
+    "titre": "Must",
+    "enonce": "must + verbe de base, même forme à toutes les personnes."
+   },
+   {
+    "titre": "Should",
+    "enonce": "should + verbe pour un conseil."
+   },
+   {
+    "titre": "Pluriels irréguliers",
+    "enonce": "foot → feet ; tooth → teeth."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:insalubrity-and-common-diseases",
+  "lv": "6e",
+  "chapitre": "Health and environment",
+  "titre": "Insalubrity and common diseases",
+  "principe": "On parle des maladies courantes et on donne des conseils.",
+  "etapes": [
+   {
+    "titre": "Les maladies",
+    "corps": "malaria, cholera, a cold, a headache."
+   },
+   {
+    "titre": "Causes",
+    "corps": "Dirty water causes cholera. Mosquitoes cause malaria."
+   },
+   {
+    "titre": "Conseils",
+    "corps": "You should see a doctor. You must sleep under a net."
+   }
+  ],
+  "exemple": {
+   "probleme": "Conseiller quelqu'un qui a le paludisme.",
+   "solution": "You should go to the hospital and take your medicine."
+  },
+  "pieges": "Confondre should (conseil) et must (obligation forte).",
+  "proprietes": [
+   {
+    "titre": "Should",
+    "enonce": "Pour donner un conseil : You should rest."
+   },
+   {
+    "titre": "Must",
+    "enonce": "Pour une obligation forte : You must go to hospital."
+   },
+   {
+    "titre": "Cause",
+    "enonce": "X causes Y : Mosquitoes cause malaria."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:water-and-health",
+  "lv": "6e",
+  "chapitre": "Health and environment",
+  "titre": "Water and health",
+  "principe": "On parle de la pollution de l'eau et de la santé avec des structures d'obligation.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "clean water, dirty water, a well, a river, to drink, to pollute."
+   },
+   {
+    "titre": "Obligation",
+    "corps": "We must keep water clean."
+   },
+   {
+    "titre": "Interdiction",
+    "corps": "You must not throw rubbish in the river."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire qu'il ne faut pas boire de l'eau sale.",
+   "solution": "You must not drink dirty water."
+  },
+  "pieges": "Confondre must not (interdit) et don't have to (pas obligé).",
+  "proprietes": [
+   {
+    "titre": "Must not",
+    "enonce": "Interdiction : You must not litter."
+   },
+   {
+    "titre": "Have to",
+    "enonce": "Obligation extérieure : We have to boil water."
+   },
+   {
+    "titre": "Eau propre",
+    "enonce": "clean / safe water ≠ dirty / polluted water."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:the-importance-of-sport",
+  "lv": "6e",
+  "chapitre": "Sports and games",
+  "titre": "The importance of sport",
+  "principe": "On parle du sport et on exprime des préférences.",
+  "etapes": [
+   {
+    "titre": "Les sports",
+    "corps": "football, basketball, athletics, handball."
+   },
+   {
+    "titre": "Préférences",
+    "corps": "I like football best. I prefer running to swimming."
+   },
+   {
+    "titre": "Raisons",
+    "corps": "Sport keeps us healthy."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire quel sport on préfère.",
+   "solution": "I prefer football to basketball."
+  },
+  "pieges": "Dire prefer than : on dit prefer ... to ....",
+  "proprietes": [
+   {
+    "titre": "Prefer",
+    "enonce": "prefer A to B."
+   },
+   {
+    "titre": "Like + ing",
+    "enonce": "I like playing football."
+   },
+   {
+    "titre": "Why / because",
+    "enonce": "Why do you play ? Because it is good for my health."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:the-can",
+  "lv": "6e",
+  "chapitre": "Sports and games",
+  "titre": "The CAN",
+  "principe": "On parle de la Coupe d'Afrique des Nations avec le but et la cause.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a match, a team, a player, to win, to lose, a goal."
+   },
+   {
+    "titre": "But",
+    "corps": "They train to win the cup."
+   },
+   {
+    "titre": "Cause",
+    "corps": "Côte d'Ivoire won because the team played well."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire pourquoi une équipe a gagné.",
+   "solution": "The team won because it scored two goals."
+  },
+  "pieges": "Confondre because (cause) et to (but).",
+  "proprietes": [
+   {
+    "titre": "But",
+    "enonce": "to + verbe : We play to win."
+   },
+   {
+    "titre": "Cause",
+    "enonce": "because + sujet + verbe : because the team played well."
+   },
+   {
+    "titre": "Prétérit simple",
+    "enonce": "won, lost, scored (verbes au passé)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:6e:traditional-games",
+  "lv": "6e",
+  "chapitre": "Sports and games",
+  "titre": "Traditional games",
+  "principe": "On parle des jeux traditionnels et on fait des suggestions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a game, to play, a rule, a player, a ball."
+   },
+   {
+    "titre": "Suggérer",
+    "corps": "Let's play. Why don't we play ayo ?"
+   },
+   {
+    "titre": "Accepter ou refuser",
+    "corps": "Yes, let's. / No, I'm tired."
+   }
+  ],
+  "exemple": {
+   "probleme": "Proposer un jeu à un ami.",
+   "solution": "Let's play ayo after school."
+  },
+  "pieges": "Ajouter to après let's : on dit Let's play, pas Let's to play.",
+  "proprietes": [
+   {
+    "titre": "Let's",
+    "enonce": "Let's + verbe de base."
+   },
+   {
+    "titre": "Why don't we",
+    "enonce": "Why don't we + verbe de base ?"
+   },
+   {
+    "titre": "Réponses",
+    "enonce": "Good idea. / Yes, let's. / Sorry, I can't."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:greetings",
+  "lv": "5e",
+  "chapitre": "At school",
+  "titre": "Greetings",
+  "principe": "On salue, on se présente et on prend congé avec des formules simples. Le choix de la formule dépend du moment de la journée.",
+  "etapes": [
+   {
+    "titre": "Saluer",
+    "corps": "Good morning (le matin), Good afternoon (l'après-midi), Good evening (le soir), Hello / Hi (à tout moment)."
+   },
+   {
+    "titre": "Se présenter",
+    "corps": "I am Awa. My name is Awa. Nice to meet you."
+   },
+   {
+    "titre": "Prendre congé",
+    "corps": "Goodbye, See you tomorrow, Good night (au coucher)."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comment se présenter à un camarade ?",
+   "solution": "Hello! I am Koffi. What is your name? — I am Awa. Nice to meet you."
+  },
+  "pieges": "Dire Good night pour saluer le soir : Good night sert seulement à dire au revoir avant de dormir.",
+  "proprietes": [
+   {
+    "titre": "To be au présent",
+    "enonce": "I am, you are, he/she/it is, we are, you are, they are."
+   },
+   {
+    "titre": "Moments de la journée",
+    "enonce": "Good morning, Good afternoon, Good evening."
+   },
+   {
+    "titre": "Formes contractées",
+    "enonce": "I am = I'm ; you are = you're ; she is = she's."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:in-the-classroom",
+  "lv": "5e",
+  "chapitre": "At school",
+  "titre": "In the classroom",
+  "principe": "On nomme les objets de la classe et on pose des questions pour identifier et localiser personnes et objets.",
+  "etapes": [
+   {
+    "titre": "Nommer",
+    "corps": "a book, a pen, a desk, a blackboard, a bag."
+   },
+   {
+    "titre": "Questionner",
+    "corps": "What is this ? It is a book. Who is he ? He is my teacher."
+   },
+   {
+    "titre": "Localiser",
+    "corps": "Where is the book ? It is on the desk."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comment demander et dire où est le stylo ?",
+   "solution": "Where is my pen ? — It is under the book."
+  },
+  "pieges": "Oublier l'article : on dit a pen, pas pen.",
+  "proprietes": [
+   {
+    "titre": "Article indéfini",
+    "enonce": "a devant une consonne (a book) ; an devant une voyelle (an egg)."
+   },
+   {
+    "titre": "Question avec to be",
+    "enonce": "On inverse : Is this a pen ? Yes, it is. / No, it isn't."
+   },
+   {
+    "titre": "Prépositions de lieu",
+    "enonce": "in, on, under, behind, near, between."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:numbers-and-school-things",
+  "lv": "5e",
+  "chapitre": "At school",
+  "titre": "Numbers and school things",
+  "principe": "On compte de 0 à 20 et on met les noms de fournitures au pluriel.",
+  "etapes": [
+   {
+    "titre": "Les nombres",
+    "corps": "0 zero, 1 one, 2 two... 10 ten, 11 eleven, 12 twelve, 13 thirteen... 20 twenty."
+   },
+   {
+    "titre": "Le pluriel",
+    "corps": "On ajoute -s : pen → pens. Après s, x, ch, sh : -es (box → boxes)."
+   },
+   {
+    "titre": "Demander la quantité",
+    "corps": "How many pens are there ? There are five pens."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire qu'il y a douze cahiers sur le bureau.",
+   "solution": "There are twelve exercise books on the desk."
+  },
+  "pieges": "Dire two pen : après un nombre supérieur à un, le nom prend un -s.",
+  "proprietes": [
+   {
+    "titre": "Pluriels réguliers",
+    "enonce": "nom + s ; nom en -s, -x, -ch, -sh + es ; consonne + y → ies (baby → babies)."
+   },
+   {
+    "titre": "Pluriels irréguliers",
+    "enonce": "man → men ; woman → women ; child → children ; foot → feet."
+   },
+   {
+    "titre": "There is / There are",
+    "enonce": "There is + singulier ; There are + pluriel."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:my-family",
+  "lv": "5e",
+  "chapitre": "At home",
+  "titre": "My family",
+  "principe": "On présente les membres de sa famille, on dit son âge et on compte jusqu'à 100.",
+  "etapes": [
+   {
+    "titre": "Les membres",
+    "corps": "father, mother, brother, sister, grandfather, grandmother, uncle, aunt."
+   },
+   {
+    "titre": "L'âge",
+    "corps": "How old are you ? I am twelve years old."
+   },
+   {
+    "titre": "Avoir",
+    "corps": "I have a brother. She has two sisters."
+   }
+  ],
+  "exemple": {
+   "probleme": "Présenter sa famille en deux phrases.",
+   "solution": "I have a sister and a brother. My father is forty years old."
+  },
+  "pieges": "Dire I have twelve years : en anglais on utilise to be pour l'âge (I am twelve).",
+  "proprietes": [
+   {
+    "titre": "To have",
+    "enonce": "I have, you have, he/she/it has, we have, they have."
+   },
+   {
+    "titre": "Âge",
+    "enonce": "I am + nombre + years old."
+   },
+   {
+    "titre": "Nombres de 21 à 100",
+    "enonce": "twenty-one, thirty, forty, fifty... one hundred."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:my-house",
+  "lv": "5e",
+  "chapitre": "At home",
+  "titre": "My house",
+  "principe": "On décrit sa maison : pièces, meubles et appareils.",
+  "etapes": [
+   {
+    "titre": "Les pièces",
+    "corps": "a bedroom, a living room, a kitchen, a bathroom."
+   },
+   {
+    "titre": "Décrire",
+    "corps": "There is a bed in the bedroom. The kitchen is big."
+   },
+   {
+    "titre": "Identifier",
+    "corps": "This is my room. That is the kitchen."
+   }
+  ],
+  "exemple": {
+   "probleme": "Décrire sa chambre.",
+   "solution": "My bedroom is small. There is a bed and a table."
+  },
+  "pieges": "Confondre this (proche) et that (loin).",
+  "proprietes": [
+   {
+    "titre": "This / that",
+    "enonce": "this (près), that (loin) au singulier ; these / those au pluriel."
+   },
+   {
+    "titre": "Adjectif",
+    "enonce": "L'adjectif est invariable et se place avant le nom : a big house."
+   },
+   {
+    "titre": "There is / are",
+    "enonce": "Pour dire qu'un objet existe dans un lieu."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:in-the-kitchen",
+  "lv": "5e",
+  "chapitre": "At home",
+  "titre": "In the kitchen",
+  "principe": "On parle de ce qu'on fait en ce moment dans la cuisine avec le présent progressif.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a pot, a knife, a spoon, a plate, a cup, a fork."
+   },
+   {
+    "titre": "Forme",
+    "corps": "be + verbe en -ing : I am cooking."
+   },
+   {
+    "titre": "Usage",
+    "corps": "Il décrit une action en cours : She is washing the plates."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire que maman prépare le riz.",
+   "solution": "Mum is cooking rice."
+  },
+  "pieges": "Oublier to be : I cooking est faux.",
+  "proprietes": [
+   {
+    "titre": "Présent progressif",
+    "enonce": "sujet + am / is / are + verbe-ing."
+   },
+   {
+    "titre": "Négation",
+    "enonce": "I am not cooking ; she is not (isn't) cooking."
+   },
+   {
+    "titre": "Question",
+    "enonce": "Are you cooking ? Yes, I am. / No, I am not."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:the-date",
+  "lv": "5e",
+  "chapitre": "Time and date",
+  "titre": "The date",
+  "principe": "On dit les jours, les mois et la date, et on rédige un petit texte simple.",
+  "etapes": [
+   {
+    "titre": "Les jours",
+    "corps": "Monday, Tuesday... Sunday."
+   },
+   {
+    "titre": "Les mois",
+    "corps": "January, February... December."
+   },
+   {
+    "titre": "La date",
+    "corps": "Today is Monday, the first of March."
+   }
+  ],
+  "exemple": {
+   "probleme": "Demander puis donner la date.",
+   "solution": "What is the date today ? It is the fifth of May."
+  },
+  "pieges": "Écrire les jours et les mois sans majuscule : en anglais ils prennent une majuscule.",
+  "proprietes": [
+   {
+    "titre": "Nombres ordinaux",
+    "enonce": "first, second, third, fourth... twentieth."
+   },
+   {
+    "titre": "Question",
+    "enonce": "What day is it today ? What is the date ?"
+   },
+   {
+    "titre": "Majuscules",
+    "enonce": "Les jours et les mois prennent une majuscule."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:the-time",
+  "lv": "5e",
+  "chapitre": "Time and date",
+  "titre": "The time",
+  "principe": "On demande et on donne l'heure, et on parle de ses activités quotidiennes.",
+  "etapes": [
+   {
+    "titre": "Demander",
+    "corps": "What time is it ? What's the time ?"
+   },
+   {
+    "titre": "Répondre",
+    "corps": "It is seven o'clock. It is half past seven. It is a quarter to eight."
+   },
+   {
+    "titre": "Activités",
+    "corps": "I get up at six. I go to school at seven."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire qu'il est huit heures et demie.",
+   "solution": "It is half past eight."
+  },
+  "pieges": "Dire seven o'clock pour 7 h 30 : o'clock s'emploie seulement pour l'heure pile.",
+  "proprietes": [
+   {
+    "titre": "Heure pile",
+    "enonce": "It is five o'clock."
+   },
+   {
+    "titre": "Demi, quart",
+    "enonce": "half past (et demie) ; a quarter past (et quart) ; a quarter to (moins le quart)."
+   },
+   {
+    "titre": "Prépositions",
+    "enonce": "at + heure ; in + moment (in the morning)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:the-time-table",
+  "lv": "5e",
+  "chapitre": "Time and date",
+  "titre": "The time table",
+  "principe": "On parle de l'emploi du temps avec le présent simple et des adverbes de fréquence.",
+  "etapes": [
+   {
+    "titre": "Matières",
+    "corps": "Maths, English, French, History, Science."
+   },
+   {
+    "titre": "Présent simple",
+    "corps": "I study English on Monday. She studies maths."
+   },
+   {
+    "titre": "Fréquence",
+    "corps": "always, usually, often, sometimes, never."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire qu'on a toujours maths le lundi.",
+   "solution": "I always have maths on Monday."
+  },
+  "pieges": "Oublier le -s à la troisième personne : he studies, pas he study.",
+  "proprietes": [
+   {
+    "titre": "Présent simple",
+    "enonce": "sujet + verbe ; he/she/it + verbe-s."
+   },
+   {
+    "titre": "Place de l'adverbe",
+    "enonce": "Il se place avant le verbe (I often play) mais après to be (I am always late)."
+   },
+   {
+    "titre": "Prépositions de temps",
+    "enonce": "on + jour ; at + heure ; in + mois."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:jobs-and-occupations",
+  "lv": "5e",
+  "chapitre": "Jobs and occupations",
+  "titre": "Jobs and occupations",
+  "principe": "On nomme des métiers et on pose des questions pour les identifier, avec les adjectifs possessifs.",
+  "etapes": [
+   {
+    "titre": "Les métiers",
+    "corps": "a teacher, a doctor, a farmer, a driver, a nurse."
+   },
+   {
+    "titre": "Question",
+    "corps": "What does your father do ? He is a driver."
+   },
+   {
+    "titre": "Possessifs",
+    "corps": "my, your, his, her, our, their."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire que sa mère est infirmière.",
+   "solution": "My mother is a nurse."
+  },
+  "pieges": "Oublier l'article devant un métier : on dit He is a driver.",
+  "proprietes": [
+   {
+    "titre": "Adjectifs possessifs",
+    "enonce": "my, your, his, her, its, our, your, their."
+   },
+   {
+    "titre": "Question sur le métier",
+    "enonce": "What do you do ? / What does she do ?"
+   },
+   {
+    "titre": "Article avec un métier",
+    "enonce": "He is a teacher (a obligatoire)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:tools",
+  "lv": "5e",
+  "chapitre": "Jobs and occupations",
+  "titre": "Tools",
+  "principe": "On nomme les outils de travail et on exprime la possession avec le cas possessif.",
+  "etapes": [
+   {
+    "titre": "Les outils",
+    "corps": "a hammer, a saw, a pen, a computer."
+   },
+   {
+    "titre": "Cas possessif",
+    "corps": "Awa's book = le livre d'Awa."
+   },
+   {
+    "titre": "Possession",
+    "corps": "Whose pen is this ? It is Kofi's."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire que le marteau est celui du menuisier.",
+   "solution": "The hammer is the carpenter's."
+  },
+  "pieges": "Écrire the book of Awa : on préfère Awa's book.",
+  "proprietes": [
+   {
+    "titre": "Cas possessif singulier",
+    "enonce": "nom + 's (the teacher's pen)."
+   },
+   {
+    "titre": "Cas possessif pluriel",
+    "enonce": "nom en -s + ' (the students' books)."
+   },
+   {
+    "titre": "Whose",
+    "enonce": "Whose + nom + to be ... ? demande à qui appartient un objet."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:work-places",
+  "lv": "5e",
+  "chapitre": "Jobs and occupations",
+  "titre": "Work places",
+  "principe": "On nomme les lieux où l'on travaille et on les décrit.",
+  "etapes": [
+   {
+    "titre": "Les lieux",
+    "corps": "a hospital, a school, a market, a farm, an office."
+   },
+   {
+    "titre": "Associer",
+    "corps": "A nurse works in a hospital."
+   },
+   {
+    "titre": "Décrire",
+    "corps": "The market is big and noisy."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire où travaille un enseignant.",
+   "solution": "A teacher works in a school."
+  },
+  "pieges": "Utiliser at ou to au lieu de in pour dire dans quel lieu une personne travaille.",
+  "proprietes": [
+   {
+    "titre": "Travailler dans",
+    "enonce": "work in + lieu."
+   },
+   {
+    "titre": "Pronoms",
+    "enonce": "A doctor works in a hospital. He treats sick people."
+   },
+   {
+    "titre": "Adjectifs",
+    "enonce": "big, small, old, new, clean, noisy."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:clothes",
+  "lv": "5e",
+  "chapitre": "Clothes and colours",
+  "titre": "Clothes",
+  "principe": "On nomme les vêtements et on demande ou dit ce que l'on porte.",
+  "etapes": [
+   {
+    "titre": "Les vêtements",
+    "corps": "a shirt, a dress, trousers, shoes, a cap."
+   },
+   {
+    "titre": "Demander",
+    "corps": "What are you wearing ?"
+   },
+   {
+    "titre": "Répondre",
+    "corps": "I am wearing a blue shirt."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire ce que porte Awa.",
+   "solution": "Awa is wearing a red dress."
+  },
+  "pieges": "Dire a trousers : trousers est toujours pluriel.",
+  "proprietes": [
+   {
+    "titre": "Wear",
+    "enonce": "wear = porter ; présent progressif : I am wearing."
+   },
+   {
+    "titre": "Noms toujours pluriels",
+    "enonce": "trousers, shorts, glasses."
+   },
+   {
+    "titre": "Ordre",
+    "enonce": "article + couleur + nom : a red dress."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:clothes-and-colours",
+  "lv": "5e",
+  "chapitre": "Clothes and colours",
+  "titre": "Clothes and colours",
+  "principe": "On associe vêtements et couleurs et on demande la couleur.",
+  "etapes": [
+   {
+    "titre": "Les couleurs",
+    "corps": "red, blue, green, yellow, black, white, brown."
+   },
+   {
+    "titre": "Demander",
+    "corps": "What colour is your shirt ?"
+   },
+   {
+    "titre": "Répondre",
+    "corps": "It is green."
+   }
+  ],
+  "exemple": {
+   "probleme": "Demander puis dire la couleur d'une casquette.",
+   "solution": "What colour is the cap ? It is black."
+  },
+  "pieges": "Placer la couleur après le nom, comme en français : on dit a green bag.",
+  "proprietes": [
+   {
+    "titre": "Adjectif de couleur",
+    "enonce": "Il est invariable et se place avant le nom."
+   },
+   {
+    "titre": "Question",
+    "enonce": "What colour is / are ... ?"
+   },
+   {
+    "titre": "Pluriel",
+    "enonce": "The shirts are white (l'adjectif ne prend pas de -s)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:buying-clothes",
+  "lv": "5e",
+  "chapitre": "Clothes and colours",
+  "titre": "Buying clothes",
+  "principe": "On achète des vêtements : nombres au-delà de 100, prix et préférences.",
+  "etapes": [
+   {
+    "titre": "Les grands nombres",
+    "corps": "one hundred, two hundred, one thousand."
+   },
+   {
+    "titre": "Demander le prix",
+    "corps": "How much is this shirt ? How much are these shoes ?"
+   },
+   {
+    "titre": "Préférences",
+    "corps": "I like the blue one. I prefer the red one."
+   }
+  ],
+  "exemple": {
+   "probleme": "Demander le prix et dire sa préférence.",
+   "solution": "How much is this shirt ? — It is 5,000 francs. I prefer the white one."
+  },
+  "pieges": "Utiliser How many pour demander un prix : on utilise How much.",
+  "proprietes": [
+   {
+    "titre": "How much",
+    "enonce": "Pour le prix et les quantités indénombrables."
+   },
+   {
+    "titre": "Like / prefer",
+    "enonce": "I like ... ; I prefer ... to ..."
+   },
+   {
+    "titre": "Pronom one",
+    "enonce": "one remplace un nom déjà cité (the red one)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:meals-and-drinks",
+  "lv": "5e",
+  "chapitre": "Food and drinks",
+  "titre": "Meals and drinks",
+  "principe": "On nomme repas, plats et boissons et on exprime ses préférences.",
+  "etapes": [
+   {
+    "titre": "Les repas",
+    "corps": "breakfast, lunch, dinner."
+   },
+   {
+    "titre": "Les plats",
+    "corps": "rice, bread, fish, beans, water, juice."
+   },
+   {
+    "titre": "Préférences",
+    "corps": "I like rice. I don't like beans. My favourite food is attiéké."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire ce qu'on aime manger au déjeuner.",
+   "solution": "I like rice and fish for lunch."
+  },
+  "pieges": "Oublier do dans la négation : on dit I don't like, pas I no like.",
+  "proprietes": [
+   {
+    "titre": "Négation du présent simple",
+    "enonce": "I / you / we / they + do not (don't) ; he / she / it + does not (doesn't)."
+   },
+   {
+    "titre": "Question",
+    "enonce": "Do you like fish ? Yes, I do. / No, I don't."
+   },
+   {
+    "titre": "Préférence",
+    "enonce": "My favourite ... is ... ."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:fruit-and-vegetables",
+  "lv": "5e",
+  "chapitre": "Food and drinks",
+  "titre": "Fruit and vegetables",
+  "principe": "On nomme fruits et légumes, on compare et on exprime des quantités.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "an orange, a banana, a mango, a tomato, an onion."
+   },
+   {
+    "titre": "Comparer",
+    "corps": "A mango is bigger than an orange."
+   },
+   {
+    "titre": "Quantités",
+    "corps": "some, a lot of, a little, a few, how much, how many."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comparer le prix d'une banane et d'une mangue.",
+   "solution": "A mango is more expensive than a banana."
+  },
+  "pieges": "Utiliser more avec un adjectif court : on dit bigger, pas more big.",
+  "proprietes": [
+   {
+    "titre": "Comparatif court",
+    "enonce": "adjectif court + -er + than : taller than."
+   },
+   {
+    "titre": "Comparatif long",
+    "enonce": "more + adjectif + than : more expensive than."
+   },
+   {
+    "titre": "Some / any",
+    "enonce": "some dans les phrases affirmatives ; any dans les questions et négations."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:recipes",
+  "lv": "5e",
+  "chapitre": "Food and drinks",
+  "titre": "Recipes",
+  "principe": "On donne des instructions pour préparer un plat, avec des connecteurs d'ordre.",
+  "etapes": [
+   {
+    "titre": "Impératif",
+    "corps": "Wash the rice. Boil the water."
+   },
+   {
+    "titre": "Connecteurs",
+    "corps": "First, then, next, after that, finally."
+   },
+   {
+    "titre": "Ingrédients",
+    "corps": "Two cups of rice, some salt, a little oil."
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner deux étapes pour faire du riz.",
+   "solution": "First, wash the rice. Then, boil it for twenty minutes."
+  },
+  "pieges": "Ajouter un sujet à l'impératif : on dit Wash the rice, pas You wash the rice.",
+  "proprietes": [
+   {
+    "titre": "Impératif",
+    "enonce": "Verbe à la forme de base : Cut the onion."
+   },
+   {
+    "titre": "Impératif négatif",
+    "enonce": "Don't + verbe : Don't add too much salt."
+   },
+   {
+    "titre": "Connecteurs chronologiques",
+    "enonce": "first, then, next, after that, finally."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:hygiene-and-the-parts-of-the-body",
+  "lv": "5e",
+  "chapitre": "Health and environment",
+  "titre": "Hygiene and the parts of the body",
+  "principe": "On nomme les parties du corps et on exprime l'obligation pour l'hygiène.",
+  "etapes": [
+   {
+    "titre": "Le corps",
+    "corps": "head, hand, arm, leg, foot, eye, ear, mouth."
+   },
+   {
+    "titre": "Hygiène",
+    "corps": "wash your hands, brush your teeth, take a bath."
+   },
+   {
+    "titre": "Obligation",
+    "corps": "You must wash your hands. You should brush your teeth."
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner un conseil d'hygiène.",
+   "solution": "You must wash your hands before meals."
+  },
+  "pieges": "Ajouter to après must : on dit You must go, pas You must to go.",
+  "proprietes": [
+   {
+    "titre": "Must",
+    "enonce": "must + verbe de base, même forme à toutes les personnes."
+   },
+   {
+    "titre": "Should",
+    "enonce": "should + verbe pour un conseil."
+   },
+   {
+    "titre": "Pluriels irréguliers",
+    "enonce": "foot → feet ; tooth → teeth."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:insalubrity-and-common-diseases",
+  "lv": "5e",
+  "chapitre": "Health and environment",
+  "titre": "Insalubrity and common diseases",
+  "principe": "On parle des maladies courantes et on donne des conseils.",
+  "etapes": [
+   {
+    "titre": "Les maladies",
+    "corps": "malaria, cholera, a cold, a headache."
+   },
+   {
+    "titre": "Causes",
+    "corps": "Dirty water causes cholera. Mosquitoes cause malaria."
+   },
+   {
+    "titre": "Conseils",
+    "corps": "You should see a doctor. You must sleep under a net."
+   }
+  ],
+  "exemple": {
+   "probleme": "Conseiller quelqu'un qui a le paludisme.",
+   "solution": "You should go to the hospital and take your medicine."
+  },
+  "pieges": "Confondre should (conseil) et must (obligation forte).",
+  "proprietes": [
+   {
+    "titre": "Should",
+    "enonce": "Pour donner un conseil : You should rest."
+   },
+   {
+    "titre": "Must",
+    "enonce": "Pour une obligation forte : You must go to hospital."
+   },
+   {
+    "titre": "Cause",
+    "enonce": "X causes Y : Mosquitoes cause malaria."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:water-and-health",
+  "lv": "5e",
+  "chapitre": "Health and environment",
+  "titre": "Water and health",
+  "principe": "On parle de la pollution de l'eau et de la santé avec des structures d'obligation.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "clean water, dirty water, a well, a river, to drink, to pollute."
+   },
+   {
+    "titre": "Obligation",
+    "corps": "We must keep water clean."
+   },
+   {
+    "titre": "Interdiction",
+    "corps": "You must not throw rubbish in the river."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire qu'il ne faut pas boire de l'eau sale.",
+   "solution": "You must not drink dirty water."
+  },
+  "pieges": "Confondre must not (interdit) et don't have to (pas obligé).",
+  "proprietes": [
+   {
+    "titre": "Must not",
+    "enonce": "Interdiction : You must not litter."
+   },
+   {
+    "titre": "Have to",
+    "enonce": "Obligation extérieure : We have to boil water."
+   },
+   {
+    "titre": "Eau propre",
+    "enonce": "clean / safe water ≠ dirty / polluted water."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:the-importance-of-sport",
+  "lv": "5e",
+  "chapitre": "Sports and games",
+  "titre": "The importance of sport",
+  "principe": "On parle du sport et on exprime des préférences.",
+  "etapes": [
+   {
+    "titre": "Les sports",
+    "corps": "football, basketball, athletics, handball."
+   },
+   {
+    "titre": "Préférences",
+    "corps": "I like football best. I prefer running to swimming."
+   },
+   {
+    "titre": "Raisons",
+    "corps": "Sport keeps us healthy."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire quel sport on préfère.",
+   "solution": "I prefer football to basketball."
+  },
+  "pieges": "Dire prefer than : on dit prefer ... to ....",
+  "proprietes": [
+   {
+    "titre": "Prefer",
+    "enonce": "prefer A to B."
+   },
+   {
+    "titre": "Like + ing",
+    "enonce": "I like playing football."
+   },
+   {
+    "titre": "Why / because",
+    "enonce": "Why do you play ? Because it is good for my health."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:the-can",
+  "lv": "5e",
+  "chapitre": "Sports and games",
+  "titre": "The CAN",
+  "principe": "On parle de la Coupe d'Afrique des Nations avec le but et la cause.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a match, a team, a player, to win, to lose, a goal."
+   },
+   {
+    "titre": "But",
+    "corps": "They train to win the cup."
+   },
+   {
+    "titre": "Cause",
+    "corps": "Côte d'Ivoire won because the team played well."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire pourquoi une équipe a gagné.",
+   "solution": "The team won because it scored two goals."
+  },
+  "pieges": "Confondre because (cause) et to (but).",
+  "proprietes": [
+   {
+    "titre": "But",
+    "enonce": "to + verbe : We play to win."
+   },
+   {
+    "titre": "Cause",
+    "enonce": "because + sujet + verbe : because the team played well."
+   },
+   {
+    "titre": "Prétérit simple",
+    "enonce": "won, lost, scored (verbes au passé)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:5e:traditional-games",
+  "lv": "5e",
+  "chapitre": "Sports and games",
+  "titre": "Traditional games",
+  "principe": "On parle des jeux traditionnels et on fait des suggestions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a game, to play, a rule, a player, a ball."
+   },
+   {
+    "titre": "Suggérer",
+    "corps": "Let's play. Why don't we play ayo ?"
+   },
+   {
+    "titre": "Accepter ou refuser",
+    "corps": "Yes, let's. / No, I'm tired."
+   }
+  ],
+  "exemple": {
+   "probleme": "Proposer un jeu à un ami.",
+   "solution": "Let's play ayo after school."
+  },
+  "pieges": "Ajouter to après let's : on dit Let's play, pas Let's to play.",
+  "proprietes": [
+   {
+    "titre": "Let's",
+    "enonce": "Let's + verbe de base."
+   },
+   {
+    "titre": "Why don't we",
+    "enonce": "Why don't we + verbe de base ?"
+   },
+   {
+    "titre": "Réponses",
+    "enonce": "Good idea. / Yes, let's. / Sorry, I can't."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:my-last-holidays",
+  "lv": "4e",
+  "chapitre": "Life at school",
+  "titre": "My last holidays",
+  "principe": "On raconte ses vacances au passé avec le prétérit simple.",
+  "etapes": [
+   {
+    "titre": "Forme régulière",
+    "corps": "verbe + -ed : visit → visited, play → played."
+   },
+   {
+    "titre": "Forme irrégulière",
+    "corps": "go → went, see → saw, eat → ate, have → had."
+   },
+   {
+    "titre": "Raconter",
+    "corps": "Last holiday, I went to Bouaké. I visited my grandmother."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire où l'on est allé en vacances.",
+   "solution": "Last August, I went to Abidjan with my family."
+  },
+  "pieges": "Mettre -ed à un verbe irrégulier : go donne went, pas goed.",
+  "proprietes": [
+   {
+    "titre": "Prétérit régulier",
+    "enonce": "verbe + -ed (consonne + y → -ied : study → studied)."
+   },
+   {
+    "titre": "Négation",
+    "enonce": "did not (didn't) + verbe de base : I didn't go."
+   },
+   {
+    "titre": "Question",
+    "enonce": "Did you go ? Yes, I did. / No, I didn't."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:school-memories",
+  "lv": "4e",
+  "chapitre": "Life at school",
+  "titre": "School memories",
+  "principe": "On évoque ses souvenirs d'école avec des expressions de temps du passé.",
+  "etapes": [
+   {
+    "titre": "Repères",
+    "corps": "last year, two years ago, when I was ten, in 2020."
+   },
+   {
+    "titre": "Prétérit de to be",
+    "corps": "I was, you were, he/she/it was, we/they were."
+   },
+   {
+    "titre": "Souvenir",
+    "corps": "I was in CM2 two years ago. My teacher was kind."
+   }
+  ],
+  "exemple": {
+   "probleme": "Parler de son premier jour à l'école.",
+   "solution": "On my first day, I was afraid but my teacher was very kind."
+  },
+  "pieges": "Dire I were : on dit I was.",
+  "proprietes": [
+   {
+    "titre": "Was / were",
+    "enonce": "I/he/she/it was ; you/we/they were."
+   },
+   {
+    "titre": "Ago",
+    "enonce": "ago se place après la durée : two years ago."
+   },
+   {
+    "titre": "Used to",
+    "enonce": "used to + verbe exprime une habitude passée : I used to walk to school."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:work-at-school",
+  "lv": "4e",
+  "chapitre": "Life at school",
+  "titre": "Work at school",
+  "principe": "On exprime la condition et on parle de ses résultats scolaires.",
+  "etapes": [
+   {
+    "titre": "Résultats",
+    "corps": "marks, a report card, to pass, to fail."
+   },
+   {
+    "titre": "Condition",
+    "corps": "If you work hard, you will pass."
+   },
+   {
+    "titre": "Conséquence",
+    "corps": "If I don't study, I will fail."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire ce qui arrivera si on travaille.",
+   "solution": "If I study every day, I will pass the exam."
+  },
+  "pieges": "Mettre will dans la proposition en if : on dit If I study, pas If I will study.",
+  "proprietes": [
+   {
+    "titre": "Première condition",
+    "enonce": "If + présent, will + verbe."
+   },
+   {
+    "titre": "Unless",
+    "enonce": "unless = if not : Unless you work, you will fail."
+   },
+   {
+    "titre": "Virgule",
+    "enonce": "On met une virgule quand la phrase commence par if."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:rural-women",
+  "lv": "4e",
+  "chapitre": "Women at work",
+  "titre": "Rural women",
+  "principe": "On exprime la capacité et on rapporte des paroles pour parler des femmes rurales.",
+  "etapes": [
+   {
+    "titre": "Capacité",
+    "corps": "She can plant rice. She cannot read yet."
+   },
+   {
+    "titre": "Vocabulaire",
+    "corps": "to farm, to harvest, to fetch water, to sell."
+   },
+   {
+    "titre": "Discours rapporté",
+    "corps": "She said that she worked in the fields."
+   }
+  ],
+  "exemple": {
+   "probleme": "Rapporter la phrase « I work in the fields ».",
+   "solution": "She said that she worked in the fields."
+  },
+  "pieges": "Garder le présent dans le discours rapporté après said : le verbe recule d'un temps.",
+  "proprietes": [
+   {
+    "titre": "Can",
+    "enonce": "can + verbe de base ; négation cannot / can't."
+   },
+   {
+    "titre": "Discours rapporté",
+    "enonce": "présent → prétérit ; will → would ; can → could."
+   },
+   {
+    "titre": "Said / told",
+    "enonce": "She said that... ; She told me that..."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:women-s-rights-and-duties",
+  "lv": "4e",
+  "chapitre": "Women at work",
+  "titre": "Women's rights and duties",
+  "principe": "On parle des droits et devoirs des femmes avec des structures de comparaison.",
+  "etapes": [
+   {
+    "titre": "Droits",
+    "corps": "the right to education, to vote, to work."
+   },
+   {
+    "titre": "Devoirs",
+    "corps": "to respect the law, to take care of children."
+   },
+   {
+    "titre": "Comparer",
+    "corps": "Women are as important as men."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comparer le rôle des femmes et des hommes.",
+   "solution": "Women are as important as men in society."
+  },
+  "pieges": "Utiliser than avec as ... as : on dit as important as.",
+  "proprietes": [
+   {
+    "titre": "As ... as",
+    "enonce": "égalité : as tall as."
+   },
+   {
+    "titre": "Comparatif",
+    "enonce": "plus ... que : taller than, more important than."
+   },
+   {
+    "titre": "Superlatif",
+    "enonce": "the tallest, the most important."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:girls-at-school",
+  "lv": "4e",
+  "chapitre": "Women at work",
+  "titre": "Girls at school",
+  "principe": "On parle de la scolarisation des filles et on exprime son opinion.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "girls' education, to drop out, early marriage, scholarship."
+   },
+   {
+    "titre": "Opinion",
+    "corps": "I think that girls must go to school."
+   },
+   {
+    "titre": "Raison",
+    "corps": "Education gives girls a better future."
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner son opinion sur l'école des filles.",
+   "solution": "In my opinion, every girl should go to school."
+  },
+  "pieges": "Employer I am agree : on dit I agree.",
+  "proprietes": [
+   {
+    "titre": "Donner son avis",
+    "enonce": "I think / I believe / In my opinion + proposition."
+   },
+   {
+    "titre": "Accord",
+    "enonce": "I agree. / I disagree. (pas I am agree)"
+   },
+   {
+    "titre": "Should",
+    "enonce": "should + verbe pour dire ce qui est souhaitable."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:means-of-transport",
+  "lv": "4e",
+  "chapitre": "Travelling",
+  "titre": "Means of transport",
+  "principe": "On compare les moyens de transport et on exprime ses goûts.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a bus, a taxi, a motorbike, a train, a plane."
+   },
+   {
+    "titre": "Comparer",
+    "corps": "A plane is faster than a train."
+   },
+   {
+    "titre": "Goûts",
+    "corps": "I like travelling by bus. I prefer going by train."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comparer deux transports.",
+   "solution": "A motorbike is cheaper than a taxi but less safe."
+  },
+  "pieges": "Dire more fast : fast prend -er (faster).",
+  "proprietes": [
+   {
+    "titre": "Adjectifs courts",
+    "enonce": "-er / -est : fast, faster, the fastest."
+   },
+   {
+    "titre": "Adjectifs longs",
+    "enonce": "more / the most : more comfortable, the most comfortable."
+   },
+   {
+    "titre": "Irréguliers",
+    "enonce": "good → better → best ; bad → worse → worst."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:at-the-airport",
+  "lv": "4e",
+  "chapitre": "Travelling",
+  "titre": "At the airport",
+  "principe": "On parle du voyage en avion, on invite, on accepte ou refuse et on exprime des regrets.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a ticket, a passport, luggage, a flight, to board, to land."
+   },
+   {
+    "titre": "Inviter",
+    "corps": "Would you like to come with me ? — Yes, with pleasure. / Sorry, I can't."
+   },
+   {
+    "titre": "Regretter",
+    "corps": "I'm sorry I missed the flight."
+   }
+  ],
+  "exemple": {
+   "probleme": "Inviter un ami à voyager.",
+   "solution": "Would you like to travel with me ? — Yes, I'd love to."
+  },
+  "pieges": "Employer to devant le verbe après would like : on dit Would you like to come.",
+  "proprietes": [
+   {
+    "titre": "Would like",
+    "enonce": "would like + to + verbe : politesse."
+   },
+   {
+    "titre": "Refus poli",
+    "enonce": "I'm sorry, I can't. / No, thank you."
+   },
+   {
+    "titre": "Regret",
+    "enonce": "I'm sorry + proposition ; I wish I had..."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:tourism",
+  "lv": "4e",
+  "chapitre": "Travelling",
+  "titre": "Tourism",
+  "principe": "On parle du tourisme et on fait, accepte ou refuse des suggestions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a tourist, a hotel, a beach, a museum, a guide."
+   },
+   {
+    "titre": "Suggérer",
+    "corps": "Why don't we visit Grand-Bassam ?"
+   },
+   {
+    "titre": "Réagir",
+    "corps": "Good idea. / I'd rather not."
+   }
+  ],
+  "exemple": {
+   "probleme": "Proposer une visite.",
+   "solution": "Let's visit the museum tomorrow."
+  },
+  "pieges": "Dire Why we don't go : l'ordre est Why don't we go.",
+  "proprietes": [
+   {
+    "titre": "Suggestions",
+    "enonce": "Let's... ; Why don't we... ? ; How about + -ing ? ; What about + -ing ?"
+   },
+   {
+    "titre": "How about",
+    "enonce": "How about visiting Yamoussoukro ?"
+   },
+   {
+    "titre": "Accepter / refuser",
+    "enonce": "Good idea. / No, I'd rather not."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:modern-and-traditional-clothes",
+  "lv": "4e",
+  "chapitre": "Fashion",
+  "titre": "Modern and traditional clothes",
+  "principe": "On compare vêtements modernes et traditionnels et on exprime des raisons.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a boubou, a pagne, jeans, a suit, fashionable."
+   },
+   {
+    "titre": "Raison",
+    "corps": "I wear a pagne because it is part of our culture."
+   },
+   {
+    "titre": "Comparer",
+    "corps": "Traditional clothes are more colourful."
+   }
+  ],
+  "exemple": {
+   "probleme": "Expliquer pourquoi on porte un pagne.",
+   "solution": "I wear a pagne because it shows our culture."
+  },
+  "pieges": "Confondre because (suivi d'une phrase) et because of (suivi d'un nom).",
+  "proprietes": [
+   {
+    "titre": "Because",
+    "enonce": "because + sujet + verbe."
+   },
+   {
+    "titre": "Because of",
+    "enonce": "because of + nom."
+   },
+   {
+    "titre": "So",
+    "enonce": "so exprime la conséquence : It was hot, so I wore a shirt."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:fashion-show",
+  "lv": "4e",
+  "chapitre": "Fashion",
+  "titre": "Fashion show",
+  "principe": "On décrit un défilé, on dit ce qu'on aime et on persuade.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a model, a designer, a catwalk, an outfit."
+   },
+   {
+    "titre": "Goûts",
+    "corps": "I love this dress. I enjoy watching fashion shows."
+   },
+   {
+    "titre": "Persuader",
+    "corps": "You should try it. It really suits you."
+   }
+  ],
+  "exemple": {
+   "probleme": "Convaincre un ami d'essayer une tenue.",
+   "solution": "You should try this outfit; it suits you well."
+  },
+  "pieges": "Dire enjoy to watch : après enjoy on met le verbe en -ing.",
+  "proprietes": [
+   {
+    "titre": "Like / love / enjoy + ing",
+    "enonce": "I enjoy dancing."
+   },
+   {
+    "titre": "Persuasion",
+    "enonce": "You should... ; Why don't you... ? ; I'm sure you'll like it."
+   },
+   {
+    "titre": "Dissuasion",
+    "enonce": "I don't think you should... ; It's not a good idea to..."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:cosmetics",
+  "lv": "4e",
+  "chapitre": "Fashion",
+  "titre": "Cosmetics",
+  "principe": "On parle des produits cosmétiques : conseils, raisons, permission et interdiction.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "cream, soap, perfume, skin, harmful."
+   },
+   {
+    "titre": "Conseil",
+    "corps": "You should not use bleaching creams."
+   },
+   {
+    "titre": "Permission / interdiction",
+    "corps": "You may use soap. You must not use harmful products."
+   }
+  ],
+  "exemple": {
+   "probleme": "Déconseiller un produit dangereux.",
+   "solution": "You shouldn't use this cream because it harms your skin."
+  },
+  "pieges": "Confondre may (permission) et must not (interdiction).",
+  "proprietes": [
+   {
+    "titre": "May / can",
+    "enonce": "permission : You may go."
+   },
+   {
+    "titre": "Must not",
+    "enonce": "interdiction : You must not smoke."
+   },
+   {
+    "titre": "Advice",
+    "enonce": "should / shouldn't pour un conseil."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:city-life",
+  "lv": "4e",
+  "chapitre": "City or village?",
+  "titre": "City life",
+  "principe": "On parle de la vie en ville : goûts, souhaits et intentions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "traffic, pollution, a skyscraper, job opportunities."
+   },
+   {
+    "titre": "Goûts",
+    "corps": "I like living in the city because there are many jobs."
+   },
+   {
+    "titre": "Intention",
+    "corps": "I want to live in Abidjan to find a job."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire pourquoi on veut vivre en ville.",
+   "solution": "I want to live in the city to study at university."
+  },
+  "pieges": "Utiliser for + verbe pour exprimer le but : on utilise to + verbe.",
+  "proprietes": [
+   {
+    "titre": "But",
+    "enonce": "to + verbe, in order to + verbe."
+   },
+   {
+    "titre": "Souhait",
+    "enonce": "I hope to... ; I would like to..."
+   },
+   {
+    "titre": "Goûts",
+    "enonce": "I like / I dislike + nom ou -ing."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:village-life",
+  "lv": "4e",
+  "chapitre": "City or village?",
+  "titre": "Village life",
+  "principe": "On décrit la vie au village : sentiments, désirs, raisons et suggestions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "farming, fishing, a breeder, to grow, comfortable."
+   },
+   {
+    "titre": "Désir",
+    "corps": "I wish I lived in a quiet village."
+   },
+   {
+    "titre": "Suggestion",
+    "corps": "How about visiting our village ?"
+   }
+  ],
+  "exemple": {
+   "probleme": "Décrire un village.",
+   "solution": "In my village, people grow cocoa and fish in the river."
+  },
+  "pieges": "Oublier le -s au présent simple avec he/she/it : he grows.",
+  "proprietes": [
+   {
+    "titre": "Présent simple",
+    "enonce": "habitudes et vérités générales."
+   },
+   {
+    "titre": "Wish",
+    "enonce": "wish + prétérit pour un souhait irréalisable au présent."
+   },
+   {
+    "titre": "How about",
+    "enonce": "How about + -ing ?"
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:rural-exodus",
+  "lv": "4e",
+  "chapitre": "City or village?",
+  "titre": "Rural exodus",
+  "principe": "On parle de l'exode rural : changements, suggestions et conséquences.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "to migrate, unemployment, overcrowded, poverty."
+   },
+   {
+    "titre": "Changer",
+    "corps": "Many young people left the village."
+   },
+   {
+    "titre": "Conséquence",
+    "corps": "As a result, towns are overcrowded."
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner une conséquence de l'exode rural.",
+   "solution": "Many people leave villages, so cities become overcrowded."
+  },
+  "pieges": "Confondre so (conséquence) et because (cause).",
+  "proprietes": [
+   {
+    "titre": "Conséquence",
+    "enonce": "so, as a result, therefore."
+   },
+   {
+    "titre": "Cause",
+    "enonce": "because, since, as."
+   },
+   {
+    "titre": "Suggestion",
+    "enonce": "Government should create jobs in villages."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:my-rights",
+  "lv": "4e",
+  "chapitre": "Human rights",
+  "titre": "My rights",
+  "principe": "On parle des droits du citoyen et on exprime opinion, approbation et désapprobation.",
+  "etapes": [
+   {
+    "titre": "Droits",
+    "corps": "the right to life, to education, to health, to vote."
+   },
+   {
+    "titre": "Approbation",
+    "corps": "I agree. That's right."
+   },
+   {
+    "titre": "Désapprobation",
+    "corps": "I disagree. I don't think so."
+   }
+  ],
+  "exemple": {
+   "probleme": "Exprimer son désaccord poliment.",
+   "solution": "I'm afraid I disagree: everyone has the right to education."
+  },
+  "pieges": "Dire I am not agree : on dit I don't agree.",
+  "proprietes": [
+   {
+    "titre": "Approuver",
+    "enonce": "I agree ; You're right ; Exactly."
+   },
+   {
+    "titre": "Désapprouver",
+    "enonce": "I disagree ; I don't think so ; I'm not sure."
+   },
+   {
+    "titre": "Right",
+    "enonce": "have the right to + verbe."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:my-duties",
+  "lv": "4e",
+  "chapitre": "Human rights",
+  "titre": "My duties",
+  "principe": "On parle des devoirs du citoyen et on donne des raisons.",
+  "etapes": [
+   {
+    "titre": "Devoirs",
+    "corps": "to pay taxes, to respect the law, to vote, to protect nature."
+   },
+   {
+    "titre": "Obligation",
+    "corps": "Citizens have to obey the law."
+   },
+   {
+    "titre": "Raison",
+    "corps": "We must vote because it is our duty."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire un devoir du citoyen.",
+   "solution": "Every citizen has to respect the law."
+  },
+  "pieges": "Employer must au passé : on utilise had to.",
+  "proprietes": [
+   {
+    "titre": "Have to",
+    "enonce": "obligation : I have to go ; passé : I had to go."
+   },
+   {
+    "titre": "Must",
+    "enonce": "obligation morale ou personnelle."
+   },
+   {
+    "titre": "Duty",
+    "enonce": "It is our duty to + verbe."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:tolerance",
+  "lv": "4e",
+  "chapitre": "Human rights",
+  "titre": "Tolerance",
+  "principe": "On parle de tolérance, d'obligations et d'interdictions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "respect, differences, peace, discrimination."
+   },
+   {
+    "titre": "Obligation",
+    "corps": "We must respect others."
+   },
+   {
+    "titre": "Interdiction",
+    "corps": "You must not insult people."
+   }
+  ],
+  "exemple": {
+   "probleme": "Rappeler une règle de tolérance.",
+   "solution": "We must respect everybody's religion."
+  },
+  "pieges": "Dire must to respect : après must on garde le verbe de base.",
+  "proprietes": [
+   {
+    "titre": "Must / must not",
+    "enonce": "obligation / interdiction."
+   },
+   {
+    "titre": "Mustn't ≠ don't have to",
+    "enonce": "mustn't = interdit ; don't have to = pas obligé."
+   },
+   {
+    "titre": "Let",
+    "enonce": "let + personne + verbe de base : Let him speak."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:endemic-diseases",
+  "lv": "4e",
+  "chapitre": "Hygiene and health",
+  "titre": "Endemic diseases",
+  "principe": "On lit un texte sur les maladies endémiques et on utilise la voix passive.",
+  "etapes": [
+   {
+    "titre": "Lire",
+    "corps": "On repère le titre, les mots-clés et le sens des paragraphes."
+   },
+   {
+    "titre": "Passif",
+    "corps": "Malaria is spread by mosquitoes."
+   },
+   {
+    "titre": "Symptômes",
+    "corps": "fever, headache, vomiting, cough."
+   }
+  ],
+  "exemple": {
+   "probleme": "Mettre à la voix passive : « Mosquitoes spread malaria ».",
+   "solution": "Malaria is spread by mosquitoes."
+  },
+  "pieges": "Oublier le participe passé dans le passif : be + participe passé.",
+  "proprietes": [
+   {
+    "titre": "Passif présent",
+    "enonce": "am / is / are + participe passé."
+   },
+   {
+    "titre": "Passif passé",
+    "enonce": "was / were + participe passé."
+   },
+   {
+    "titre": "Complément d'agent",
+    "enonce": "by + agent (facultatif)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:hygiene-at-school",
+  "lv": "4e",
+  "chapitre": "Hygiene and health",
+  "titre": "Hygiene at school",
+  "principe": "On lit un texte sur l'hygiène à l'école et on donne des conseils.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a latrine, soap, dirty, to sweep, to clean."
+   },
+   {
+    "titre": "Conseils",
+    "corps": "You should wash your hands. Why don't you clean the classroom ?"
+   },
+   {
+    "titre": "Lecture",
+    "corps": "On relève les idées principales de chaque paragraphe."
+   }
+  ],
+  "exemple": {
+   "probleme": "Conseiller un élève.",
+   "solution": "You should always wash your hands after using the toilet."
+  },
+  "pieges": "Oublier to après ought : ought to + verbe.",
+  "proprietes": [
+   {
+    "titre": "Should / ought to",
+    "enonce": "conseil."
+   },
+   {
+    "titre": "Had better",
+    "enonce": "had better + verbe : conseil fort."
+   },
+   {
+    "titre": "Impératif",
+    "enonce": "Wash your hands !"
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:hiv-aids",
+  "lv": "4e",
+  "chapitre": "Hygiene and health",
+  "titre": "HIV/AIDS",
+  "principe": "On lit un texte sur le VIH/SIDA, on sensibilise et on recommande une bonne hygiène de vie.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "to infect, a test, to protect, a treatment, to prevent."
+   },
+   {
+    "titre": "Sensibiliser",
+    "corps": "Everyone should get tested. We must protect ourselves."
+   },
+   {
+    "titre": "Recommander",
+    "corps": "I think you should... ; In my opinion... ; Why don't you... ?"
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner un conseil de prévention.",
+   "solution": "You should use protection and get tested regularly."
+  },
+  "pieges": "Employer des termes qui stigmatisent : on parle des personnes avec respect.",
+  "proprietes": [
+   {
+    "titre": "Conseil",
+    "enonce": "I think you should... ; Why don't you... ?"
+   },
+   {
+    "titre": "Prévenir",
+    "enonce": "prevent + nom ou -ing."
+   },
+   {
+    "titre": "Respect",
+    "enonce": "People living with HIV deserve respect."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:the-computer",
+  "lv": "4e",
+  "chapitre": "Information and communication technologies",
+  "titre": "The computer",
+  "principe": "On décrit un ordinateur : parties, fonctions et fonctionnement.",
+  "etapes": [
+   {
+    "titre": "Les parties",
+    "corps": "a screen, a keyboard, a mouse, a printer."
+   },
+   {
+    "titre": "Fonctions",
+    "corps": "You can type documents and save files."
+   },
+   {
+    "titre": "Fonctionnement",
+    "corps": "The mouse is used to click on icons."
+   }
+  ],
+  "exemple": {
+   "probleme": "Expliquer à quoi sert une souris.",
+   "solution": "A mouse is used to move the cursor on the screen."
+  },
+  "pieges": "Confondre le nom et le verbe : a mouse (nom), to use (verbe).",
+  "proprietes": [
+   {
+    "titre": "Passif de fonction",
+    "enonce": "be used to + verbe : A printer is used to print."
+   },
+   {
+    "titre": "Can",
+    "enonce": "can pour dire ce que fait l'appareil."
+   },
+   {
+    "titre": "Parties",
+    "enonce": "screen, keyboard, mouse, printer."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:the-telephone",
+  "lv": "4e",
+  "chapitre": "Information and communication technologies",
+  "titre": "The telephone",
+  "principe": "On décrit un téléphone : parties et fonctions.",
+  "etapes": [
+   {
+    "titre": "Les parties",
+    "corps": "a screen, a battery, a charger, a keypad."
+   },
+   {
+    "titre": "Fonctions",
+    "corps": "You can call, send messages and take photos."
+   },
+   {
+    "titre": "Décrire",
+    "corps": "It is small and light."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire à quoi sert un téléphone.",
+   "solution": "A phone is used to call people and send messages."
+  },
+  "pieges": "Dire phone to : on dit call someone (sans to).",
+  "proprietes": [
+   {
+    "titre": "Verbes",
+    "enonce": "call, text, charge, switch on / off."
+   },
+   {
+    "titre": "Passif",
+    "enonce": "A phone is used to call."
+   },
+   {
+    "titre": "Adjectifs",
+    "enonce": "small, light, modern, expensive."
+   }
+  ]
+ },
+ {
+  "id": "anglais:4e:the-internet",
+  "lv": "4e",
+  "chapitre": "Information and communication technologies",
+  "titre": "The Internet",
+  "principe": "On décrit l'Internet et ses utilisations.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a website, an email, to download, to search, online."
+   },
+   {
+    "titre": "Utilisations",
+    "corps": "People use the Internet to study and to communicate."
+   },
+   {
+    "titre": "Décrire",
+    "corps": "The Internet connects millions of people."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire à quoi sert l'Internet.",
+   "solution": "The Internet is used to search for information."
+  },
+  "pieges": "Oublier l'article : on dit the Internet.",
+  "proprietes": [
+   {
+    "titre": "Use to",
+    "enonce": "use X to + verbe."
+   },
+   {
+    "titre": "Present simple",
+    "enonce": "The Internet connects people."
+   },
+   {
+    "titre": "Avantages / dangers",
+    "enonce": "advantage ≠ disadvantage."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:my-last-holidays",
+  "lv": "3e",
+  "chapitre": "Life at school",
+  "titre": "My last holidays",
+  "principe": "On raconte ses vacances au passé avec le prétérit simple.",
+  "etapes": [
+   {
+    "titre": "Forme régulière",
+    "corps": "verbe + -ed : visit → visited, play → played."
+   },
+   {
+    "titre": "Forme irrégulière",
+    "corps": "go → went, see → saw, eat → ate, have → had."
+   },
+   {
+    "titre": "Raconter",
+    "corps": "Last holiday, I went to Bouaké. I visited my grandmother."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire où l'on est allé en vacances.",
+   "solution": "Last August, I went to Abidjan with my family."
+  },
+  "pieges": "Mettre -ed à un verbe irrégulier : go donne went, pas goed.",
+  "proprietes": [
+   {
+    "titre": "Prétérit régulier",
+    "enonce": "verbe + -ed (consonne + y → -ied : study → studied)."
+   },
+   {
+    "titre": "Négation",
+    "enonce": "did not (didn't) + verbe de base : I didn't go."
+   },
+   {
+    "titre": "Question",
+    "enonce": "Did you go ? Yes, I did. / No, I didn't."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:school-memories",
+  "lv": "3e",
+  "chapitre": "Life at school",
+  "titre": "School memories",
+  "principe": "On évoque ses souvenirs d'école avec des expressions de temps du passé.",
+  "etapes": [
+   {
+    "titre": "Repères",
+    "corps": "last year, two years ago, when I was ten, in 2020."
+   },
+   {
+    "titre": "Prétérit de to be",
+    "corps": "I was, you were, he/she/it was, we/they were."
+   },
+   {
+    "titre": "Souvenir",
+    "corps": "I was in CM2 two years ago. My teacher was kind."
+   }
+  ],
+  "exemple": {
+   "probleme": "Parler de son premier jour à l'école.",
+   "solution": "On my first day, I was afraid but my teacher was very kind."
+  },
+  "pieges": "Dire I were : on dit I was.",
+  "proprietes": [
+   {
+    "titre": "Was / were",
+    "enonce": "I/he/she/it was ; you/we/they were."
+   },
+   {
+    "titre": "Ago",
+    "enonce": "ago se place après la durée : two years ago."
+   },
+   {
+    "titre": "Used to",
+    "enonce": "used to + verbe exprime une habitude passée : I used to walk to school."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:work-at-school",
+  "lv": "3e",
+  "chapitre": "Life at school",
+  "titre": "Work at school",
+  "principe": "On exprime la condition et on parle de ses résultats scolaires.",
+  "etapes": [
+   {
+    "titre": "Résultats",
+    "corps": "marks, a report card, to pass, to fail."
+   },
+   {
+    "titre": "Condition",
+    "corps": "If you work hard, you will pass."
+   },
+   {
+    "titre": "Conséquence",
+    "corps": "If I don't study, I will fail."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire ce qui arrivera si on travaille.",
+   "solution": "If I study every day, I will pass the exam."
+  },
+  "pieges": "Mettre will dans la proposition en if : on dit If I study, pas If I will study.",
+  "proprietes": [
+   {
+    "titre": "Première condition",
+    "enonce": "If + présent, will + verbe."
+   },
+   {
+    "titre": "Unless",
+    "enonce": "unless = if not : Unless you work, you will fail."
+   },
+   {
+    "titre": "Virgule",
+    "enonce": "On met une virgule quand la phrase commence par if."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:rural-women",
+  "lv": "3e",
+  "chapitre": "Women at work",
+  "titre": "Rural women",
+  "principe": "On exprime la capacité et on rapporte des paroles pour parler des femmes rurales.",
+  "etapes": [
+   {
+    "titre": "Capacité",
+    "corps": "She can plant rice. She cannot read yet."
+   },
+   {
+    "titre": "Vocabulaire",
+    "corps": "to farm, to harvest, to fetch water, to sell."
+   },
+   {
+    "titre": "Discours rapporté",
+    "corps": "She said that she worked in the fields."
+   }
+  ],
+  "exemple": {
+   "probleme": "Rapporter la phrase « I work in the fields ».",
+   "solution": "She said that she worked in the fields."
+  },
+  "pieges": "Garder le présent dans le discours rapporté après said : le verbe recule d'un temps.",
+  "proprietes": [
+   {
+    "titre": "Can",
+    "enonce": "can + verbe de base ; négation cannot / can't."
+   },
+   {
+    "titre": "Discours rapporté",
+    "enonce": "présent → prétérit ; will → would ; can → could."
+   },
+   {
+    "titre": "Said / told",
+    "enonce": "She said that... ; She told me that..."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:women-s-rights-and-duties",
+  "lv": "3e",
+  "chapitre": "Women at work",
+  "titre": "Women's rights and duties",
+  "principe": "On parle des droits et devoirs des femmes avec des structures de comparaison.",
+  "etapes": [
+   {
+    "titre": "Droits",
+    "corps": "the right to education, to vote, to work."
+   },
+   {
+    "titre": "Devoirs",
+    "corps": "to respect the law, to take care of children."
+   },
+   {
+    "titre": "Comparer",
+    "corps": "Women are as important as men."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comparer le rôle des femmes et des hommes.",
+   "solution": "Women are as important as men in society."
+  },
+  "pieges": "Utiliser than avec as ... as : on dit as important as.",
+  "proprietes": [
+   {
+    "titre": "As ... as",
+    "enonce": "égalité : as tall as."
+   },
+   {
+    "titre": "Comparatif",
+    "enonce": "plus ... que : taller than, more important than."
+   },
+   {
+    "titre": "Superlatif",
+    "enonce": "the tallest, the most important."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:girls-at-school",
+  "lv": "3e",
+  "chapitre": "Women at work",
+  "titre": "Girls at school",
+  "principe": "On parle de la scolarisation des filles et on exprime son opinion.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "girls' education, to drop out, early marriage, scholarship."
+   },
+   {
+    "titre": "Opinion",
+    "corps": "I think that girls must go to school."
+   },
+   {
+    "titre": "Raison",
+    "corps": "Education gives girls a better future."
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner son opinion sur l'école des filles.",
+   "solution": "In my opinion, every girl should go to school."
+  },
+  "pieges": "Employer I am agree : on dit I agree.",
+  "proprietes": [
+   {
+    "titre": "Donner son avis",
+    "enonce": "I think / I believe / In my opinion + proposition."
+   },
+   {
+    "titre": "Accord",
+    "enonce": "I agree. / I disagree. (pas I am agree)"
+   },
+   {
+    "titre": "Should",
+    "enonce": "should + verbe pour dire ce qui est souhaitable."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:means-of-transport",
+  "lv": "3e",
+  "chapitre": "Travelling",
+  "titre": "Means of transport",
+  "principe": "On compare les moyens de transport et on exprime ses goûts.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a bus, a taxi, a motorbike, a train, a plane."
+   },
+   {
+    "titre": "Comparer",
+    "corps": "A plane is faster than a train."
+   },
+   {
+    "titre": "Goûts",
+    "corps": "I like travelling by bus. I prefer going by train."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comparer deux transports.",
+   "solution": "A motorbike is cheaper than a taxi but less safe."
+  },
+  "pieges": "Dire more fast : fast prend -er (faster).",
+  "proprietes": [
+   {
+    "titre": "Adjectifs courts",
+    "enonce": "-er / -est : fast, faster, the fastest."
+   },
+   {
+    "titre": "Adjectifs longs",
+    "enonce": "more / the most : more comfortable, the most comfortable."
+   },
+   {
+    "titre": "Irréguliers",
+    "enonce": "good → better → best ; bad → worse → worst."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:at-the-airport",
+  "lv": "3e",
+  "chapitre": "Travelling",
+  "titre": "At the airport",
+  "principe": "On parle du voyage en avion, on invite, on accepte ou refuse et on exprime des regrets.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a ticket, a passport, luggage, a flight, to board, to land."
+   },
+   {
+    "titre": "Inviter",
+    "corps": "Would you like to come with me ? — Yes, with pleasure. / Sorry, I can't."
+   },
+   {
+    "titre": "Regretter",
+    "corps": "I'm sorry I missed the flight."
+   }
+  ],
+  "exemple": {
+   "probleme": "Inviter un ami à voyager.",
+   "solution": "Would you like to travel with me ? — Yes, I'd love to."
+  },
+  "pieges": "Employer to devant le verbe après would like : on dit Would you like to come.",
+  "proprietes": [
+   {
+    "titre": "Would like",
+    "enonce": "would like + to + verbe : politesse."
+   },
+   {
+    "titre": "Refus poli",
+    "enonce": "I'm sorry, I can't. / No, thank you."
+   },
+   {
+    "titre": "Regret",
+    "enonce": "I'm sorry + proposition ; I wish I had..."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:tourism",
+  "lv": "3e",
+  "chapitre": "Travelling",
+  "titre": "Tourism",
+  "principe": "On parle du tourisme et on fait, accepte ou refuse des suggestions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a tourist, a hotel, a beach, a museum, a guide."
+   },
+   {
+    "titre": "Suggérer",
+    "corps": "Why don't we visit Grand-Bassam ?"
+   },
+   {
+    "titre": "Réagir",
+    "corps": "Good idea. / I'd rather not."
+   }
+  ],
+  "exemple": {
+   "probleme": "Proposer une visite.",
+   "solution": "Let's visit the museum tomorrow."
+  },
+  "pieges": "Dire Why we don't go : l'ordre est Why don't we go.",
+  "proprietes": [
+   {
+    "titre": "Suggestions",
+    "enonce": "Let's... ; Why don't we... ? ; How about + -ing ? ; What about + -ing ?"
+   },
+   {
+    "titre": "How about",
+    "enonce": "How about visiting Yamoussoukro ?"
+   },
+   {
+    "titre": "Accepter / refuser",
+    "enonce": "Good idea. / No, I'd rather not."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:modern-and-traditional-clothes",
+  "lv": "3e",
+  "chapitre": "Fashion",
+  "titre": "Modern and traditional clothes",
+  "principe": "On compare vêtements modernes et traditionnels et on exprime des raisons.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a boubou, a pagne, jeans, a suit, fashionable."
+   },
+   {
+    "titre": "Raison",
+    "corps": "I wear a pagne because it is part of our culture."
+   },
+   {
+    "titre": "Comparer",
+    "corps": "Traditional clothes are more colourful."
+   }
+  ],
+  "exemple": {
+   "probleme": "Expliquer pourquoi on porte un pagne.",
+   "solution": "I wear a pagne because it shows our culture."
+  },
+  "pieges": "Confondre because (suivi d'une phrase) et because of (suivi d'un nom).",
+  "proprietes": [
+   {
+    "titre": "Because",
+    "enonce": "because + sujet + verbe."
+   },
+   {
+    "titre": "Because of",
+    "enonce": "because of + nom."
+   },
+   {
+    "titre": "So",
+    "enonce": "so exprime la conséquence : It was hot, so I wore a shirt."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:fashion-show",
+  "lv": "3e",
+  "chapitre": "Fashion",
+  "titre": "Fashion show",
+  "principe": "On décrit un défilé, on dit ce qu'on aime et on persuade.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a model, a designer, a catwalk, an outfit."
+   },
+   {
+    "titre": "Goûts",
+    "corps": "I love this dress. I enjoy watching fashion shows."
+   },
+   {
+    "titre": "Persuader",
+    "corps": "You should try it. It really suits you."
+   }
+  ],
+  "exemple": {
+   "probleme": "Convaincre un ami d'essayer une tenue.",
+   "solution": "You should try this outfit; it suits you well."
+  },
+  "pieges": "Dire enjoy to watch : après enjoy on met le verbe en -ing.",
+  "proprietes": [
+   {
+    "titre": "Like / love / enjoy + ing",
+    "enonce": "I enjoy dancing."
+   },
+   {
+    "titre": "Persuasion",
+    "enonce": "You should... ; Why don't you... ? ; I'm sure you'll like it."
+   },
+   {
+    "titre": "Dissuasion",
+    "enonce": "I don't think you should... ; It's not a good idea to..."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:cosmetics",
+  "lv": "3e",
+  "chapitre": "Fashion",
+  "titre": "Cosmetics",
+  "principe": "On parle des produits cosmétiques : conseils, raisons, permission et interdiction.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "cream, soap, perfume, skin, harmful."
+   },
+   {
+    "titre": "Conseil",
+    "corps": "You should not use bleaching creams."
+   },
+   {
+    "titre": "Permission / interdiction",
+    "corps": "You may use soap. You must not use harmful products."
+   }
+  ],
+  "exemple": {
+   "probleme": "Déconseiller un produit dangereux.",
+   "solution": "You shouldn't use this cream because it harms your skin."
+  },
+  "pieges": "Confondre may (permission) et must not (interdiction).",
+  "proprietes": [
+   {
+    "titre": "May / can",
+    "enonce": "permission : You may go."
+   },
+   {
+    "titre": "Must not",
+    "enonce": "interdiction : You must not smoke."
+   },
+   {
+    "titre": "Advice",
+    "enonce": "should / shouldn't pour un conseil."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:city-life",
+  "lv": "3e",
+  "chapitre": "City or village?",
+  "titre": "City life",
+  "principe": "On parle de la vie en ville : goûts, souhaits et intentions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "traffic, pollution, a skyscraper, job opportunities."
+   },
+   {
+    "titre": "Goûts",
+    "corps": "I like living in the city because there are many jobs."
+   },
+   {
+    "titre": "Intention",
+    "corps": "I want to live in Abidjan to find a job."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire pourquoi on veut vivre en ville.",
+   "solution": "I want to live in the city to study at university."
+  },
+  "pieges": "Utiliser for + verbe pour exprimer le but : on utilise to + verbe.",
+  "proprietes": [
+   {
+    "titre": "But",
+    "enonce": "to + verbe, in order to + verbe."
+   },
+   {
+    "titre": "Souhait",
+    "enonce": "I hope to... ; I would like to..."
+   },
+   {
+    "titre": "Goûts",
+    "enonce": "I like / I dislike + nom ou -ing."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:village-life",
+  "lv": "3e",
+  "chapitre": "City or village?",
+  "titre": "Village life",
+  "principe": "On décrit la vie au village : sentiments, désirs, raisons et suggestions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "farming, fishing, a breeder, to grow, comfortable."
+   },
+   {
+    "titre": "Désir",
+    "corps": "I wish I lived in a quiet village."
+   },
+   {
+    "titre": "Suggestion",
+    "corps": "How about visiting our village ?"
+   }
+  ],
+  "exemple": {
+   "probleme": "Décrire un village.",
+   "solution": "In my village, people grow cocoa and fish in the river."
+  },
+  "pieges": "Oublier le -s au présent simple avec he/she/it : he grows.",
+  "proprietes": [
+   {
+    "titre": "Présent simple",
+    "enonce": "habitudes et vérités générales."
+   },
+   {
+    "titre": "Wish",
+    "enonce": "wish + prétérit pour un souhait irréalisable au présent."
+   },
+   {
+    "titre": "How about",
+    "enonce": "How about + -ing ?"
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:rural-exodus",
+  "lv": "3e",
+  "chapitre": "City or village?",
+  "titre": "Rural exodus",
+  "principe": "On parle de l'exode rural : changements, suggestions et conséquences.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "to migrate, unemployment, overcrowded, poverty."
+   },
+   {
+    "titre": "Changer",
+    "corps": "Many young people left the village."
+   },
+   {
+    "titre": "Conséquence",
+    "corps": "As a result, towns are overcrowded."
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner une conséquence de l'exode rural.",
+   "solution": "Many people leave villages, so cities become overcrowded."
+  },
+  "pieges": "Confondre so (conséquence) et because (cause).",
+  "proprietes": [
+   {
+    "titre": "Conséquence",
+    "enonce": "so, as a result, therefore."
+   },
+   {
+    "titre": "Cause",
+    "enonce": "because, since, as."
+   },
+   {
+    "titre": "Suggestion",
+    "enonce": "Government should create jobs in villages."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:my-rights",
+  "lv": "3e",
+  "chapitre": "Human rights",
+  "titre": "My rights",
+  "principe": "On parle des droits du citoyen et on exprime opinion, approbation et désapprobation.",
+  "etapes": [
+   {
+    "titre": "Droits",
+    "corps": "the right to life, to education, to health, to vote."
+   },
+   {
+    "titre": "Approbation",
+    "corps": "I agree. That's right."
+   },
+   {
+    "titre": "Désapprobation",
+    "corps": "I disagree. I don't think so."
+   }
+  ],
+  "exemple": {
+   "probleme": "Exprimer son désaccord poliment.",
+   "solution": "I'm afraid I disagree: everyone has the right to education."
+  },
+  "pieges": "Dire I am not agree : on dit I don't agree.",
+  "proprietes": [
+   {
+    "titre": "Approuver",
+    "enonce": "I agree ; You're right ; Exactly."
+   },
+   {
+    "titre": "Désapprouver",
+    "enonce": "I disagree ; I don't think so ; I'm not sure."
+   },
+   {
+    "titre": "Right",
+    "enonce": "have the right to + verbe."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:my-duties",
+  "lv": "3e",
+  "chapitre": "Human rights",
+  "titre": "My duties",
+  "principe": "On parle des devoirs du citoyen et on donne des raisons.",
+  "etapes": [
+   {
+    "titre": "Devoirs",
+    "corps": "to pay taxes, to respect the law, to vote, to protect nature."
+   },
+   {
+    "titre": "Obligation",
+    "corps": "Citizens have to obey the law."
+   },
+   {
+    "titre": "Raison",
+    "corps": "We must vote because it is our duty."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire un devoir du citoyen.",
+   "solution": "Every citizen has to respect the law."
+  },
+  "pieges": "Employer must au passé : on utilise had to.",
+  "proprietes": [
+   {
+    "titre": "Have to",
+    "enonce": "obligation : I have to go ; passé : I had to go."
+   },
+   {
+    "titre": "Must",
+    "enonce": "obligation morale ou personnelle."
+   },
+   {
+    "titre": "Duty",
+    "enonce": "It is our duty to + verbe."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:tolerance",
+  "lv": "3e",
+  "chapitre": "Human rights",
+  "titre": "Tolerance",
+  "principe": "On parle de tolérance, d'obligations et d'interdictions.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "respect, differences, peace, discrimination."
+   },
+   {
+    "titre": "Obligation",
+    "corps": "We must respect others."
+   },
+   {
+    "titre": "Interdiction",
+    "corps": "You must not insult people."
+   }
+  ],
+  "exemple": {
+   "probleme": "Rappeler une règle de tolérance.",
+   "solution": "We must respect everybody's religion."
+  },
+  "pieges": "Dire must to respect : après must on garde le verbe de base.",
+  "proprietes": [
+   {
+    "titre": "Must / must not",
+    "enonce": "obligation / interdiction."
+   },
+   {
+    "titre": "Mustn't ≠ don't have to",
+    "enonce": "mustn't = interdit ; don't have to = pas obligé."
+   },
+   {
+    "titre": "Let",
+    "enonce": "let + personne + verbe de base : Let him speak."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:endemic-diseases",
+  "lv": "3e",
+  "chapitre": "Hygiene and health",
+  "titre": "Endemic diseases",
+  "principe": "On lit un texte sur les maladies endémiques et on utilise la voix passive.",
+  "etapes": [
+   {
+    "titre": "Lire",
+    "corps": "On repère le titre, les mots-clés et le sens des paragraphes."
+   },
+   {
+    "titre": "Passif",
+    "corps": "Malaria is spread by mosquitoes."
+   },
+   {
+    "titre": "Symptômes",
+    "corps": "fever, headache, vomiting, cough."
+   }
+  ],
+  "exemple": {
+   "probleme": "Mettre à la voix passive : « Mosquitoes spread malaria ».",
+   "solution": "Malaria is spread by mosquitoes."
+  },
+  "pieges": "Oublier le participe passé dans le passif : be + participe passé.",
+  "proprietes": [
+   {
+    "titre": "Passif présent",
+    "enonce": "am / is / are + participe passé."
+   },
+   {
+    "titre": "Passif passé",
+    "enonce": "was / were + participe passé."
+   },
+   {
+    "titre": "Complément d'agent",
+    "enonce": "by + agent (facultatif)."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:hygiene-at-school",
+  "lv": "3e",
+  "chapitre": "Hygiene and health",
+  "titre": "Hygiene at school",
+  "principe": "On lit un texte sur l'hygiène à l'école et on donne des conseils.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a latrine, soap, dirty, to sweep, to clean."
+   },
+   {
+    "titre": "Conseils",
+    "corps": "You should wash your hands. Why don't you clean the classroom ?"
+   },
+   {
+    "titre": "Lecture",
+    "corps": "On relève les idées principales de chaque paragraphe."
+   }
+  ],
+  "exemple": {
+   "probleme": "Conseiller un élève.",
+   "solution": "You should always wash your hands after using the toilet."
+  },
+  "pieges": "Oublier to après ought : ought to + verbe.",
+  "proprietes": [
+   {
+    "titre": "Should / ought to",
+    "enonce": "conseil."
+   },
+   {
+    "titre": "Had better",
+    "enonce": "had better + verbe : conseil fort."
+   },
+   {
+    "titre": "Impératif",
+    "enonce": "Wash your hands !"
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:hiv-aids",
+  "lv": "3e",
+  "chapitre": "Hygiene and health",
+  "titre": "HIV/AIDS",
+  "principe": "On lit un texte sur le VIH/SIDA, on sensibilise et on recommande une bonne hygiène de vie.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "to infect, a test, to protect, a treatment, to prevent."
+   },
+   {
+    "titre": "Sensibiliser",
+    "corps": "Everyone should get tested. We must protect ourselves."
+   },
+   {
+    "titre": "Recommander",
+    "corps": "I think you should... ; In my opinion... ; Why don't you... ?"
+   }
+  ],
+  "exemple": {
+   "probleme": "Donner un conseil de prévention.",
+   "solution": "You should use protection and get tested regularly."
+  },
+  "pieges": "Employer des termes qui stigmatisent : on parle des personnes avec respect.",
+  "proprietes": [
+   {
+    "titre": "Conseil",
+    "enonce": "I think you should... ; Why don't you... ?"
+   },
+   {
+    "titre": "Prévenir",
+    "enonce": "prevent + nom ou -ing."
+   },
+   {
+    "titre": "Respect",
+    "enonce": "People living with HIV deserve respect."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:the-computer",
+  "lv": "3e",
+  "chapitre": "Information and communication technologies",
+  "titre": "The computer",
+  "principe": "On décrit un ordinateur : parties, fonctions et fonctionnement.",
+  "etapes": [
+   {
+    "titre": "Les parties",
+    "corps": "a screen, a keyboard, a mouse, a printer."
+   },
+   {
+    "titre": "Fonctions",
+    "corps": "You can type documents and save files."
+   },
+   {
+    "titre": "Fonctionnement",
+    "corps": "The mouse is used to click on icons."
+   }
+  ],
+  "exemple": {
+   "probleme": "Expliquer à quoi sert une souris.",
+   "solution": "A mouse is used to move the cursor on the screen."
+  },
+  "pieges": "Confondre le nom et le verbe : a mouse (nom), to use (verbe).",
+  "proprietes": [
+   {
+    "titre": "Passif de fonction",
+    "enonce": "be used to + verbe : A printer is used to print."
+   },
+   {
+    "titre": "Can",
+    "enonce": "can pour dire ce que fait l'appareil."
+   },
+   {
+    "titre": "Parties",
+    "enonce": "screen, keyboard, mouse, printer."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:the-telephone",
+  "lv": "3e",
+  "chapitre": "Information and communication technologies",
+  "titre": "The telephone",
+  "principe": "On décrit un téléphone : parties et fonctions.",
+  "etapes": [
+   {
+    "titre": "Les parties",
+    "corps": "a screen, a battery, a charger, a keypad."
+   },
+   {
+    "titre": "Fonctions",
+    "corps": "You can call, send messages and take photos."
+   },
+   {
+    "titre": "Décrire",
+    "corps": "It is small and light."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire à quoi sert un téléphone.",
+   "solution": "A phone is used to call people and send messages."
+  },
+  "pieges": "Dire phone to : on dit call someone (sans to).",
+  "proprietes": [
+   {
+    "titre": "Verbes",
+    "enonce": "call, text, charge, switch on / off."
+   },
+   {
+    "titre": "Passif",
+    "enonce": "A phone is used to call."
+   },
+   {
+    "titre": "Adjectifs",
+    "enonce": "small, light, modern, expensive."
+   }
+  ]
+ },
+ {
+  "id": "anglais:3e:the-internet",
+  "lv": "3e",
+  "chapitre": "Information and communication technologies",
+  "titre": "The Internet",
+  "principe": "On décrit l'Internet et ses utilisations.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a website, an email, to download, to search, online."
+   },
+   {
+    "titre": "Utilisations",
+    "corps": "People use the Internet to study and to communicate."
+   },
+   {
+    "titre": "Décrire",
+    "corps": "The Internet connects millions of people."
+   }
+  ],
+  "exemple": {
+   "probleme": "Dire à quoi sert l'Internet.",
+   "solution": "The Internet is used to search for information."
+  },
+  "pieges": "Oublier l'article : on dit the Internet.",
+  "proprietes": [
+   {
+    "titre": "Use to",
+    "enonce": "use X to + verbe."
+   },
+   {
+    "titre": "Present simple",
+    "enonce": "The Internet connects people."
+   },
+   {
+    "titre": "Avantages / dangers",
+    "enonce": "advantage ≠ disadvantage."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:lifestyle-moving-with-the-times",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "Lifestyle: moving with the times",
+  "principe": "On compare les modes de vie d'hier et d'aujourd'hui avec les temps du présent et du passé, et on écrit une lettre officielle de plainte.",
+  "etapes": [
+   {
+    "titre": "Temps",
+    "corps": "present simple / present perfect ; past simple / past perfect."
+   },
+   {
+    "titre": "Mots utiles",
+    "corps": "wherever, whenever, whoever, whichever, whatever, however."
+   },
+   {
+    "titre": "Lettre de plainte",
+    "corps": "Objet, motif, faits, demande, formule de politesse."
+   }
+  ],
+  "exemple": {
+   "probleme": "Comparer la vie d'avant et d'aujourd'hui.",
+   "solution": "Life has changed a lot since people started using mobile phones."
+  },
+  "pieges": "Utiliser le present perfect avec une date précise : on dit I visited it in 2019.",
+  "proprietes": [
+   {
+    "titre": "Present perfect",
+    "enonce": "have / has + participe passé ; lié au présent."
+   },
+   {
+    "titre": "Past perfect",
+    "enonce": "had + participe passé ; antérieur à un autre fait passé."
+   },
+   {
+    "titre": "-ever",
+    "enonce": "whatever = quoi que, whenever = chaque fois que."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:freedom-and-civil-rights",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "Freedom and civil rights",
+  "principe": "On parle de la liberté et des droits civiques avec les modaux au passé, et on écrit une lettre informelle.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "equality, discrimination, prejudice, step-father, half-sister, mother-in-law."
+   },
+   {
+    "titre": "Modaux au passé",
+    "corps": "should have, could have, must have + participe passé."
+   },
+   {
+    "titre": "Lettre informelle",
+    "corps": "Ton amical, formes contractées, formule finale souple."
+   }
+  ],
+  "exemple": {
+   "probleme": "Exprimer un regret.",
+   "solution": "He should have voted in the last election."
+  },
+  "pieges": "Dire should have went : après have, on utilise le participe passé (gone).",
+  "proprietes": [
+   {
+    "titre": "Should have",
+    "enonce": "regret ou reproche."
+   },
+   {
+    "titre": "Could have",
+    "enonce": "possibilité non réalisée."
+   },
+   {
+    "titre": "Must have",
+    "enonce": "déduction certaine sur le passé."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:development-issues",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "Development issues",
+  "principe": "On aborde les enjeux du développement avec verbes à particule, causatifs et comparaison, et on écrit un article.",
+  "etapes": [
+   {
+    "titre": "Verbes à particule",
+    "corps": "put up with, look forward to, come up with."
+   },
+   {
+    "titre": "Causatifs",
+    "corps": "make / let / allow / enable ; have / get something done."
+   },
+   {
+    "titre": "Article",
+    "corps": "Titre, chapeau, développement, conclusion."
+   }
+  ],
+  "exemple": {
+   "probleme": "Utiliser un causatif.",
+   "solution": "The government had the road repaired."
+  },
+  "pieges": "Mettre to après make à la voix active : make + personne + verbe de base.",
+  "proprietes": [
+   {
+    "titre": "Make / let",
+    "enonce": "make / let + objet + verbe de base."
+   },
+   {
+    "titre": "Allow / enable",
+    "enonce": "allow / enable + objet + to + verbe."
+   },
+   {
+    "titre": "Have / get",
+    "enonce": "have something done ; get something done."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:what-the-future-holds",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "What the future holds",
+  "principe": "On parle de l'avenir avec les différentes formes du futur, et on rédige une dissertation argumentative.",
+  "etapes": [
+   {
+    "titre": "Futur",
+    "corps": "will, be going to, future progressive, future perfect."
+   },
+   {
+    "titre": "Connecteurs",
+    "corps": "firstly, moreover, however, in conclusion."
+   },
+   {
+    "titre": "Plan",
+    "corps": "Introduction, arguments pour, arguments contre, conclusion."
+   }
+  ],
+  "exemple": {
+   "probleme": "Utiliser le future perfect.",
+   "solution": "By 2040, many cities will have doubled in size."
+  },
+  "pieges": "Confondre will (décision, prévision) et be going to (intention, preuve présente).",
+  "proprietes": [
+   {
+    "titre": "Future progressive",
+    "enonce": "will be + -ing : action en cours à un moment futur."
+   },
+   {
+    "titre": "Future perfect",
+    "enonce": "will have + participe passé : terminée avant un moment futur."
+   },
+   {
+    "titre": "Be going to",
+    "enonce": "intention ou prévision basée sur un indice."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:managing-resources",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "Managing resources",
+  "principe": "On parle de la gestion des ressources avec le conditionnel, les relatives et le passif impersonnel, et on structure un exposé.",
+  "etapes": [
+   {
+    "titre": "Conditionnels",
+    "corps": "If + prétérit, would + verbe ; If + past perfect, would have + participe."
+   },
+   {
+    "titre": "Relatives",
+    "corps": "who, whom, whose, which, that."
+   },
+   {
+    "titre": "Passif impersonnel",
+    "corps": "It is said that... ; It is believed that..."
+   }
+  ],
+  "exemple": {
+   "probleme": "Utiliser une relative.",
+   "solution": "The farmer who grows cocoa sells it to a cooperative."
+  },
+  "pieges": "Utiliser who pour une chose : who pour une personne, which pour une chose.",
+  "proprietes": [
+   {
+    "titre": "Conditionnel 2",
+    "enonce": "If + prétérit, would + verbe de base."
+   },
+   {
+    "titre": "Conditionnel 3",
+    "enonce": "If + past perfect, would have + participe passé."
+   },
+   {
+    "titre": "Relatives",
+    "enonce": "who (personne), which (chose), whose (possession), that."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:contemporary-africa",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "Contemporary Africa",
+  "principe": "On parle de l'Afrique contemporaine : économie, idiomes, négation emphatique.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "trade, investment, growth, entrepreneur."
+   },
+   {
+    "titre": "Structures",
+    "corps": "not only ... but also ; neither ... nor."
+   },
+   {
+    "titre": "Exposé",
+    "corps": "Accroche, plan annoncé, développement, conclusion."
+   }
+  ],
+  "exemple": {
+   "probleme": "Utiliser not only ... but also.",
+   "solution": "Not only does the country export cocoa, but it also exports coffee."
+  },
+  "pieges": "Oublier l'inversion après not only en début de phrase : not only does...",
+  "proprietes": [
+   {
+    "titre": "Not only ... but also",
+    "enonce": "avec inversion sujet-auxiliaire en début de phrase."
+   },
+   {
+    "titre": "Neither ... nor",
+    "enonce": "ni ... ni."
+   },
+   {
+    "titre": "Idiomes",
+    "enonce": "à apprendre en contexte, sans traduction mot à mot."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:international-issues",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "International issues",
+  "principe": "On aborde les questions internationales avec le style indirect, les infinitifs passifs et les requêtes.",
+  "etapes": [
+   {
+    "titre": "Organisations",
+    "corps": "UN, AU, ECOWAS, UNESCO."
+   },
+   {
+    "titre": "Discours indirect",
+    "corps": "She asked if I knew him. He told me to leave."
+   },
+   {
+    "titre": "Requêtes et ordres",
+    "corps": "Could you help me ? He ordered them to stop."
+   }
+  ],
+  "exemple": {
+   "probleme": "Rapporter une question.",
+   "solution": "He asked me where I lived."
+  },
+  "pieges": "Garder l'ordre interrogatif dans la question indirecte : on écrit where I lived.",
+  "proprietes": [
+   {
+    "titre": "Question indirecte",
+    "enonce": "ordre sujet + verbe, sans do ni inversion."
+   },
+   {
+    "titre": "Reporting verbs",
+    "enonce": "ask, tell, order, request, advise."
+   },
+   {
+    "titre": "Need / dare",
+    "enonce": "need et dare s'emploient comme modaux ou comme verbes ordinaires."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:cultural-differences",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "Cultural differences",
+  "principe": "On parle des différences culturelles : adjectifs en -ed/-ing, interrogatives, lettre de motivation.",
+  "etapes": [
+   {
+    "titre": "-ed / -ing",
+    "corps": "bored (qui s'ennuie) ≠ boring (ennuyeux)."
+   },
+   {
+    "titre": "Interrogatives",
+    "corps": "How long have you lived here ? What do you think of it ?"
+   },
+   {
+    "titre": "Lettre de motivation",
+    "corps": "Poste visé, qualités, expérience, motivation, formule de politesse."
+   }
+  ],
+  "exemple": {
+   "probleme": "Choisir -ed ou -ing.",
+   "solution": "The film was boring, so I felt bored."
+  },
+  "pieges": "Confondre adjectifs en -ed (sentiment ressenti) et -ing (cause).",
+  "proprietes": [
+   {
+    "titre": "Adjectifs en -ed",
+    "enonce": "décrivent ce qu'on ressent."
+   },
+   {
+    "titre": "Adjectifs en -ing",
+    "enonce": "décrivent ce qui provoque le sentiment."
+   },
+   {
+    "titre": "Gestes",
+    "enonce": "body language varies between cultures."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:justice",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "Justice",
+  "principe": "On parle de la justice : tags, approbation, vérification, dialogue.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "a judge, a lawyer, a trial, a witness, prison."
+   },
+   {
+    "titre": "Question tags",
+    "corps": "You are a lawyer, aren't you ? He didn't come, did he ?"
+   },
+   {
+    "titre": "Désaccord / accord",
+    "corps": "I (don't) agree. That's true. I see what you mean."
+   }
+  ],
+  "exemple": {
+   "probleme": "Ajouter un question tag.",
+   "solution": "She lives in Abidjan, doesn't she ?"
+  },
+  "pieges": "Garder la même polarité dans le tag : phrase positive → tag négatif.",
+  "proprietes": [
+   {
+    "titre": "Question tag",
+    "enonce": "phrase positive → tag négatif ; phrase négative → tag positif."
+   },
+   {
+    "titre": "Clarifier",
+    "enonce": "Do you mean that... ? Could you repeat ?"
+   },
+   {
+    "titre": "Conclure",
+    "enonce": "To sum up, In short, To conclude."
+   }
+  ]
+ },
+ {
+  "id": "anglais:tle:demography",
+  "lv": "tle",
+  "chapitre": "Thèmes de Terminale",
+  "titre": "Demography",
+  "principe": "On étudie la démographie : croissance, migrations, pronoms, exposé.",
+  "etapes": [
+   {
+    "titre": "Vocabulaire",
+    "corps": "population, birth rate, overcrowding, migration."
+   },
+   {
+    "titre": "Décrire une courbe",
+    "corps": "rise, increase, fall, decrease, remain stable."
+   },
+   {
+    "titre": "Pronoms",
+    "corps": "personnels, réfléchis (myself, themselves), réciproques (each other)."
+   }
+  ],
+  "exemple": {
+   "probleme": "Décrire une croissance.",
+   "solution": "The population has increased steadily since 1990."
+  },
+  "pieges": "Confondre réfléchi et réciproque : themselves (chacun lui-même) ≠ each other (l'un l'autre).",
+  "proprietes": [
+   {
+    "titre": "Pronoms réfléchis",
+    "enonce": "myself, yourself, himself, herself, itself, ourselves, themselves."
+   },
+   {
+    "titre": "Réciproque",
+    "enonce": "each other / one another."
+   },
+   {
+    "titre": "Décrire les variations",
+    "enonce": "sharp rise, slight fall, steady growth."
+   }
+  ]
+ }
+]

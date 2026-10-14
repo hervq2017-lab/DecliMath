@@ -1,0 +1,1637 @@
+{
+ "meta": {
+  "date": "2026-10-11",
+  "pays": "Côte d'Ivoire",
+  "discipline": "Mathématiques",
+  "niveaux": "6e à Terminale (séries A, C, D)",
+  "source": "Programmes éducatifs officiels, DPFC (Ministère de l'Éducation nationale)",
+  "limite": "Le CIAM n'est pas intégré: sa table des matières n'a pas pu être consultée (voir feuille Correspondance_CIAM)."
+ },
+ "volumes_horaires": [
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "heures_semaine": 4,
+   "heures_an": 128,
+   "remarque": "Résumé du PDF reçu en anglais: libellés des leçons traduits, à vérifier dans le PDF.",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/01.%20Prog%20%C3%89duct%20MATHS%206e%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 13
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "heures_semaine": 4,
+   "heures_an": 128,
+   "remarque": "",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/02.%20Prog%20%C3%89duct%20MATHS%205e%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 12
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "heures_semaine": 4,
+   "heures_an": 128,
+   "remarque": "Aucune leçon de fonctions ni de probabilités listée pour la 4e.",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/03.%20Prog%20%C3%89duct%20MATHS%204e%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 11
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "heures_semaine": 4,
+   "heures_an": 128,
+   "remarque": "Un autre extrait du même programme indique 31 semaines pour 128 h (incohérent: 31 × 4 = 124). Thème « Transformations du plan »: niveau exact des leçons non précisé.",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/04.%20Prog%20%C3%89duct%20MATHS%203e%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 14
+  },
+  {
+   "niveau": "2nde A",
+   "serie": "A",
+   "heures_semaine": 3,
+   "heures_an": 96,
+   "remarque": "",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/05.%20Prog%20%C3%89duct%20MATHS%202A%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 8
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "heures_semaine": 5,
+   "heures_an": 160,
+   "remarque": "",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/06.Prog%20Educt%20maths%202C%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 20
+  },
+  {
+   "niveau": "1ère A1",
+   "serie": "A1",
+   "heures_semaine": 4,
+   "heures_an": 128,
+   "remarque": "",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/07.%20Prog%20%C3%89duct%20MATHS%201A1%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 7
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "heures_semaine": 6,
+   "heures_an": 204,
+   "remarque": "",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/09.Prog%20Educt%20maths%201C%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 17
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "heures_semaine": 5,
+   "heures_an": 170,
+   "remarque": "Le tableau synoptique cite aussi « Nombres complexes » en 1ère D; absent du corps du programme.",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/10.Prog%20Educt%20maths%201D%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 15
+  },
+  {
+   "niveau": "Tle A1",
+   "serie": "A1",
+   "heures_semaine": 5,
+   "heures_an": 160,
+   "remarque": "Le guide d'exécution numérote la leçon des systèmes linéaires « 6 » au lieu de « 1 ».",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/11.%20Prog%20%C3%89duct%20MATHS%20TA1%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 8
+  },
+  {
+   "niveau": "Tle A2",
+   "serie": "A2",
+   "heures_semaine": 4,
+   "heures_an": 128,
+   "remarque": "En-têtes du PDF mentionnant « Terminale A1 »: document incohérent, à vérifier.",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/12.%20Prog%20%C3%89duct%20MATHS%20TA2%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 7
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "heures_semaine": 8,
+   "heures_an": 256,
+   "remarque": "",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/13.%20Prog%20Educt%20maths%20TC%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 19
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "heures_semaine": 6,
+   "heures_an": 192,
+   "remarque": "Composées de transformations: listée au tableau synoptique, absente du corps du programme.",
+   "source": "https://dpfc-ci.net/dpfc/programmes/maths/14.%20Prog%20Educt%20maths%20TD%20CND%200923.pdf",
+   "confiance": "Élevée",
+   "nb_lecons": 13
+  }
+ ],
+ "lecons": [
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Nombres entiers naturels",
+   "id": "maths:6e:nombres-entiers-naturels"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 2,
+   "lecon": "Nombres décimaux",
+   "id": "maths:6e:nombres-decimaux"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 3,
+   "lecon": "Fractions",
+   "id": "maths:6e:fractions"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Proportionnalité",
+   "id": "maths:6e:proportionnalite"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 2,
+   "lecon": "Statistique",
+   "id": "maths:6e:statistique"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 1,
+   "lecon": "Droites et points",
+   "id": "maths:6e:droites-et-points"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 2,
+   "lecon": "Segments",
+   "id": "maths:6e:segments"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 3,
+   "lecon": "Cercles et disques",
+   "id": "maths:6e:cercles-et-disques"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 4,
+   "lecon": "Angles",
+   "id": "maths:6e:angles"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 5,
+   "lecon": "Triangles",
+   "id": "maths:6e:triangles"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 6,
+   "lecon": "Parallélogrammes",
+   "id": "maths:6e:parallelogrammes"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie de l'espace",
+   "numero": 1,
+   "lecon": "Pavés droits et cylindres droits",
+   "id": "maths:6e:paves-droits-et-cylindres-droits"
+  },
+  {
+   "niveau": "6e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 1,
+   "lecon": "Figures symétriques par rapport à un point",
+   "id": "maths:6e:figures-symetriques-par-rapport-a-un-point"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Nombres premiers",
+   "id": "maths:5e:nombres-premiers"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 2,
+   "lecon": "Nombres décimaux relatifs",
+   "id": "maths:5e:nombres-decimaux-relatifs"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 3,
+   "lecon": "Fractions",
+   "id": "maths:5e:fractions"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Proportionnalité",
+   "id": "maths:5e:proportionnalite"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 2,
+   "lecon": "Statistique",
+   "id": "maths:5e:statistique"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 1,
+   "lecon": "Segments",
+   "id": "maths:5e:segments"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 2,
+   "lecon": "Cercles",
+   "id": "maths:5e:cercles"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 3,
+   "lecon": "Angles",
+   "id": "maths:5e:angles"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 4,
+   "lecon": "Triangles",
+   "id": "maths:5e:triangles"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 5,
+   "lecon": "Parallélogrammes particuliers",
+   "id": "maths:5e:parallelogrammes-particuliers"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie de l'espace",
+   "numero": 1,
+   "lecon": "Prisme droit",
+   "id": "maths:5e:prisme-droit"
+  },
+  {
+   "niveau": "5e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 1,
+   "lecon": "Figures symétriques par rapport à une droite",
+   "id": "maths:5e:figures-symetriques-par-rapport-a-une-droite"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Nombres décimaux relatifs",
+   "id": "maths:4e:nombres-decimaux-relatifs"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 2,
+   "lecon": "Nombres rationnels",
+   "id": "maths:4e:nombres-rationnels"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 3,
+   "lecon": "Calcul littéral",
+   "id": "maths:4e:calcul-litteral"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 4,
+   "lecon": "Équations et inéquations dans ℚ",
+   "id": "maths:4e:equations-et-inequations-dans-q"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistique",
+   "id": "maths:4e:statistique"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 1,
+   "lecon": "Angles",
+   "id": "maths:4e:angles"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 2,
+   "lecon": "Distances",
+   "id": "maths:4e:distances"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 3,
+   "lecon": "Cercles et triangles",
+   "id": "maths:4e:cercles-et-triangles"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 4,
+   "lecon": "Vecteurs",
+   "id": "maths:4e:vecteurs"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie de l'espace",
+   "numero": 1,
+   "lecon": "Perspective cavalière",
+   "id": "maths:4e:perspective-cavaliere"
+  },
+  {
+   "niveau": "4e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 1,
+   "lecon": "Symétries et translations",
+   "id": "maths:4e:symetries-et-translations"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Calcul littéral",
+   "id": "maths:3e:calcul-litteral"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 2,
+   "lecon": "Racines carrées",
+   "id": "maths:3e:racines-carrees"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 3,
+   "lecon": "Calcul numérique",
+   "id": "maths:3e:calcul-numerique"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 4,
+   "lecon": "Équations et inéquations dans ℝ",
+   "id": "maths:3e:equations-et-inequations-dans-r"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 5,
+   "lecon": "Équations et inéquations dans ℝ × ℝ",
+   "id": "maths:3e:equations-et-inequations-dans-r-x-r"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 1,
+   "lecon": "Applications affines",
+   "id": "maths:3e:applications-affines"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistique",
+   "id": "maths:3e:statistique"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 1,
+   "lecon": "Triangle rectangle",
+   "id": "maths:3e:triangle-rectangle"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 2,
+   "lecon": "Propriétés de Thalès dans un triangle",
+   "id": "maths:3e:proprietes-de-thales-dans-un-triangle"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 3,
+   "lecon": "Angles inscrits",
+   "id": "maths:3e:angles-inscrits"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 4,
+   "lecon": "Vecteurs",
+   "id": "maths:3e:vecteurs"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 5,
+   "lecon": "Coordonnées d'un vecteur",
+   "id": "maths:3e:coordonnees-d-un-vecteur"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 6,
+   "lecon": "Équations de droites",
+   "id": "maths:3e:equations-de-droites"
+  },
+  {
+   "niveau": "3e",
+   "serie": "—",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie de l'espace",
+   "numero": 1,
+   "lecon": "Pyramides et cônes",
+   "id": "maths:3e:pyramides-et-cones"
+  },
+  {
+   "niveau": "2nde A",
+   "serie": "A",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Calcul numérique",
+   "id": "maths:2nde-a:calcul-numerique"
+  },
+  {
+   "niveau": "2nde A",
+   "serie": "A",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 2,
+   "lecon": "Calcul littéral",
+   "id": "maths:2nde-a:calcul-litteral"
+  },
+  {
+   "niveau": "2nde A",
+   "serie": "A",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 3,
+   "lecon": "Équations et inéquations dans ℝ",
+   "id": "maths:2nde-a:equations-et-inequations-dans-r"
+  },
+  {
+   "niveau": "2nde A",
+   "serie": "A",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 4,
+   "lecon": "Systèmes d'équations linéaires",
+   "id": "maths:2nde-a:systemes-d-equations-lineaires"
+  },
+  {
+   "niveau": "2nde A",
+   "serie": "A",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 1,
+   "lecon": "Généralités sur les fonctions",
+   "id": "maths:2nde-a:generalites-sur-les-fonctions"
+  },
+  {
+   "niveau": "2nde A",
+   "serie": "A",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 2,
+   "lecon": "Études de fonctions élémentaires",
+   "id": "maths:2nde-a:etudes-de-fonctions-elementaires"
+  },
+  {
+   "niveau": "2nde A",
+   "serie": "A",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistique",
+   "id": "maths:2nde-a:statistique"
+  },
+  {
+   "niveau": "2nde A",
+   "serie": "A",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation de phénomènes aléatoires",
+   "numero": 1,
+   "lecon": "Dénombrement",
+   "id": "maths:2nde-a:denombrement"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Ensemble des nombres réels",
+   "id": "maths:2nde-c:ensemble-des-nombres-reels"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 2,
+   "lecon": "Polynômes et fractions rationnelles",
+   "id": "maths:2nde-c:polynomes-et-fractions-rationnelles"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 3,
+   "lecon": "Équations et inéquations dans ℝ",
+   "id": "maths:2nde-c:equations-et-inequations-dans-r"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 4,
+   "lecon": "Inéquations dans ℝ × ℝ",
+   "id": "maths:2nde-c:inequations-dans-r-x-r"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 1,
+   "lecon": "Généralités sur les fonctions",
+   "id": "maths:2nde-c:generalites-sur-les-fonctions"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 2,
+   "lecon": "Étude de fonctions élémentaires",
+   "id": "maths:2nde-c:etude-de-fonctions-elementaires"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistique à une variable",
+   "id": "maths:2nde-c:statistique-a-une-variable"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 1,
+   "lecon": "Dénombrement",
+   "id": "maths:2nde-c:denombrement"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 2,
+   "lecon": "Probabilité",
+   "id": "maths:2nde-c:probabilite"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 1,
+   "lecon": "Vecteurs et points du plan",
+   "id": "maths:2nde-c:vecteurs-et-points-du-plan"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 2,
+   "lecon": "Produit scalaire",
+   "id": "maths:2nde-c:produit-scalaire"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 3,
+   "lecon": "Angles inscrits",
+   "id": "maths:2nde-c:angles-inscrits"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 4,
+   "lecon": "Angles orientés et trigonométrie",
+   "id": "maths:2nde-c:angles-orientes-et-trigonometrie"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie de l'espace",
+   "numero": 1,
+   "lecon": "Droites et plans de l'espace",
+   "id": "maths:2nde-c:droites-et-plans-de-l-espace"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 1,
+   "lecon": "Utilisation des symétries et translations",
+   "id": "maths:2nde-c:utilisation-des-symetries-et-translations"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 2,
+   "lecon": "Homothéties",
+   "id": "maths:2nde-c:homotheties"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 3,
+   "lecon": "Rotations",
+   "id": "maths:2nde-c:rotations"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 4,
+   "lecon": "Composées de transformations",
+   "id": "maths:2nde-c:composees-de-transformations"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Arithmétique",
+   "theme": "Arithmétique",
+   "numero": 1,
+   "lecon": "Divisibilité dans ℤ",
+   "id": "maths:2nde-c:divisibilite-dans-z"
+  },
+  {
+   "niveau": "2nde C",
+   "serie": "C",
+   "competence": "Arithmétique",
+   "theme": "Arithmétique",
+   "numero": 2,
+   "lecon": "PPCM et PGCD de deux entiers relatifs",
+   "id": "maths:2nde-c:ppcm-et-pgcd-de-deux-entiers-relatifs"
+  },
+  {
+   "niveau": "1ère A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Équations et inéquations dans ℝ",
+   "id": "maths:1ere-a1:equations-et-inequations-dans-r"
+  },
+  {
+   "niveau": "1ère A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 2,
+   "lecon": "Systèmes linéaires dans ℝ × ℝ",
+   "id": "maths:1ere-a1:systemes-lineaires-dans-r-x-r"
+  },
+  {
+   "niveau": "1ère A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 1,
+   "lecon": "Généralités sur les fonctions",
+   "id": "maths:1ere-a1:generalites-sur-les-fonctions"
+  },
+  {
+   "niveau": "1ère A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 2,
+   "lecon": "Dérivabilité et étude de fonctions",
+   "id": "maths:1ere-a1:derivabilite-et-etude-de-fonctions"
+  },
+  {
+   "niveau": "1ère A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 3,
+   "lecon": "Suites numériques",
+   "id": "maths:1ere-a1:suites-numeriques"
+  },
+  {
+   "niveau": "1ère A1",
+   "serie": "A1",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistique",
+   "id": "maths:1ere-a1:statistique"
+  },
+  {
+   "niveau": "1ère A1",
+   "serie": "A1",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation de phénomènes aléatoires",
+   "numero": 1,
+   "lecon": "Dénombrement",
+   "id": "maths:1ere-a1:denombrement"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Équations et inéquations du second degré dans ℝ",
+   "id": "maths:1ere-c:equations-et-inequations-du-second-degre-dans-r"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 2,
+   "lecon": "Systèmes d'équations linéaires dans ℝ² et dans ℝ³",
+   "id": "maths:1ere-c:systemes-d-equations-lineaires-dans-r2-et-dans-r3"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 1,
+   "lecon": "Généralités sur les fonctions",
+   "id": "maths:1ere-c:generalites-sur-les-fonctions"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 2,
+   "lecon": "Limites et continuité",
+   "id": "maths:1ere-c:limites-et-continuite"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 3,
+   "lecon": "Extension de la notion de limite",
+   "id": "maths:1ere-c:extension-de-la-notion-de-limite"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 4,
+   "lecon": "Dérivation",
+   "id": "maths:1ere-c:derivation"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 5,
+   "lecon": "Étude et représentation graphique d'une fonction",
+   "id": "maths:1ere-c:etude-et-representation-graphique-d-une-fonction"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 6,
+   "lecon": "Suites numériques",
+   "id": "maths:1ere-c:suites-numeriques"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistique à une variable",
+   "id": "maths:1ere-c:statistique-a-une-variable"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 1,
+   "lecon": "Dénombrement",
+   "id": "maths:1ere-c:denombrement"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 2,
+   "lecon": "Probabilités",
+   "id": "maths:1ere-c:probabilites"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 1,
+   "lecon": "Géométrie analytique du plan",
+   "id": "maths:1ere-c:geometrie-analytique-du-plan"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 2,
+   "lecon": "Barycentre",
+   "id": "maths:1ere-c:barycentre"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 3,
+   "lecon": "Angles orientés et trigonométrie",
+   "id": "maths:1ere-c:angles-orientes-et-trigonometrie"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie de l'espace",
+   "numero": 1,
+   "lecon": "Vecteurs de l'espace",
+   "id": "maths:1ere-c:vecteurs-de-l-espace"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie de l'espace",
+   "numero": 2,
+   "lecon": "Orthogonalité dans l'espace",
+   "id": "maths:1ere-c:orthogonalite-dans-l-espace"
+  },
+  {
+   "niveau": "1ère C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 1,
+   "lecon": "Composées de transformations du plan",
+   "id": "maths:1ere-c:composees-de-transformations-du-plan"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Équations et inéquations du second degré dans ℝ",
+   "id": "maths:1ere-d:equations-et-inequations-du-second-degre-dans-r"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 2,
+   "lecon": "Systèmes d'équations linéaires dans ℝ² et dans ℝ³",
+   "id": "maths:1ere-d:systemes-d-equations-lineaires-dans-r2-et-dans-r3"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 1,
+   "lecon": "Généralités sur les fonctions",
+   "id": "maths:1ere-d:generalites-sur-les-fonctions"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 2,
+   "lecon": "Limites et continuité",
+   "id": "maths:1ere-d:limites-et-continuite"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 3,
+   "lecon": "Extension de la notion de limite",
+   "id": "maths:1ere-d:extension-de-la-notion-de-limite"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 4,
+   "lecon": "Dérivation",
+   "id": "maths:1ere-d:derivation"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 5,
+   "lecon": "Étude et représentation graphique d'une fonction",
+   "id": "maths:1ere-d:etude-et-representation-graphique-d-une-fonction"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 6,
+   "lecon": "Suites numériques",
+   "id": "maths:1ere-d:suites-numeriques"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistique à une variable",
+   "id": "maths:1ere-d:statistique-a-une-variable"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 1,
+   "lecon": "Dénombrement",
+   "id": "maths:1ere-d:denombrement"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 2,
+   "lecon": "Probabilité",
+   "id": "maths:1ere-d:probabilite"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 1,
+   "lecon": "Barycentre",
+   "id": "maths:1ere-d:barycentre"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 2,
+   "lecon": "Angles orientés et trigonométrie",
+   "id": "maths:1ere-d:angles-orientes-et-trigonometrie"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie de l'espace",
+   "numero": 1,
+   "lecon": "Orthogonalité dans l'espace",
+   "id": "maths:1ere-d:orthogonalite-dans-l-espace"
+  },
+  {
+   "niveau": "1ère D",
+   "serie": "D",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 1,
+   "lecon": "Composées de transformations du plan",
+   "id": "maths:1ere-d:composees-de-transformations-du-plan"
+  },
+  {
+   "niveau": "Tle A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Systèmes linéaires dans ℝ × ℝ",
+   "id": "maths:tle-a1:systemes-lineaires-dans-r-x-r"
+  },
+  {
+   "niveau": "Tle A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 1,
+   "lecon": "Étude de fonctions polynômes et de fonctions rationnelles",
+   "id": "maths:tle-a1:etude-de-fonctions-polynomes-et-de-fonctions-rationnelles"
+  },
+  {
+   "niveau": "Tle A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 2,
+   "lecon": "Primitives et calcul intégral",
+   "id": "maths:tle-a1:primitives-et-calcul-integral"
+  },
+  {
+   "niveau": "Tle A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 3,
+   "lecon": "Fonction logarithme népérien",
+   "id": "maths:tle-a1:fonction-logarithme-neperien"
+  },
+  {
+   "niveau": "Tle A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 4,
+   "lecon": "Fonction exponentielle népérienne",
+   "id": "maths:tle-a1:fonction-exponentielle-neperienne"
+  },
+  {
+   "niveau": "Tle A1",
+   "serie": "A1",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 5,
+   "lecon": "Suites numériques",
+   "id": "maths:tle-a1:suites-numeriques"
+  },
+  {
+   "niveau": "Tle A1",
+   "serie": "A1",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistique à deux variables",
+   "id": "maths:tle-a1:statistique-a-deux-variables"
+  },
+  {
+   "niveau": "Tle A1",
+   "serie": "A1",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 1,
+   "lecon": "Probabilités",
+   "id": "maths:tle-a1:probabilites"
+  },
+  {
+   "niveau": "Tle A2",
+   "serie": "A2",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Systèmes linéaires dans ℝ × ℝ",
+   "id": "maths:tle-a2:systemes-lineaires-dans-r-x-r"
+  },
+  {
+   "niveau": "Tle A2",
+   "serie": "A2",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 1,
+   "lecon": "Étude de fonctions polynômes et de fonctions rationnelles",
+   "id": "maths:tle-a2:etude-de-fonctions-polynomes-et-de-fonctions-rationnelles"
+  },
+  {
+   "niveau": "Tle A2",
+   "serie": "A2",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 2,
+   "lecon": "Fonction logarithme népérien",
+   "id": "maths:tle-a2:fonction-logarithme-neperien"
+  },
+  {
+   "niveau": "Tle A2",
+   "serie": "A2",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 3,
+   "lecon": "Fonction exponentielle népérienne",
+   "id": "maths:tle-a2:fonction-exponentielle-neperienne"
+  },
+  {
+   "niveau": "Tle A2",
+   "serie": "A2",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions numériques",
+   "numero": 4,
+   "lecon": "Suites numériques",
+   "id": "maths:tle-a2:suites-numeriques"
+  },
+  {
+   "niveau": "Tle A2",
+   "serie": "A2",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistique à deux variables",
+   "id": "maths:tle-a2:statistique-a-deux-variables"
+  },
+  {
+   "niveau": "Tle A2",
+   "serie": "A2",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 1,
+   "lecon": "Probabilités",
+   "id": "maths:tle-a2:probabilites"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Nombres complexes",
+   "id": "maths:tle-c:nombres-complexes"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 1,
+   "lecon": "Limites et continuité",
+   "id": "maths:tle-c:limites-et-continuite"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 2,
+   "lecon": "Dérivabilité et étude de fonctions",
+   "id": "maths:tle-c:derivabilite-et-etude-de-fonctions"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 3,
+   "lecon": "Primitives",
+   "id": "maths:tle-c:primitives"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 4,
+   "lecon": "Fonctions logarithmes",
+   "id": "maths:tle-c:fonctions-logarithmes"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 5,
+   "lecon": "Fonctions exponentielles et fonctions puissances",
+   "id": "maths:tle-c:fonctions-exponentielles-et-fonctions-puissances"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 6,
+   "lecon": "Calcul intégral",
+   "id": "maths:tle-c:calcul-integral"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 7,
+   "lecon": "Suites numériques",
+   "id": "maths:tle-c:suites-numeriques"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 8,
+   "lecon": "Équations différentielles",
+   "id": "maths:tle-c:equations-differentielles"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistiques à deux variables",
+   "id": "maths:tle-c:statistiques-a-deux-variables"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 1,
+   "lecon": "Probabilité conditionnelle et variable aléatoire",
+   "id": "maths:tle-c:probabilite-conditionnelle-et-variable-aleatoire"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 1,
+   "lecon": "Barycentre et lignes de niveaux",
+   "id": "maths:tle-c:barycentre-et-lignes-de-niveaux"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 2,
+   "lecon": "Coniques",
+   "id": "maths:tle-c:coniques"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie de l'espace",
+   "numero": 1,
+   "lecon": "Géométrie analytique dans l'espace",
+   "id": "maths:tle-c:geometrie-analytique-dans-l-espace"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 1,
+   "lecon": "Isométries du plan",
+   "id": "maths:tle-c:isometries-du-plan"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 2,
+   "lecon": "Similitudes directes du plan",
+   "id": "maths:tle-c:similitudes-directes-du-plan"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 3,
+   "lecon": "Nombres complexes et transformations du plan",
+   "id": "maths:tle-c:nombres-complexes-et-transformations-du-plan"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Arithmétique",
+   "theme": "Arithmétique",
+   "numero": 1,
+   "lecon": "Divisibilité dans ℤ",
+   "id": "maths:tle-c:divisibilite-dans-z"
+  },
+  {
+   "niveau": "Tle C",
+   "serie": "C",
+   "competence": "Arithmétique",
+   "theme": "Arithmétique",
+   "numero": 2,
+   "lecon": "PPCM et PGCD de deux entiers relatifs",
+   "id": "maths:tle-c:ppcm-et-pgcd-de-deux-entiers-relatifs"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Calculs algébriques",
+   "numero": 1,
+   "lecon": "Nombres complexes",
+   "id": "maths:tle-d:nombres-complexes"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 1,
+   "lecon": "Limites et continuité",
+   "id": "maths:tle-d:limites-et-continuite"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 2,
+   "lecon": "Dérivabilité et étude de fonctions",
+   "id": "maths:tle-d:derivabilite-et-etude-de-fonctions"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 3,
+   "lecon": "Primitives",
+   "id": "maths:tle-d:primitives"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 4,
+   "lecon": "Fonctions logarithmes",
+   "id": "maths:tle-d:fonctions-logarithmes"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 5,
+   "lecon": "Fonctions exponentielles et fonctions puissances",
+   "id": "maths:tle-d:fonctions-exponentielles-et-fonctions-puissances"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 6,
+   "lecon": "Calcul intégral",
+   "id": "maths:tle-d:calcul-integral"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 7,
+   "lecon": "Suites numériques",
+   "id": "maths:tle-d:suites-numeriques"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Calculs algébriques et fonctions",
+   "theme": "Fonctions",
+   "numero": 8,
+   "lecon": "Équations différentielles",
+   "id": "maths:tle-d:equations-differentielles"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Organisation et traitement des données",
+   "numero": 1,
+   "lecon": "Statistiques à deux variables",
+   "id": "maths:tle-d:statistiques-a-deux-variables"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Organisation et traitement des données; modélisation d'un phénomène aléatoire",
+   "theme": "Modélisation d'un phénomène aléatoire",
+   "numero": 1,
+   "lecon": "Probabilité conditionnelle et variable aléatoire",
+   "id": "maths:tle-d:probabilite-conditionnelle-et-variable-aleatoire"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Géométrie du plan",
+   "numero": 1,
+   "lecon": "Nombres complexes et géométrie du plan",
+   "id": "maths:tle-d:nombres-complexes-et-geometrie-du-plan"
+  },
+  {
+   "niveau": "Tle D",
+   "serie": "D",
+   "competence": "Géométrie du plan, géométrie de l'espace, transformations du plan",
+   "theme": "Transformations du plan",
+   "numero": 1,
+   "lecon": "Composées de transformations",
+   "id": "maths:tle-d:composees-de-transformations"
+  }
+ ],
+ "correspondance_ciam": [
+  {
+   "volume": "Terminale SE (série D)",
+   "origine": "Titre vu dans le catalogue d'une librairie (EDICEF)",
+   "remarque": "Correspond à la série D (d'après ce titre)"
+  },
+  {
+   "volume": "1ère SE",
+   "origine": "Titre vu dans un résultat de recherche",
+   "remarque": "SE = probablement sciences expérimentales (série D); à confirmer"
+  },
+  {
+   "volume": "1ère SM",
+   "origine": "Titre vu dans un résultat de recherche (corrigé)",
+   "remarque": "SM = probablement sciences mathématiques (série C); à confirmer"
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+// Menu du compte : informations de connexion et 4 thèmes ; compatibilité avec l'ancien réglage sombre/clair.
+import { renderToString } from "react-dom/server";
+import { createElement as h } from "react";
+import { MemoryRouter } from "react-router-dom";
+import { signUp, setPrefs, update, themeOf, THEMES, currentUser, State } from "../src/store";
+import { TopBar } from "../src/components/ui";
+let fail = 0;
+const ok = (c: boolean, m: string) => { if (!c) { fail++; console.log("ÉCHEC", m); } else console.log("ok   ", m); };
+const get = (): State => { let r!: State; update((s) => { r = s; return s; }); return r; };
+ok(THEMES.length === 4 && new Set(THEMES.map((t) => t.id)).size === 4, "4 thèmes distincts");
+ok(THEMES.filter((t) => t.dark).length === 2, "2 sombres et 2 clairs");
+ok(themeOf(undefined) === "nuit" && themeOf({ dark: false }) === "clair" && themeOf({ dark: true }) === "nuit" && themeOf({ theme: "ocean", dark: false }) === "ocean", "compatibilité ancien réglage");
+signUp({ role: "student", name: "Awa", email: "awa@x.ci", password: "secret1", country: "CI", level: "3e" });
+const render = () => renderToString(h(MemoryRouter, null, h(TopBar, { name: "Awa", sub: "x", profileTo: "/profil" })));
+let html = render();
+ok(html.includes("awa@x.ci") && html.includes("Élève") && html.includes("3ème") && html.includes("Connecté depuis") && html.includes("Compte gratuit"), "infos de connexion affichées");
+ok(["Nuit", "Océan", "Clair", "Soleil"].every((t) => html.includes(t)), "les 4 thèmes proposés");
+ok(/aria-pressed="true"[^>]*>(?:(?!<button).)*Nuit/s.test(html), "Nuit actif par défaut");
+const u = get().users[0];
+setPrefs(u.id, { theme: "soleil", dark: false });
+html = render();
+ok(/aria-pressed="true"[^>]*>(?:(?!<button).)*Soleil/s.test(html) && currentUser(get())!.prefs?.theme === "soleil", "Soleil actif après choix");
+ok(!/undefined|NaN/.test(html), "pas de texte invalide");
+console.log(fail ? `${fail} échec(s)` : "tous les tests passent"); process.exit(fail ? 1 : 0);

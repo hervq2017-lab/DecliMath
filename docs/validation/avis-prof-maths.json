@@ -1,0 +1,2490 @@
+{
+  "maths:1ere:angles-orientes-et-trigonometrie-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:angles-orientes-et-trigonometrie-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:barycentre-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 2, intro, définition",
+        "quoi": "« G est plus près du point au plus grand coefficient » n'est vrai que pour des coefficients de même signe. Les égalités a·GA + b·GB = 0 sont écrites sans flèches (lisibles comme des longueurs).",
+        "correction": "Pour a et b de même signe, G est sur le segment [AB], plus près du point de plus grand coefficient. Définition : a·GA⃗ + b·GB⃗ = 0⃗ avec a + b ≠ 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:barycentre-serie-d": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 2, intro, définition",
+        "quoi": "« G est plus près du point au plus grand coefficient » n'est vrai que pour des coefficients de même signe. Les égalités a·GA + b·GB = 0 sont écrites sans flèches (lisibles comme des longueurs).",
+        "correction": "Pour a et b de même signe, G est sur le segment [AB], plus près du point de plus grand coefficient. Définition : a·GA⃗ + b·GB⃗ = 0⃗ avec a + b ≠ 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:composees-de-transformations-du-plan-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 3, exemple",
+        "quoi": "L'étape « Identifier » cite translation, rotation, symétrie : la symétrie glissée manque (composée d'une symétrie axiale et d'une translation de vecteur non parallèle à l'axe). L'exemple (deux translations) est trivial et n'illustre pas l'identification.",
+        "correction": "Étape 3 : la composée de deux isométries peut être une translation, une rotation, une symétrie axiale ou une symétrie glissée. Exemple : deux symétries d'axes parallèles distants de d donnent une translation de vecteur de longueur 2d, perpendiculaire aux axes."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:composees-de-transformations-du-plan-serie-d": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 3, exemple",
+        "quoi": "L'étape « Identifier » cite translation, rotation, symétrie : la symétrie glissée manque (composée d'une symétrie axiale et d'une translation de vecteur non parallèle à l'axe). L'exemple (deux translations) est trivial et n'illustre pas l'identification.",
+        "correction": "Étape 3 : la composée de deux isométries peut être une translation, une rotation, une symétrie axiale ou une symétrie glissée. Exemple : deux symétries d'axes parallèles distants de d donnent une translation de vecteur de longueur 2d, perpendiculaire aux axes."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:denombrement-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite la répétition, non traitée.",
+        "correction": "Ajouter : avec répétition, 3 chiffres parmi 10 donnent 10 × 10 × 10 = 1 000 codes ; sans répétition, 10 × 9 × 8 = 720."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:denombrement-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite la répétition, non traitée.",
+        "correction": "Ajouter : avec répétition, 3 chiffres parmi 10 donnent 10 × 10 × 10 = 1 000 codes ; sans répétition, 10 × 9 × 8 = 720."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:denombrement-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite la répétition, non traitée.",
+        "correction": "Ajouter : avec répétition, 3 chiffres parmi 10 donnent 10 × 10 × 10 = 1 000 codes ; sans répétition, 10 × 9 × 8 = 720."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:derivabilite-et-etude-de-fonctions-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "La définition de la dérivée (limite du taux d'accroissement) est absente.",
+        "correction": "f'(a) = lim (f(a + h) − f(a))/h quand h → 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:derivation-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "La définition de la dérivée (limite du taux d'accroissement) est absente.",
+        "correction": "f'(a) = lim (f(a + h) − f(a))/h quand h → 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:derivation-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "La définition de la dérivée (limite du taux d'accroissement) est absente.",
+        "correction": "f'(a) = lim (f(a + h) − f(a))/h quand h → 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:equations-et-inequations-dans-serie-a1": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 1",
+        "quoi": "L'étape 1 s'intitule « Mettre sous forme canonique » alors qu'elle consiste à tout passer dans un membre. La forme canonique est a(x − α)² + β : le mot est faux et va troubler l'élève.",
+        "correction": "Intituler l'étape « Tout passer dans un membre » : on se ramène à P(x) = 0 ou P(x) > 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:equations-et-inequations-du-second-degre-dans-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "Le titre contient les inéquations, mais l'exemple ne résout qu'une équation ; la règle de signe n'est donnée que pour Δ > 0.",
+        "correction": "Résoudre x² − 5x + 6 > 0 : racines 2 et 3, a = 1 > 0 : S = ]−∞ ; 2[ ∪ ]3 ; +∞[. Si Δ < 0, le trinôme est du signe de a partout."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:equations-et-inequations-du-second-degre-dans-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "Le titre contient les inéquations, mais l'exemple ne résout qu'une équation ; la règle de signe n'est donnée que pour Δ > 0.",
+        "correction": "Résoudre x² − 5x + 6 > 0 : racines 2 et 3, a = 1 > 0 : S = ]−∞ ; 2[ ∪ ]3 ; +∞[. Si Δ < 0, le trinôme est du signe de a partout."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:etude-et-representation-graphique-d-une-fonction-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple ne calcule ni limites ni asymptotes, alors que l'étape 1 les demande.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:etude-et-representation-graphique-d-une-fonction-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple ne calcule ni limites ni asymptotes, alors que l'étape 1 les demande.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:extension-de-la-notion-de-limite-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "piège, exemple",
+        "quoi": "L'asymptote oblique est annoncée sans exemple ; le piège gagnerait à citer un cas (1/(x − 1) tend vers −∞ à gauche et +∞ à droite de 1).",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:extension-de-la-notion-de-limite-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "piège, exemple",
+        "quoi": "L'asymptote oblique est annoncée sans exemple ; le piège gagnerait à citer un cas (1/(x − 1) tend vers −∞ à gauche et +∞ à droite de 1).",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:generalites-sur-les-fonctions-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "« rendent négative une racine » est imprécis ; l'exemple ne traite que le domaine (variations et parité non illustrées).",
+        "correction": "Domaine de √(x − 3) : on exige x − 3 ≥ 0, donc D = [3 ; +∞[. Parité : f(x) = x² est paire car f(−x) = f(x)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:generalites-sur-les-fonctions-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "« rendent négative une racine » est imprécis ; l'exemple ne traite que le domaine (variations et parité non illustrées).",
+        "correction": "Domaine de √(x − 3) : on exige x − 3 ≥ 0, donc D = [3 ; +∞[. Parité : f(x) = x² est paire car f(−x) = f(x)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:generalites-sur-les-fonctions-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "« rendent négative une racine » est imprécis ; l'exemple ne traite que le domaine (variations et parité non illustrées).",
+        "correction": "Domaine de √(x − 3) : on exige x − 3 ≥ 0, donc D = [3 ; +∞[. Parité : f(x) = x² est paire car f(−x) = f(x)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:geometrie-analytique-du-plan-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro annonce les positions relatives, non traitées.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:limites-et-continuite-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 2",
+        "quoi": "« Somme, produit, quotient suivent des règles » sans les donner.",
+        "correction": "Ajouter un tableau des règles (+∞ + a = +∞ ; +∞ × a > 0 = +∞ ; a/0⁺ = +∞ si a > 0) et la liste des formes indéterminées : ∞ − ∞, 0 × ∞, ∞/∞, 0/0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:limites-et-continuite-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 2",
+        "quoi": "« Somme, produit, quotient suivent des règles » sans les donner.",
+        "correction": "Ajouter un tableau des règles (+∞ + a = +∞ ; +∞ × a > 0 = +∞ ; a/0⁺ = +∞ si a > 0) et la liste des formes indéterminées : ∞ − ∞, 0 × ∞, ∞/∞, 0/0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:orthogonalite-dans-l-espace-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "propriété 3",
+        "quoi": "La propriété nommée « Théorème des trois perpendiculaires » énonce « si une droite est orthogonale à un plan, elle est orthogonale à toutes les droites de ce plan » : ce n'est pas ce théorème, c'est la propriété de la droite orthogonale à un plan.",
+        "correction": "Renommer « Droite orthogonale à un plan ». Théorème des trois perpendiculaires (si on le garde) : (AH) est orthogonale au plan P avec H dans P ; d est une droite de P ; K est le pied de la perpendiculaire à d issue de H. Alors (AK) est orthogonale à d."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:orthogonalite-dans-l-espace-serie-d": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "propriété 3",
+        "quoi": "La propriété nommée « Théorème des trois perpendiculaires » énonce « si une droite est orthogonale à un plan, elle est orthogonale à toutes les droites de ce plan » : ce n'est pas ce théorème, c'est la propriété de la droite orthogonale à un plan.",
+        "correction": "Renommer « Droite orthogonale à un plan ». Théorème des trois perpendiculaires (si on le garde) : (AH) est orthogonale au plan P avec H dans P ; d est une droite de P ; K est le pied de la perpendiculaire à d issue de H. Alors (AK) est orthogonale à d."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:probabilite-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:probabilites-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:statistique-a-une-variable-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce moyenne, médiane, quartiles, variance et écart-type ; les étapes ne traitent que moyenne, variance et écart-type. Médiane et quartiles n'ont ni étape ni exemple.",
+        "correction": "Ajouter une étape « Médiane et quartiles » (série rangée de n valeurs : médiane = valeur du milieu ; Q1 = valeur de rang ⌈n/4⌉ ; Q3 = valeur de rang ⌈3n/4⌉), ou retirer ces mots de l'intro."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:statistique-a-une-variable-serie-d": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce moyenne, médiane, quartiles, variance et écart-type ; les étapes ne traitent que moyenne, variance et écart-type. Médiane et quartiles n'ont ni étape ni exemple.",
+        "correction": "Ajouter une étape « Médiane et quartiles » (série rangée de n valeurs : médiane = valeur du milieu ; Q1 = valeur de rang ⌈n/4⌉ ; Q3 = valeur de rang ⌈3n/4⌉), ou retirer ces mots de l'intro."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:statistique-serie-a1": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce moyenne, médiane, quartiles, variance et écart-type ; les étapes ne traitent que moyenne, variance et écart-type. Médiane et quartiles n'ont ni étape ni exemple.",
+        "correction": "Ajouter une étape « Médiane et quartiles » (série rangée de n valeurs : médiane = valeur du milieu ; Q1 = valeur de rang ⌈n/4⌉ ; Q3 = valeur de rang ⌈3n/4⌉), ou retirer ces mots de l'intro."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:suites-numeriques-serie-a1": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce « leurs limites » ; aucune étape ne les traite (elles ne figurent que dans une propriété). La somme d'une suite géométrique n'a pas d'étape non plus.",
+        "correction": "Ajouter une étape « Limite » : si |q| < 1, qⁿ → 0 ; si q > 1 et u₀ > 0, uₙ → +∞. Ajouter la somme géométrique : S = u₀ × (1 − qⁿ⁺¹)/(1 − q) pour q ≠ 1."
+      },
+      {
+        "gravite": "a-corriger",
+        "ou": "exemple",
+        "quoi": "« Premier terme 3 » est ambigu : u₁₀ = 43 si le premier terme est u₀, mais 39 s'il s'agit de u₁.",
+        "correction": "Énoncé : « suite arithmétique de premier terme u₀ = 3 et de raison 4 ». Piège nommé : confondre u₀ et u₁ ; si le premier terme est u₁, uₙ = u₁ + (n − 1)r, donc u₁₀ = 3 + 9 × 4 = 39."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:suites-numeriques-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce « leurs limites » ; aucune étape ne les traite (elles ne figurent que dans une propriété). La somme d'une suite géométrique n'a pas d'étape non plus.",
+        "correction": "Ajouter une étape « Limite » : si |q| < 1, qⁿ → 0 ; si q > 1 et u₀ > 0, uₙ → +∞. Ajouter la somme géométrique : S = u₀ × (1 − qⁿ⁺¹)/(1 − q) pour q ≠ 1."
+      },
+      {
+        "gravite": "a-corriger",
+        "ou": "exemple",
+        "quoi": "« Premier terme 3 » est ambigu : u₁₀ = 43 si le premier terme est u₀, mais 39 s'il s'agit de u₁.",
+        "correction": "Énoncé : « suite arithmétique de premier terme u₀ = 3 et de raison 4 ». Piège nommé : confondre u₀ et u₁ ; si le premier terme est u₁, uₙ = u₁ + (n − 1)r, donc u₁₀ = 3 + 9 × 4 = 39."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:suites-numeriques-serie-d": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce « leurs limites » ; aucune étape ne les traite (elles ne figurent que dans une propriété). La somme d'une suite géométrique n'a pas d'étape non plus.",
+        "correction": "Ajouter une étape « Limite » : si |q| < 1, qⁿ → 0 ; si q > 1 et u₀ > 0, uₙ → +∞. Ajouter la somme géométrique : S = u₀ × (1 − qⁿ⁺¹)/(1 − q) pour q ≠ 1."
+      },
+      {
+        "gravite": "a-corriger",
+        "ou": "exemple",
+        "quoi": "« Premier terme 3 » est ambigu : u₁₀ = 43 si le premier terme est u₀, mais 39 s'il s'agit de u₁.",
+        "correction": "Énoncé : « suite arithmétique de premier terme u₀ = 3 et de raison 4 ». Piège nommé : confondre u₀ et u₁ ; si le premier terme est u₁, uₙ = u₁ + (n − 1)r, donc u₁₀ = 3 + 9 × 4 = 39."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:systemes-d-equations-lineaires-dans-et-dans-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "titre, exemple",
+        "quoi": "Le titre parle de ℝ² et ℝ³ ; seul le système 3 × 3 est traité, et l'exemple se résout par substitution, non par pivot.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:systemes-d-equations-lineaires-dans-et-dans-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "titre, exemple",
+        "quoi": "Le titre parle de ℝ² et ℝ³ ; seul le système 3 × 3 est traité, et l'exemple se résout par substitution, non par pivot.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:systemes-lineaires-dans-couples-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "L'étape 1 parle de multiplier les équations, mais l'exemple n'en a pas besoin.",
+        "correction": "Résoudre 2x + 3y = 12 et x − y = 1 : on multiplie la 2e par 3 : 3x − 3y = 3, puis on additionne : 5x = 15, x = 3, y = 2."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:1ere:vecteurs-de-l-espace-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 2",
+        "quoi": "La coplanarité est énoncée dans un seul sens.",
+        "correction": "Si u et v ne sont pas colinéaires : u, v, w sont coplanaires si et seulement si w = a·u + b·v."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:angles-inscrits-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro annonce « montrer que quatre points sont cocycliques » ; la réciproque n'est pas énoncée.",
+        "correction": "Ajouter : si deux angles interceptent le même segment et sont égaux, les quatre points sont sur un même cercle."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:angles-orientes-et-trigonometrie-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:calcul-litteral-serie-a": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce « mettre sous forme canonique » ; aucune étape ni exemple ne la traite.",
+        "correction": "Soit retirer ces mots de l'intro, soit ajouter une étape : x² + 6x + 5 = (x + 3)² − 4. La forme canonique est a(x − α)² + β."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:calcul-numerique-serie-a": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1",
+        "quoi": "La mise au même dénominateur (étape 1) n'est pas illustrée.",
+        "correction": "3/4 + 5/6 = 9/12 + 10/12 = 19/12."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:composees-de-transformations-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 3, exemple",
+        "quoi": "L'étape « Identifier » cite translation, rotation, symétrie : la symétrie glissée manque (composée d'une symétrie axiale et d'une translation de vecteur non parallèle à l'axe). L'exemple (deux translations) est trivial et n'illustre pas l'identification.",
+        "correction": "Étape 3 : la composée de deux isométries peut être une translation, une rotation, une symétrie axiale ou une symétrie glissée. Exemple : deux symétries d'axes parallèles distants de d donnent une translation de vecteur de longueur 2d, perpendiculaire aux axes."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:denombrement-serie-a": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite la répétition, non traitée.",
+        "correction": "Ajouter : avec répétition, 3 chiffres parmi 10 donnent 10 × 10 × 10 = 1 000 codes ; sans répétition, 10 × 9 × 8 = 720."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:denombrement-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite la répétition, non traitée.",
+        "correction": "Ajouter : avec répétition, 3 chiffres parmi 10 donnent 10 × 10 × 10 = 1 000 codes ; sans répétition, 10 × 9 × 8 = 720."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:divisibilite-dans-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:droites-et-plans-de-l-espace-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite l'orthogonalité, non traitée.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:ensemble-des-nombres-reels-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:equations-et-inequations-dans-serie-a": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 1",
+        "quoi": "L'étape 1 s'intitule « Mettre sous forme canonique » alors qu'elle consiste à tout passer dans un membre. La forme canonique est a(x − α)² + β : le mot est faux et va troubler l'élève.",
+        "correction": "Intituler l'étape « Tout passer dans un membre » : on se ramène à P(x) = 0 ou P(x) > 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:equations-et-inequations-dans-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 1",
+        "quoi": "L'étape 1 s'intitule « Mettre sous forme canonique » alors qu'elle consiste à tout passer dans un membre. La forme canonique est a(x − α)² + β : le mot est faux et va troubler l'élève.",
+        "correction": "Intituler l'étape « Tout passer dans un membre » : on se ramène à P(x) = 0 ou P(x) > 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:etude-de-fonctions-elementaires-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite la valeur absolue, qui n'a ni étape ni propriété.",
+        "correction": "Soit retirer « valeur absolue », soit ajouter : |x| = x si x ≥ 0 et −x sinon ; décroissante sur ]−∞ ; 0], croissante sur [0 ; +∞[."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:etudes-de-fonctions-elementaires-serie-a": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite la valeur absolue, qui n'a ni étape ni propriété.",
+        "correction": "Soit retirer « valeur absolue », soit ajouter : |x| = x si x ≥ 0 et −x sinon ; décroissante sur ]−∞ ; 0], croissante sur [0 ; +∞[."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:generalites-sur-les-fonctions-serie-a": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "« rendent négative une racine » est imprécis ; l'exemple ne traite que le domaine (variations et parité non illustrées).",
+        "correction": "Domaine de √(x − 3) : on exige x − 3 ≥ 0, donc D = [3 ; +∞[. Parité : f(x) = x² est paire car f(−x) = f(x)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:generalites-sur-les-fonctions-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "« rendent négative une racine » est imprécis ; l'exemple ne traite que le domaine (variations et parité non illustrées).",
+        "correction": "Domaine de √(x − 3) : on exige x − 3 ≥ 0, donc D = [3 ; +∞[. Parité : f(x) = x² est paire car f(−x) = f(x)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:homotheties-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:inequations-dans-couples-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:polynomes-et-fractions-rationnelles-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:ppcm-et-pgcd-de-deux-entiers-relatifs-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:probabilite-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:produit-scalaire-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:rotations-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:statistique-a-une-variable-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce moyenne, médiane, quartiles, variance et écart-type ; les étapes ne traitent que moyenne, variance et écart-type. Médiane et quartiles n'ont ni étape ni exemple.",
+        "correction": "Ajouter une étape « Médiane et quartiles » (série rangée de n valeurs : médiane = valeur du milieu ; Q1 = valeur de rang ⌈n/4⌉ ; Q3 = valeur de rang ⌈3n/4⌉), ou retirer ces mots de l'intro."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:statistique-serie-a": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce moyenne, médiane, quartiles, variance et écart-type ; les étapes ne traitent que moyenne, variance et écart-type. Médiane et quartiles n'ont ni étape ni exemple.",
+        "correction": "Ajouter une étape « Médiane et quartiles » (série rangée de n valeurs : médiane = valeur du milieu ; Q1 = valeur de rang ⌈n/4⌉ ; Q3 = valeur de rang ⌈3n/4⌉), ou retirer ces mots de l'intro."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:systemes-d-equations-lineaires-serie-a": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "L'étape 1 parle de multiplier les équations, mais l'exemple n'en a pas besoin.",
+        "correction": "Résoudre 2x + 3y = 12 et x − y = 1 : on multiplie la 2e par 3 : 3x − 3y = 3, puis on additionne : 5x = 15, x = 3, y = 2."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:utilisation-des-symetries-et-translations-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:2nde:vecteurs-et-points-du-plan-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "piège, propriété Chasles",
+        "quoi": "Le piège (« conclure à l'alignement avec un seul calcul de coefficient sans vérifier la colinéarité ») ne nomme pas une erreur précise. La relation de Chasles est écrite sans flèches.",
+        "correction": "Piège : calculer les coordonnées dans le mauvais sens (xA − xB au lieu de xB − xA) ou ne comparer que les abscisses ; on utilise le déterminant xy' − x'y de AB⃗ et AC⃗. Chasles : AB⃗ + BC⃗ = AC⃗."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:angles-inscrits": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:applications-affines": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple ne calcule qu'une image ; « trouver a et b » (étape 2) n'est pas illustré.",
+        "correction": "f(1) = 5 et f(3) = 11 : a = (11 − 5)/(3 − 1) = 3 ; 5 = 3 × 1 + b donc b = 2 ; f(x) = 3x + 2."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:calcul-litteral": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:calcul-numerique": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "piège",
+        "quoi": "Le piège est exact mais trop court pour guider l'élève.",
+        "correction": "10⁻³ = 1/1 000 = 0,001, et non −1 000."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:coordonnees-d-un-vecteur": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:equations-de-droites": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:equations-et-inequations-dans": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:equations-et-inequations-dans-couples": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "titre, étapes",
+        "quoi": "Le titre est « Équations et inéquations dans ℝ × ℝ » mais seul un système de deux équations est traité ; les inéquations à deux inconnues sont absentes.",
+        "correction": "Ajouter une étape : une inéquation à deux inconnues se représente par un demi-plan. Exemple : x + y ≤ 4. On trace la droite x + y = 4, puis on teste le point (0 ; 0) : 0 ≤ 4 est vrai, donc on garde le côté de l'origine."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:fonctions-lineaires-et-affines": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple ne calcule qu'une image ; « trouver a » n'est pas illustré.",
+        "correction": "f(1) = 5 et f(3) = 11 : a = (11 − 5)/(3 − 1) = 3."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:proprietes-de-thales-dans-un-triangle": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:pyramides-et-cones": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "Aucune situation réelle dans l'intro ni dans l'exemple : ajouter un exemple en contexte local (marché, FCFA, champ, moto).",
+        "correction": "Un tas de sable en cône de rayon 1 m et de hauteur 0,9 m : V = (1/3) × 3,14 × 1 × 0,9 ≈ 0,94 m³."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:racines-carrees": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 3",
+        "quoi": "La rationalisation du dénominateur n'est pas illustrée.",
+        "correction": "1/√2 = √2/(√2 × √2) = √2/2."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:statistique": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 1, exemple, piège",
+        "quoi": "L'étape 1 parle de quartiles sans dire comment les trouver. L'exemple (2, 4, 6, 8, 10) ne calcule que la médiane. Le piège « confondre moyenne et médiane » n'est pas illustré : dans l'exemple, moyenne et médiane valent toutes deux 6.",
+        "correction": "Règle : pour n valeurs rangées, Q1 est la valeur de rang ⌈n/4⌉ et Q3 celle de rang ⌈3n/4⌉. Exemple : 2, 4, 6, 8, 10, 12, 14 (n = 7). Médiane = 4e valeur = 8. Q1 = 2e valeur = 4. Q3 = 6e valeur = 12. Écart interquartile = 12 − 4 = 8. Piège : 1, 2, 3, 4, 100 a pour moyenne 22 et pour médiane 3 : la moyenne est tirée par la valeur extrême."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:triangle-rectangle": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 2, exemple",
+        "quoi": "Pas d'aide mémoire pour choisir cos, sin ou tan, et aucun exemple de recherche d'un angle.",
+        "correction": "SOH-CAH-TOA : Sin = Opposé/Hypoténuse ; Cos = Adjacent/Hypoténuse ; Tan = Opposé/Adjacent."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:3e:vecteurs": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étapes 1 et 3, propriétés",
+        "quoi": "Mêmes relations écrites sans flèche (AB + BC = AC ; AB = k·AC). De plus « AB = 2 CD donc les droites (AB) et (CD) sont parallèles » oublie le cas où elles sont confondues.",
+        "correction": "Écrire AB⃗ + BC⃗ = AC⃗ ; AB⃗ = k·AC⃗ signifie que A, B, C sont alignés. Exemple : si AB⃗ = 2 CD⃗, les droites (AB) et (CD) sont parallèles ou confondues ; elles sont confondues si les quatre points sont alignés."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:angles": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:calcul-litteral": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:cercles-et-triangles": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:distances": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:equations-et-inequations-dans": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "titre, étapes, exemple",
+        "quoi": "Le titre et le piège parlent d'inéquations, mais ni les étapes ni l'exemple n'en traitent une : seule 3x − 5 = 7 est résolue.",
+        "correction": "Ajouter un second exemple : Résoudre −2x + 6 > 2. On retranche 6 : −2x > −4. On divise par −2, nombre négatif, donc on change le sens : x < 2. S = ]−∞ ; 2[. Vérification : x = 0 donne 6 > 2, vrai."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:nombres-decimaux-relatifs": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:nombres-rationnels": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "piège",
+        "quoi": "Le piège (signe du numérateur) est exact mais n'a ni exemple ni correction.",
+        "correction": "Piège : 1/2 − (x − 1)/3 : le signe moins porte sur tout le numérateur : (3 − 2(x − 1))/6 = (5 − 2x)/6."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:perspective-cavaliere": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:statistique": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple ne traite que la médiane ; le regroupement en classes et la moyenne par centres de classes ne sont pas illustrés.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:symetries-et-translations": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "titre, intro, étapes",
+        "quoi": "Le titre et l'intro annoncent translations et symétries, mais les étapes et l'exemple ne traitent que la translation.",
+        "correction": "Ajouter une étape « Symétrie centrale et axiale » : le symétrique de A par rapport à O est le point A' tel que O est le milieu de [AA'] ; par rapport à une droite (d), la droite (d) est la médiatrice de [AA']. Exemple : A(1 ; 2) a pour symétrique A'(−1 ; −2) par rapport à O(0 ; 0)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:theoreme-de-pythagore": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple cherche l'hypoténuse ; la recherche d'un côté de l'angle droit (citée dans le piège) n'est pas illustrée.",
+        "correction": "Hypoténuse 5, un côté 3 : autre côté² = 25 − 9 = 16, donc 4."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:4e:vecteurs": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étapes 2-3, propriétés",
+        "quoi": "Les relations vectorielles sont écrites sans flèche (« BA = −AB », « AB + BC = AC », « AB = DC »). Lues comme des longueurs, elles sont fausses (AB + BC = AC n'est vrai que si B est sur [AC]). L'élève ne peut pas distinguer le vecteur de la longueur.",
+        "correction": "Écrire les vecteurs avec une flèche : Chasles AB⃗ + BC⃗ = AC⃗ ; opposé BA⃗ = −AB⃗ ; ABCD est un parallélogramme si et seulement si AB⃗ = DC⃗. La longueur se note AB (sans flèche)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:angles": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:cercles": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "piège",
+        "quoi": "Le piège dit : « croire que toute droite coupant le cercle en un point est une tangente : il faut qu'elle n'ait qu'un seul point commun ». C'est la définition même de la tangente, donc ce n'est pas une erreur d'élève.",
+        "correction": "Piège : croire qu'une droite qui touche presque le cercle est une tangente. La tangente a un seul point commun T avec le cercle et elle est perpendiculaire au rayon [OT] : on le vérifie à l'équerre. Une droite qui entre dans le cercle et en ressort a deux points communs : c'est une sécante."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:figures-symetriques-par-rapport-a-une-droite": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:fractions": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:nombres-decimaux-relatifs": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:nombres-premiers": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:parallelogrammes-particuliers": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:prisme-droit": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:proportionnalite": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple ne traite que le pourcentage ; reconnaître la proportionnalité (étape 1) n'est pas illustré.",
+        "correction": "Tableau : 2 kg → 1 800 FCFA ; 5 kg → 4 500 FCFA. Quotients 900 et 900 : proportionnel."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:segments": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro (« les segments servent à comparer des longueurs ») est vague et l'exemple porte sur la médiatrice.",
+        "correction": "Intro : un segment est la partie de droite entre deux points ; son milieu et sa médiatrice servent à partager et à construire."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:statistique": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:5e:triangles": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:angles": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:cercles-et-disques": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "Aucune situation réelle dans l'intro ni dans l'exemple : ajouter un exemple en contexte local (marché, FCFA, champ, moto).",
+        "correction": "Un puits circulaire de rayon 1 m : périmètre = 2 × 3,14 × 1 = 6,28 m."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:droites-et-points": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:figures-symetriques-par-rapport-a-un-point": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:fractions": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étapes",
+        "quoi": "Le piège cite l'addition de fractions de dénominateurs différents, absente des étapes.",
+        "correction": "Ajouter : 1/2 + 1/3 = 3/6 + 2/6 = 5/6 (même dénominateur d'abord). Exemple en contexte : les 3/4 d'un sac de 20 kg de riz = 20 ÷ 4 × 3 = 15 kg."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:nombres-decimaux": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "Aucune situation réelle dans l'intro ni dans l'exemple : ajouter un exemple en contexte local (marché, FCFA, champ, moto).",
+        "correction": "2,5 m de tissu à 1 200 FCFA le mètre : 2,5 × 1 200 = 3 000 FCFA."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:nombres-entiers-naturels": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "Aucune situation réelle dans l'intro ni dans l'exemple : ajouter un exemple en contexte local (marché, FCFA, champ, moto).",
+        "correction": "Un vendeur a 3 sacs de 25 kg et 1 sac de 10 kg : 3 × 25 + 10 = 85 kg (la multiplication d'abord)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:parallelogrammes": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "Aucune situation réelle dans l'intro ni dans l'exemple : ajouter un exemple en contexte local (marché, FCFA, champ, moto).",
+        "correction": "Une parcelle en parallélogramme de base 12 m et de hauteur 7 m : aire = 12 × 7 = 84 m²."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:paves-droits-et-cylindres-droits": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "Aucune situation réelle dans l'intro ni dans l'exemple : ajouter un exemple en contexte local (marché, FCFA, champ, moto).",
+        "correction": "Une citerne de 2 m sur 1 m sur 1,5 m : V = 3 m³ = 3 000 L."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:proportionnalite": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:segments": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:statistique": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:6e:triangles": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "Aucune situation réelle dans l'intro ni dans l'exemple : ajouter un exemple en contexte local (marché, FCFA, champ, moto).",
+        "correction": "Un champ triangulaire de base 40 m et de hauteur 25 m : aire = 40 × 25 ÷ 2 = 500 m²."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:ci:addition-simple": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:cm1:proportionnalite": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:cp:monnaie-le-fcfa": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1",
+        "quoi": "Le prix total utilise une multiplication ; à vérifier avec un enseignant de CP si les élèves la connaissent déjà.",
+        "correction": "Variante sans multiplication : 100 + 100 + 100 = 300 FCFA."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:barycentre-et-lignes-de-niveaux-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 1, exemple, propriété 3",
+        "quoi": "Σ aᵢ·MAᵢ = (Σ aᵢ)·MG est une égalité de vecteurs écrite sans flèches, et la condition Σ aᵢ ≠ 0 est absente de l'étape. « Cercle si k est assez grand » est vague. MA·MB = k se lit comme un produit de longueurs, pas comme un produit scalaire.",
+        "correction": "Σ aᵢ·MAᵢ⃗ = (Σ aᵢ)·MG⃗, avec Σ aᵢ ≠ 0. Exemple MA² + MB² = k : cercle de centre I si k > AB²/2 ; le point I si k = AB²/2 ; ensemble vide si k < AB²/2. Ligne de niveau : MA⃗·MB⃗ = k (produit scalaire)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:calcul-integral-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite les volumes de révolution, absents du cours.",
+        "correction": "Soit retirer ce mot, soit ajouter V = π∫ₐᵇ [f(x)]² dx ; pour f(x) = x sur [0 ; 1], V = π/3."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:calcul-integral-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "L'intro cite les volumes de révolution, absents du cours.",
+        "correction": "Soit retirer ce mot, soit ajouter V = π∫ₐᵇ [f(x)]² dx ; pour f(x) = x sur [0 ; 1], V = π/3."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:composees-de-transformations-serie-d": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 3, exemple",
+        "quoi": "L'étape « Identifier » cite translation, rotation, symétrie : la symétrie glissée manque (composée d'une symétrie axiale et d'une translation de vecteur non parallèle à l'axe). L'exemple (deux translations) est trivial et n'illustre pas l'identification.",
+        "correction": "Étape 3 : la composée de deux isométries peut être une translation, une rotation, une symétrie axiale ou une symétrie glissée. Exemple : deux symétries d'axes parallèles distants de d donnent une translation de vecteur de longueur 2d, perpendiculaire aux axes."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:coniques-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:derivabilite-et-etude-de-fonctions-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "La définition de la dérivée (limite du taux d'accroissement) est absente.",
+        "correction": "f'(a) = lim (f(a + h) − f(a))/h quand h → 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:derivabilite-et-etude-de-fonctions-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "intro",
+        "quoi": "La définition de la dérivée (limite du taux d'accroissement) est absente.",
+        "correction": "f'(a) = lim (f(a + h) − f(a))/h quand h → 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:divisibilite-dans-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "piège, étape 2",
+        "quoi": "Le piège « additionner les congruences de façon incorrecte » ne nomme aucune erreur réelle, et la méthode « réduire modulo n » n'est pas expliquée.",
+        "correction": "Piège réel : simplifier une congruence par un facteur non premier avec n (6 ≡ 0 [6] mais on ne peut pas « diviser par 6 »). Méthode : 7 ≡ 2 [5], donc 7¹⁰ ≡ 2¹⁰ ; comme 2⁴ = 16 ≡ 1 [5], 2¹⁰ = (2⁴)² × 2² ≡ 4 [5]."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:equations-differentielles-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:equations-differentielles-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:etude-de-fonctions-polynomes-et-de-fonctions-rationnelles-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple est un polynôme ; une fonction rationnelle (asymptotes) n'est pas illustrée.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:etude-de-fonctions-polynomes-et-de-fonctions-rationnelles-serie-a2": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple est un polynôme ; une fonction rationnelle (asymptotes) n'est pas illustrée.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:fonction-exponentielle-neperienne-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "piège",
+        "quoi": "Le piège est un énoncé (eˣ = −2) et non une erreur d'élève nommée.",
+        "correction": "Erreur : écrire x = ln(−2). Or eˣ > 0, donc eˣ = −2 n'a aucune solution."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:fonction-exponentielle-neperienne-serie-a2": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "piège",
+        "quoi": "Le piège est un énoncé (eˣ = −2) et non une erreur d'élève nommée.",
+        "correction": "Erreur : écrire x = ln(−2). Or eˣ > 0, donc eˣ = −2 n'a aucune solution."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:fonction-logarithme-neperien-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1",
+        "quoi": "Les formules de l'étape 1 n'indiquent pas l'hypothèse a, b > 0 (elle figure seulement dans les propriétés).",
+        "correction": "ln(ab) = ln a + ln b pour a > 0 et b > 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:fonction-logarithme-neperien-serie-a2": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1",
+        "quoi": "Les formules de l'étape 1 n'indiquent pas l'hypothèse a, b > 0 (elle figure seulement dans les propriétés).",
+        "correction": "ln(ab) = ln a + ln b pour a > 0 et b > 0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:fonctions-exponentielles-et-fonctions-puissances-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple (dériver 2ˣ) est trivial ; les fonctions puissances ne sont pas illustrées.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:fonctions-exponentielles-et-fonctions-puissances-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple (dériver 2ˣ) est trivial ; les fonctions puissances ne sont pas illustrées.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:fonctions-logarithmes-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:fonctions-logarithmes-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:geometrie-analytique-dans-l-espace-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "propriété « Distance point-plan »",
+        "quoi": "La lettre d désigne à la fois la distance et le terme constant du plan ax + by + cz + d = 0 : « d = |ax₀ + by₀ + cz₀ + d| / √(a² + b² + c²) » est ambigu.",
+        "correction": "Distance du point M₀(x₀ ; y₀ ; z₀) au plan : δ = |a x₀ + b y₀ + c z₀ + d| / √(a² + b² + c²)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:isometries-du-plan-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "étape 1, exemple",
+        "quoi": "L'étape « Reconnaître : on étudie les points fixes » ne donne aucun critère. L'exemple (une symétrie axiale a une infinité de points fixes) ne montre pas comment reconnaître une isométrie.",
+        "correction": "Critère : aucun point fixe → translation ou symétrie glissée ; un seul point fixe → rotation ; une droite de points fixes → symétrie axiale ; tous les points fixes → identité. Exemple de composée : deux symétries d'axes parallèles donnent une translation."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:limites-et-continuite-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 2",
+        "quoi": "« Somme, produit, quotient suivent des règles » sans les donner.",
+        "correction": "Ajouter un tableau des règles (+∞ + a = +∞ ; +∞ × a > 0 = +∞ ; a/0⁺ = +∞ si a > 0) et la liste des formes indéterminées : ∞ − ∞, 0 × ∞, ∞/∞, 0/0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:limites-et-continuite-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 2",
+        "quoi": "« Somme, produit, quotient suivent des règles » sans les donner.",
+        "correction": "Ajouter un tableau des règles (+∞ + a = +∞ ; +∞ × a > 0 = +∞ ; a/0⁺ = +∞ si a > 0) et la liste des formes indéterminées : ∞ − ∞, 0 × ∞, ∞/∞, 0/0."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:loi-binomiale": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 2",
+        "quoi": "C(n, k) n'est pas défini dans le cours.",
+        "correction": "C(n, k) = n!/(k!(n − k)!) ; C(4, 2) = 6."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:nombres-complexes-et-geometrie-du-plan-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple (rotation de centre O) est trivial : le cas d'un centre quelconque n'est pas illustré.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:nombres-complexes-et-transformations-du-plan-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "exemple",
+        "quoi": "L'exemple (rotation de centre O) est trivial : le cas d'un centre quelconque n'est pas illustré.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:nombres-complexes-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 3",
+        "quoi": "La forme trigonométrique est donnée sans dire comment trouver θ.",
+        "correction": "cos θ = a/r et sin θ = b/r, où r = |z| = √(a² + b²)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:nombres-complexes-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 3",
+        "quoi": "La forme trigonométrique est donnée sans dire comment trouver θ.",
+        "correction": "cos θ = a/r et sin θ = b/r, où r = |z| = √(a² + b²)."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:ppcm-et-pgcd-de-deux-entiers-relatifs-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:primitives-et-calcul-integral-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:primitives-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:primitives-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:probabilite-conditionnelle-et-variable-aleatoire-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes, exemple",
+        "quoi": "L'intro annonce la probabilité conditionnelle et la loi binomiale ; les étapes ne traitent que loi, espérance et variance. P(A | B) n'apparaît que dans la formule de Bayes, sans définition ni exemple.",
+        "correction": "Ajouter l'étape : P(B | A) = P(A ∩ B)/P(A) avec P(A) ≠ 0. Exemple : P(A) = 0,4 et P(A ∩ B) = 0,1 donnent P(B | A) = 0,25. Ajouter un exemple de variance : X vaut 0 ou 10 avec la probabilité 0,5 : V(X) = 50 − 25 = 25."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:probabilite-conditionnelle-et-variable-aleatoire-serie-d": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes, exemple",
+        "quoi": "L'intro annonce la probabilité conditionnelle et la loi binomiale ; les étapes ne traitent que loi, espérance et variance. P(A | B) n'apparaît que dans la formule de Bayes, sans définition ni exemple.",
+        "correction": "Ajouter l'étape : P(B | A) = P(A ∩ B)/P(A) avec P(A) ≠ 0. Exemple : P(A) = 0,4 et P(A ∩ B) = 0,1 donnent P(B | A) = 0,25. Ajouter un exemple de variance : X vaut 0 ou 10 avec la probabilité 0,5 : V(X) = 50 − 25 = 25."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:probabilites-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "L'arbre (étape 1) n'est pas illustré.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:probabilites-serie-a2": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "L'arbre (étape 1) n'est pas illustré.",
+        "correction": ""
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:similitudes-directes-du-plan-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:statistique-a-deux-variables-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:statistique-a-deux-variables-serie-a2": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:statistiques-a-deux-variables-serie-c": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:statistiques-a-deux-variables-serie-d": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:suites-numeriques-serie-a1": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce « leurs limites » ; aucune étape ne les traite (elles ne figurent que dans une propriété). La somme d'une suite géométrique n'a pas d'étape non plus.",
+        "correction": "Ajouter une étape « Limite » : si |q| < 1, qⁿ → 0 ; si q > 1 et u₀ > 0, uₙ → +∞. Ajouter la somme géométrique : S = u₀ × (1 − qⁿ⁺¹)/(1 − q) pour q ≠ 1."
+      },
+      {
+        "gravite": "a-corriger",
+        "ou": "exemple",
+        "quoi": "« Premier terme 3 » est ambigu : u₁₀ = 43 si le premier terme est u₀, mais 39 s'il s'agit de u₁.",
+        "correction": "Énoncé : « suite arithmétique de premier terme u₀ = 3 et de raison 4 ». Piège nommé : confondre u₀ et u₁ ; si le premier terme est u₁, uₙ = u₁ + (n − 1)r, donc u₁₀ = 3 + 9 × 4 = 39."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:suites-numeriques-serie-a2": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce « leurs limites » ; aucune étape ne les traite (elles ne figurent que dans une propriété). La somme d'une suite géométrique n'a pas d'étape non plus.",
+        "correction": "Ajouter une étape « Limite » : si |q| < 1, qⁿ → 0 ; si q > 1 et u₀ > 0, uₙ → +∞. Ajouter la somme géométrique : S = u₀ × (1 − qⁿ⁺¹)/(1 − q) pour q ≠ 1."
+      },
+      {
+        "gravite": "a-corriger",
+        "ou": "exemple",
+        "quoi": "« Premier terme 3 » est ambigu : u₁₀ = 43 si le premier terme est u₀, mais 39 s'il s'agit de u₁.",
+        "correction": "Énoncé : « suite arithmétique de premier terme u₀ = 3 et de raison 4 ». Piège nommé : confondre u₀ et u₁ ; si le premier terme est u₁, uₙ = u₁ + (n − 1)r, donc u₁₀ = 3 + 9 × 4 = 39."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:suites-numeriques-serie-c": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce « leurs limites » ; aucune étape ne les traite (elles ne figurent que dans une propriété). La somme d'une suite géométrique n'a pas d'étape non plus.",
+        "correction": "Ajouter une étape « Limite » : si |q| < 1, qⁿ → 0 ; si q > 1 et u₀ > 0, uₙ → +∞. Ajouter la somme géométrique : S = u₀ × (1 − qⁿ⁺¹)/(1 − q) pour q ≠ 1."
+      },
+      {
+        "gravite": "a-corriger",
+        "ou": "exemple",
+        "quoi": "« Premier terme 3 » est ambigu : u₁₀ = 43 si le premier terme est u₀, mais 39 s'il s'agit de u₁.",
+        "correction": "Énoncé : « suite arithmétique de premier terme u₀ = 3 et de raison 4 ». Piège nommé : confondre u₀ et u₁ ; si le premier terme est u₁, uₙ = u₁ + (n − 1)r, donc u₁₀ = 3 + 9 × 4 = 39."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:suites-numeriques-serie-d": {
+    "avis": "a-corriger",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "a-corriger",
+        "ou": "intro, étapes",
+        "quoi": "L'intro annonce « leurs limites » ; aucune étape ne les traite (elles ne figurent que dans une propriété). La somme d'une suite géométrique n'a pas d'étape non plus.",
+        "correction": "Ajouter une étape « Limite » : si |q| < 1, qⁿ → 0 ; si q > 1 et u₀ > 0, uₙ → +∞. Ajouter la somme géométrique : S = u₀ × (1 − qⁿ⁺¹)/(1 − q) pour q ≠ 1."
+      },
+      {
+        "gravite": "a-corriger",
+        "ou": "exemple",
+        "quoi": "« Premier terme 3 » est ambigu : u₁₀ = 43 si le premier terme est u₀, mais 39 s'il s'agit de u₁.",
+        "correction": "Énoncé : « suite arithmétique de premier terme u₀ = 3 et de raison 4 ». Piège nommé : confondre u₀ et u₁ ; si le premier terme est u₁, uₙ = u₁ + (n − 1)r, donc u₁₀ = 3 + 9 × 4 = 39."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:systemes-lineaires-dans-couples-serie-a1": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "L'étape 1 parle de multiplier les équations, mais l'exemple n'en a pas besoin.",
+        "correction": "Résoudre 2x + 3y = 12 et x − y = 1 : on multiplie la 2e par 3 : 3x − 3y = 3, puis on additionne : 5x = 15, x = 3, y = 2."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  },
+  "maths:tle:systemes-lineaires-dans-couples-serie-a2": {
+    "avis": "recommande-validation",
+    "recalcule": true,
+    "problemes": [
+      {
+        "gravite": "conseil",
+        "ou": "étape 1, exemple",
+        "quoi": "L'étape 1 parle de multiplier les équations, mais l'exemple n'en a pas besoin.",
+        "correction": "Résoudre 2x + 3y = 12 et x − y = 1 : on multiplie la 2e par 3 : 3x − 3y = 3, puis on additionne : 5x = 15, x = 3, y = 2."
+      }
+    ],
+    "points_forts": [
+      "Exemple recalculé : résultat juste",
+      "Définitions et propriétés exactes"
+    ],
+    "date": "2026-10-13"
+  }
+}
