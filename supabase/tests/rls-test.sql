@@ -1,4 +1,4 @@
--- Test des règles d'accès (RLS) et des fonctions des migrations 20261014 à 20261015000100 (à lancer APRÈS les trois).
+-- Test des règles d'accès (RLS) et des fonctions des migrations 20261014 à 20261015000200 (à lancer APRÈS les quatre).
 -- À coller dans Supabase > SQL Editor > Run. Le script ne laisse AUCUNE trace : il finit toujours par une
 -- erreur volontaire qui annule tout (comptes de test compris). Lis le message :
 --   « TESTS OK : n vérifications »  -> tout est conforme ;
@@ -14,25 +14,27 @@ declare
   code text; pay uuid; n int := 0; c int; r text; t timestamptz;
 begin
   -- Comptes de test (le trigger crée les profils, comme à une vraie inscription).
-  -- Un élève n'existe que créé par un parent : le serveur pose app_metadata.parent_id (api/children.ts).
+  -- Un élève n'existe que créé par un parent : le serveur (api/children.ts) crée son profil et son corrigé différé juste après son compte.
   insert into auth.users (id, email, raw_user_meta_data) values (p, 'p@test.invalid', '{"role":"parent","name":"Parent","country":"CI"}');
   insert into auth.users (id, email, raw_user_meta_data) values (p2, 'p2@test.invalid', '{"role":"parent","name":"Autre parent","country":"CI"}');
   select invite_code into code from public.profiles where id = p;
   insert into auth.users (id, email, raw_user_meta_data, raw_app_meta_data) values (s, 's@test.invalid', '{"role":"student","name":"Eleve","level":"tle"}', jsonb_build_object('parent_id', p, 'login', 'eleve.1234'));
+  insert into public.profiles (id, role, name, login, level, parent_id) values (s, 'student', 'Eleve', 'eleve.1234', 'tle', p);
+  insert into public.solution_modes (student_id, mode) values (s, 'deferred');
   insert into auth.users (id, email, raw_user_meta_data, raw_app_meta_data) values (o, 'o@test.invalid', '{"role":"student","name":"Autre","level":"tle"}', jsonb_build_object('parent_id', p2, 'login', 'autre.5678'));
+  insert into public.profiles (id, role, name, login, level, parent_id) values (o, 'student', 'Autre', 'autre.5678', 'tle', p2);
+  insert into public.solution_modes (student_id, mode) values (o, 'deferred');
   insert into auth.users (id, email, raw_user_meta_data) values (a, 'a@test.invalid', '{"role":"parent","name":"Admin"}');
   update public.profiles set role = 'admin' where id = a;  -- fait par nous (postgres), comme la requête manuelle du schéma
 
   -- 1. Trigger d'inscription
-  begin
-    insert into auth.users (id, email, raw_user_meta_data) values (h, 'h@test.invalid', '{"role":"admin","name":"Pirate"}');
-    raise exception 'ECHEC : une inscription directe demandant le rôle admin a été acceptée' using errcode = 'ZZ001';
-  exception when raise_exception then if sqlerrm like 'ECHEC%' then raise; end if; end;
+  insert into auth.users (id, email, raw_user_meta_data) values (h, 'h@test.invalid', '{"role":"admin","name":"Pirate"}');
+  if exists (select 1 from public.profiles where id = h) then raise exception 'ECHEC : une inscription directe demandant le rôle admin a reçu un profil' using errcode = 'ZZ001'; end if;
   n := n + 1;
-  begin
-    insert into auth.users (id, email, raw_user_meta_data) values (gen_random_uuid(), 'e@test.invalid', '{"role":"student","name":"Seul","level":"tle"}');
-    raise exception 'ECHEC : un élève s''est inscrit sans parent' using errcode = 'ZZ001';
-  exception when raise_exception then if sqlerrm like 'ECHEC%' then raise; end if; end;
+  declare e uuid := gen_random_uuid(); begin
+    insert into auth.users (id, email, raw_user_meta_data) values (e, 'e@test.invalid', '{"role":"student","name":"Seul","level":"tle"}');
+    if exists (select 1 from public.profiles where id = e) then raise exception 'ECHEC : une inscription « élève » directe a reçu un profil' using errcode = 'ZZ001'; end if;
+  end;
   n := n + 1;
   if code is null or length(code) <> 6 then raise exception 'ECHEC : le parent n''a pas de code d''invitation' using errcode = 'ZZ001'; end if; n := n + 1;
   if (select parent_id from public.profiles where id = s) is distinct from p then raise exception 'ECHEC : l''élève n''est pas rattaché à son parent' using errcode = 'ZZ001'; end if; n := n + 1;

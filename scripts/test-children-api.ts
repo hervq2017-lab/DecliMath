@@ -6,12 +6,14 @@ type U = { id: string; email: string; password: string; app_metadata: any; user_
 type P = Record<string, any>;
 const users = new Map<string, U>();
 let profiles: P[] = [];
+const solutionModes: P[] = [];
 let seq = 0;
 const newId = () => `00000000-0000-4000-8000-${String(++seq).padStart(12, "0")}`;
 
-function addUser(email: string, password: string, meta: any, app: any = {}): U {
+function addUser(email: string, password: string, meta: any, app: any = {}, forceProfile = false): U {
   const u: U = { id: newId(), email, password, app_metadata: app, user_metadata: meta, created_at: new Date().toISOString() };
   users.set(u.id, u);
+  if (meta.role !== "parent" && !forceProfile) return u; // comme la vraie base : le déclencheur ne crée que les profils parents
   profiles.push({ id: u.id, role: meta.role, name: meta.name, country: meta.country ?? "CI", level: meta.level ?? null, serie: meta.serie ?? null, parent_id: app.parent_id ?? null, login: app.login ?? null, suspended: false });
   return u;
 }
@@ -49,6 +51,12 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
       }
       if (req.method === "DELETE") { users.delete(u.id); profiles = profiles.filter((p) => p.id !== u.id); return send(res, 200, {}); }
     }
+    if (path === "/rest/v1/solution_modes" && req.method === "POST") { solutionModes.push(body); return send(res, 201, {}); }
+    if (path === "/rest/v1/profiles" && req.method === "POST") {
+      if (profiles.some((p) => body.login && p.login === body.login)) return send(res, 409, { code: "23505", message: "duplicate key value violates unique constraint profiles_login_key" });
+      profiles.push({ suspended: false, ...body });
+      return send(res, 201, {});
+    }
     if (path === "/rest/v1/profiles") {
       const match = (p: P) => [...url.searchParams].every(([k, v]) => ["select", "order", "limit"].includes(k) || !v.startsWith("eq.") || String(p[k]) === v.slice(3));
       const rows = profiles.filter(match);
@@ -77,7 +85,7 @@ async function call(body: unknown, token?: string): Promise<{ status: number; js
 
 const awa = addUser("awa@test.com", "x", { role: "parent", name: "Awa", country: "CI" });
 const moussa = addUser("m@test.com", "x", { role: "parent", name: "Moussa", country: "SN" });
-const kid = addUser("kid@test.com", "x", { role: "student", name: "Eleve" });
+const kid = addUser("kid@test.com", "x", { role: "student", name: "Eleve" }, {}, true);
 const T = tokenOf(awa);
 
 ok((await call({ action: "create", children: [{ name: "Bola", level: "3e" }] })).status === 401, "sans connexion : refusé");
@@ -90,6 +98,8 @@ ok(kids.every((k) => /^[a-z0-9]+\.\d{4}$/.test(k.login) && k.password.length ===
 ok(new Set(kids.map((k) => k.login)).size === 3 && new Set(kids.map((k) => k.password)).size === 3, "identifiants et mots de passe tous différents");
 ok(kids.every((k) => users.get(k.id)?.password === k.password && users.get(k.id)?.email === `${k.login}@eleves.declickmath.invalid`), "le compte créé correspond à ce que voit le parent (connexion possible)");
 ok(kids.every((k) => profiles.find((p) => p.id === k.id)?.parent_id === awa.id), "chaque enfant est rattaché au parent");
+ok(kids.every((k) => profiles.find((p) => p.id === k.id)?.login === k.login && profiles.find((p) => p.id === k.id)?.role === "student"), "le profil de chaque élève est créé par le serveur, avec son identifiant");
+ok(kids.every((k) => solutionModes.some((m) => m.student_id === k.id && m.mode === "deferred")), "corrigé « différé » par défaut pour chaque élève");
 
 const [b0, b1] = kids;
 const rp = await call({ action: "reset-password", childId: b0.id }, T);

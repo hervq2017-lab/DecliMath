@@ -38,8 +38,20 @@ async function createKids(admin: Admin, parent: { id: string; country: string },
         app_metadata: { parent_id: parent.id, login },
         user_metadata: { role: "student", name, country: parent.country, level, serie },
       });
-      if (!error && data.user) { created.push({ id: data.user.id, name, login, password }); break; }
-      if (!/already|registered|exists/i.test(error?.message ?? "")) return created.length ? created : null;
+      if (error || !data.user) {
+        if (!/already|registered|exists/i.test(error?.message ?? "")) return created.length ? created : null;
+        continue;
+      }
+      // Le profil de l'élève est créé ici (le déclencheur de la base ne gère que les parents : GoTrue n'enregistre app_metadata qu'après coup).
+      const { error: pe } = await admin.from("profiles").insert({ id: data.user.id, role: "student", name, login, country: parent.country, level, serie: serie || null, parent_id: parent.id });
+      const { error: se } = pe ? { error: pe } : await admin.from("solution_modes").insert({ student_id: data.user.id, mode: "deferred" });
+      if (pe || se) {
+        await admin.auth.admin.deleteUser(data.user.id); // on ne laisse pas de compte sans profil
+        if (pe?.code === "23505") continue; // identifiant déjà pris : on en tire un autre
+        return created.length ? created : null;
+      }
+      created.push({ id: data.user.id, name, login, password });
+      break;
     }
   }
   return created;
