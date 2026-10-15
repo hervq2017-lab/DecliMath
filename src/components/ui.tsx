@@ -109,7 +109,7 @@ function Rail({ label, items, foot }: { label: string; items: RailItem[]; foot?:
     <nav className="bottom-nav" aria-label={label}>
       <Link className="side-brand" to="/accueil" aria-label="DeclickMath, page d'accueil">
         <LogoMark />
-        <span className="side-id"><span className="side-name">Declick<b>Math</b></span><small className="side-tag">Apprendre • S'entraîner • Réussir</small></span>
+        <span className="side-id"><span className="side-name">Declick<b>Math</b></span></span>
       </Link>
       {items.map(({ to, label: text, Icon, end }) => (
         <NavLink key={to} to={to} end={end} className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>

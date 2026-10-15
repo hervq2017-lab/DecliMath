@@ -648,7 +648,7 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 .navy .stats3 span { color: #4a5489; }
 
 /* ---- Exercices : bannière + panneau latéral (maquette) ---- */
-.side-id { display: flex; flex-direction: column; line-height: 1.15; } .side-tag { font-size: .72rem; color: var(--muted); font-weight: 600; }
+.side-id { display: flex; flex-direction: column; line-height: 1.15; }
 .lvl-badge { padding: 3px 12px; border-radius: 999px; border: 2px solid var(--primary); color: var(--primary-ink); font-size: .85rem; font-weight: 800; }
 .cat-top { display: grid; grid-template-columns: 1fr; gap: 16px; }
 .cat-hero { position: relative; overflow: hidden; border-radius: 26px; padding: 26px 28px; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
@@ -670,7 +670,6 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 @media (min-width: 1024px) { .cat-top { grid-template-columns: minmax(0, 1fr) 340px; align-items: stretch; } .cat-side { justify-content: center; } }
 @media (max-width: 700px) { .cat-hero-main { max-width: 100%; } .cat-hero-img { display: none; } .cat-hero-tile { width: 64px; height: 64px; border-radius: 18px; } }
 :root[data-theme="light"] .cat-side { background: var(--card); border-color: var(--line); } :root[data-theme="light"] .cat-side-btn { background: var(--card); border-color: var(--line); }
-.side-tag { white-space: nowrap; font-size: .64rem; letter-spacing: -.1px; }
 .cat-hero-main { max-width: 68%; } .cat-hero-feats { max-width: 66%; }
 .cat-hero-img { width: 30%; }
 .cat-hero-formula { top: 14px; bottom: auto; right: 20px; font-size: .95rem; opacity: .9; }
