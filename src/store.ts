@@ -385,6 +385,21 @@ export function regenerateLogin(parentId: string, childId: string) {
   });
 }
 
+/** Supprime l'accès d'un enfant du parent, avec toute sa progression. */
+export function removeChild(parentId: string, childId: string) {
+  update((s) => {
+    if (!s.users.some((u) => u.id === childId && u.parentId === parentId && u.role === "student")) return s;
+    const mine = <T extends { studentId: string }>(rows: T[]) => rows.filter((r) => r.studentId !== childId);
+    const { [childId]: _mode, ...solutionMode } = s.solutionMode;
+    return {
+      ...s, users: s.users.filter((u) => u.id !== childId),
+      attempts: mine(s.attempts), checks: mine(s.checks), exams: mine(s.exams), papers: mine(s.papers), evidence: mine(s.evidence), bilans: mine(s.bilans),
+      memory: Object.fromEntries(Object.entries(s.memory ?? {}).filter(([, m]) => m.studentId !== childId)),
+      solutionMode,
+    };
+  });
+}
+
 export function logIn(email: string, password: string): string | null {
   const u = state.users.find((x) => x.email === email.trim().toLowerCase() && x.password === password);
   if (!u) return "E-mail ou mot de passe incorrect.";

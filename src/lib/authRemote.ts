@@ -2,7 +2,7 @@
 // sinon l'application garde son mode local (store.ts). Le serveur reste la source de vérité des comptes : le navigateur
 // n'en garde qu'une copie dans l'état local (sans mot de passe) pour que les écrans existants continuent de fonctionner.
 import type { LevelId } from "../curriculum";
-import { ChildInput, DEFAULT_PREFS, getState, Prefs, Role, SolutionMode, subscribe, update, User } from "../store";
+import { ChildInput, DEFAULT_PREFS, getState, Prefs, removeChild, Role, SolutionMode, subscribe, update, User } from "../store";
 import { supabase, supabaseReady } from "./supabase";
 import { pullProgress, resetProgressTracking, startProgressSync } from "./progressSync";
 
@@ -291,6 +291,14 @@ export async function remoteResetChild(childId: string): Promise<string | null> 
   const res = (await callChildren({ action: "reset-login", childId })) as { error?: string; login?: string };
   if (res.error || !res.login) return res.error ?? "Changement impossible.";
   await hydrateAfter([{ id: childId, login: res.login, password: "" }]);
+  return null;
+}
+
+/** Supprime l'accès d'un enfant (compte et progression) ; renvoie un message d'erreur ou null. */
+export async function remoteDeleteChild(childId: string): Promise<string | null> {
+  const res = (await callChildren({ action: "delete", childId })) as { error?: string; id?: string };
+  if (!res.id) return res.error ?? "Suppression impossible.";
+  removeChild(getState().sessionId ?? "", childId);
   return null;
 }
 

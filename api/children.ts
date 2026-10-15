@@ -128,5 +128,15 @@ export default async function handler(req: Req, res: Res) {
     return res.status(500).json({ error: "Changement impossible." });
   }
 
+  // Supprime l'accès d'un enfant : son compte, son profil et sa progression disparaissent (suppression en cascade). Irréversible.
+  if (body.action === "delete") {
+    const childId = String(body.childId ?? "");
+    const { data: child } = await admin.from("profiles").select("id").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
+    if (!child) return res.status(404).json({ error: "Enfant introuvable." });
+    const { error } = await admin.auth.admin.deleteUser(child.id);
+    if (error) return res.status(500).json({ error: "Suppression impossible. Réessaie." });
+    return res.status(200).json({ id: child.id });
+  }
+
   return res.status(400).json({ error: "Action inconnue." });
 }

@@ -1,9 +1,9 @@
-import { Copy, KeyRound, Plus, RefreshCw } from "lucide-react";
+import { Copy, KeyRound, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { levelById, LEVELS, LevelId, seriesAt } from "../curriculum";
-import { remoteCreateChildren, remoteFamilyCode, remoteResetChild } from "../lib/authRemote";
+import { remoteCreateChildren, remoteDeleteChild, remoteFamilyCode, remoteResetChild } from "../lib/authRemote";
 import { supabaseReady } from "../lib/supabase";
-import { addChildren, ensureFamilyCode, regenerateLogin, studentsOf, useStore } from "../store";
+import { addChildren, ensureFamilyCode, regenerateLogin, removeChild, studentsOf, useStore } from "../store";
 
 /** Accès des enfants : un seul code famille pour tous ; chaque enfant choisit son prénom à la connexion. */
 export default function ChildAccess({ parentId }: { parentId: string }) {
@@ -36,6 +36,11 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
     if (supabaseReady) void run(() => remoteFamilyCode(true)); else ensureFamilyCode(parentId, true);
   };
 
+  const removeAccess = (id: string, childName: string) => {
+    if (!window.confirm(`Supprimer l'accès de ${childName} ? Son compte et toute sa progression seront effacés définitivement.`)) return;
+    if (supabaseReady) void run(() => remoteDeleteChild(id)); else removeChild(parentId, id);
+  };
+
   return (
     <section className="card stack" aria-labelledby="acces">
       <h2 id="acces" style={{ fontSize: "1.05rem" }}><KeyRound size={18} aria-hidden="true" style={{ verticalAlign: "-3px" }} /> Accès de connexion de mes enfants</h2>
@@ -53,7 +58,12 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
         {children.map((c) => (
           <li key={c.id} className="row" style={{ justifyContent: "space-between" }}>
             <span><b>{c.name}</b> <span className="muted small">• {levelById(c.level ?? "tle").label}{c.serie ? ` ${c.serie}` : ""} • identifiant <code>{c.email}</code></span></span>
-            <button type="button" className="btn link" disabled={busy} onClick={() => { if (supabaseReady) void run(() => remoteResetChild(c.id)); else regenerateLogin(parentId, c.id); }}>Nouvel identifiant</button>
+            <span className="row">
+              <button type="button" className="btn link" disabled={busy} onClick={() => { if (supabaseReady) void run(() => remoteResetChild(c.id)); else regenerateLogin(parentId, c.id); }}>Nouvel identifiant</button>
+              <button type="button" className="btn link" disabled={busy} style={{ color: "var(--danger, #ff6b6b)" }} onClick={() => removeAccess(c.id, c.name)}>
+                <Trash2 size={15} aria-hidden="true" style={{ verticalAlign: "-2px" }} /> Supprimer
+              </button>
+            </span>
           </li>
         ))}
       </ul>
