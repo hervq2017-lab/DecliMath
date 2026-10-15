@@ -87,7 +87,9 @@ const GOALS = ["Rattraper mon retard", "Préparer un contrôle", "Préparer l'ex
 export default function Auth() {
   const [params] = useSearchParams();
   const [step, setStep] = useState<"welcome" | "signup" | "login">(params.get("c") === "login" ? "login" : params.get("r") === "parent" ? "signup" : "welcome");
-  const [kidLogin, setKidLogin] = useState(false);
+  /** À la connexion : qui se connecte. L'élève entre par le code famille, le parent par e-mail. */
+  const [who, setWho] = useState<"parent" | "student">(params.get("r") === "student" ? "student" : "parent");
+  const [idForm, setIdForm] = useState(false);
   const [role, setRole] = useState<Role>("parent");
   const [level, setLevel] = useState<LevelId>("3e");
   const [goal, setGoal] = useState(GOALS[0]);
@@ -145,13 +147,16 @@ export default function Auth() {
             <p className="lead">Un coach bienveillant qui explique, jamais un prof sévère.</p>
           </div>
           <section className="card stack" style={{ background: "#fff", color: "#3d3868", borderColor: "#fff" }}>
-            <h2 style={{ fontSize: "1.1rem", color: "#1c1545" }}>Tu es élève ?</h2>
-            <p className="small" style={{ color: "#5f5a85" }}>Ton compte est créé par ton parent. Connecte-toi avec l'identifiant et le mot de passe qu'il t'a donnés.</p>
-            <button className="btn primary block" onClick={() => setStep("login")}>Me connecter</button>
+            <h2 style={{ fontSize: "1.1rem", color: "#1c1545" }}>Je suis parent</h2>
+            <p className="small" style={{ color: "#5f5a85" }}>Suivez les progrès de vos enfants et gérez leurs accès.</p>
+            <button className="btn primary block" onClick={() => { setWho("parent"); setStep("login"); }}>Me connecter</button>
+            <button className="btn link" onClick={() => setStep("signup")}>Créer mon espace parent</button>
           </section>
-          <div className="row" style={{ justifyContent: "center" }}>
-            <button className="btn link" style={{ color: "#fff" }} onClick={() => setStep("signup")}>Je suis parent : créer mon espace</button>
-          </div>
+          <section className="card stack" style={{ background: "#fff", color: "#3d3868", borderColor: "#fff" }}>
+            <h2 style={{ fontSize: "1.1rem", color: "#1c1545" }}>Je suis élève</h2>
+            <p className="small" style={{ color: "#5f5a85" }}>Entre avec le code famille donné par ton parent, puis choisis ton prénom.</p>
+            <button className="btn primary block" onClick={() => { setWho("student"); setIdForm(false); setStep("login"); }}>Me connecter</button>
+          </section>
         </main>
       </div>
     );
@@ -185,7 +190,18 @@ export default function Auth() {
           <GradCap />
         </header>
 
-        {isLogin && kidLogin ? <FamilyLogin onBack={() => setKidLogin(false)} /> : (
+        {isLogin && (
+          <div className="auth-who" role="tablist" aria-label="Je me connecte en tant que">
+            {([["parent", "Parent", Users], ["student", "Élève", GraduationCap]] as const).map(([id, label, Icon]) => (
+              <button key={id} type="button" role="tab" aria-selected={who === id} className={who === id ? "on" : ""}
+                onClick={() => { setError(null); setInfo(null); setWho(id); setIdForm(false); }}>
+                <Icon size={20} aria-hidden="true" /> {label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {isLogin && who === "student" && !idForm ? <FamilyLogin onBack={() => setIdForm(true)} /> : (
         <form onSubmit={submit} className="auth-card">
           {!isLogin && (
             <>
@@ -216,10 +232,10 @@ export default function Auth() {
             </>
           )}
           <label className="auth-label">
-            <span className="auth-lbl"><Mail size={26} aria-hidden="true" /> {isLogin ? "E-mail ou identifiant" : "E-mail"}<span className="req" aria-hidden="true">*</span></span>
+            <span className="auth-lbl"><Mail size={26} aria-hidden="true" /> {isLogin ? (who === "parent" ? "E-mail" : "Identifiant") : "E-mail"}<span className="req" aria-hidden="true">*</span></span>
             <span className="auth-input">
               <Mail size={22} aria-hidden="true" />
-              <input name="email" type={isLogin ? "text" : "email"} required autoComplete={isLogin ? "username" : "email"} autoCapitalize="none" placeholder={isLogin ? "E-mail ou identifiant de l'élève" : "votre@email.com"} />
+              <input name="email" type={isLogin && who === "student" ? "text" : "email"} required autoComplete={isLogin ? "username" : "email"} autoCapitalize="none" placeholder={isLogin && who === "student" ? "Identifiant de l'élève" : "votre@email.com"} />
             </span>
           </label>
           <div className="auth-label">
@@ -302,14 +318,12 @@ export default function Auth() {
             {isLogin ? "Se connecter" : "Créer mon compte"}
             <ArrowRight size={22} aria-hidden="true" />
           </button>
-          {isLogin && (
-            <p className="auth-switch">
-              Tu es un enfant ? <button type="button" onClick={() => { setError(null); setKidLogin(true); }}>Entrer avec le code famille</button>
-            </p>
+          {isLogin && who === "student" && (
+            <p className="auth-switch"><button type="button" onClick={() => { setError(null); setIdForm(false); }}>Entrer avec le code famille</button></p>
           )}
           <p className="auth-switch">
-            {isLogin ? "Parent sans compte ?" : "Déjà un compte ?"}{" "}
-            <button type="button" onClick={() => { setError(null); setStep(isLogin ? "signup" : "login"); }}>
+            {isLogin ? (who === "parent" ? "Parent sans compte ?" : "Ton parent n'a pas de compte ?") : "Déjà un compte ?"}{" "}
+            <button type="button" onClick={() => { setError(null); setWho("parent"); setStep(isLogin ? "signup" : "login"); }}>
               {isLogin ? "Créer un espace parent" : "Se connecter"}
             </button>
             <ArrowRight size={18} aria-hidden="true" />

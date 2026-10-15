@@ -289,3 +289,9 @@
   .auth-trust { display: none; }
   .auth-proto { display: none; }
 }
+
+/* Choix Parent / Élève à la connexion */
+.auth-who { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; border-radius: 18px; border: 1px solid rgba(60, 90, 200, .4); background: var(--a-card); }
+.auth-who button { min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 13px; background: none; color: var(--a-muted); font: 700 1rem var(--font-body); cursor: pointer; }
+.auth-who button.on { background: linear-gradient(135deg, #35b6ff, #8a4dff); color: #fff; }
+.auth-who button:focus-visible { outline: 3px solid #ffc63d; outline-offset: 2px; }
