@@ -1,4 +1,4 @@
--- Test des règles d'accès (RLS) et des fonctions de supabase/migrations/20261014000000_init.sql.
+-- Test des règles d'accès (RLS) et des fonctions des migrations 20261014 à 20261015000100 (à lancer APRÈS les trois).
 -- À coller dans Supabase > SQL Editor > Run. Le script ne laisse AUCUNE trace : il finit toujours par une
 -- erreur volontaire qui annule tout (comptes de test compris). Lis le message :
 --   « TESTS OK : n vérifications »  -> tout est conforme ;
@@ -7,31 +7,36 @@ do $$
 declare
   p uuid := gen_random_uuid();   -- parent
   s uuid := gen_random_uuid();   -- élève rattaché à p
-  o uuid := gen_random_uuid();   -- autre élève, sans parent
+  o uuid := gen_random_uuid();   -- autre élève, rattaché à un autre parent (p2)
+  p2 uuid := gen_random_uuid();  -- autre parent
   h uuid := gen_random_uuid();   -- « pirate » qui demande le rôle admin à l'inscription
   a uuid := gen_random_uuid();   -- administrateur
   code text; pay uuid; n int := 0; c int; r text; t timestamptz;
 begin
   -- Comptes de test (le trigger crée les profils, comme à une vraie inscription).
+  -- Un élève n'existe que créé par un parent : le serveur pose app_metadata.parent_id (api/children.ts).
   insert into auth.users (id, email, raw_user_meta_data) values (p, 'p@test.invalid', '{"role":"parent","name":"Parent","country":"CI"}');
+  insert into auth.users (id, email, raw_user_meta_data) values (p2, 'p2@test.invalid', '{"role":"parent","name":"Autre parent","country":"CI"}');
   select invite_code into code from public.profiles where id = p;
-  insert into auth.users (id, email, raw_user_meta_data) values (s, 's@test.invalid', jsonb_build_object('role','student','name','Eleve','level','tle','invite_code', code));
-  insert into auth.users (id, email, raw_user_meta_data) values (o, 'o@test.invalid', '{"role":"student","name":"Autre","level":"tle"}');
-  insert into auth.users (id, email, raw_user_meta_data) values (h, 'h@test.invalid', '{"role":"admin","name":"Pirate"}');
-  insert into auth.users (id, email, raw_user_meta_data) values (a, 'a@test.invalid', '{"role":"student","name":"Admin"}');
+  insert into auth.users (id, email, raw_user_meta_data, raw_app_meta_data) values (s, 's@test.invalid', '{"role":"student","name":"Eleve","level":"tle"}', jsonb_build_object('parent_id', p, 'login', 'eleve.1234'));
+  insert into auth.users (id, email, raw_user_meta_data, raw_app_meta_data) values (o, 'o@test.invalid', '{"role":"student","name":"Autre","level":"tle"}', jsonb_build_object('parent_id', p2, 'login', 'autre.5678'));
+  insert into auth.users (id, email, raw_user_meta_data) values (a, 'a@test.invalid', '{"role":"parent","name":"Admin"}');
   update public.profiles set role = 'admin' where id = a;  -- fait par nous (postgres), comme la requête manuelle du schéma
 
   -- 1. Trigger d'inscription
-  select role into r from public.profiles where id = h;
-  if r <> 'student' then raise exception 'ECHEC : le rôle admin demandé à l''inscription a été accepté (%)', r using errcode = 'ZZ001'; end if; n := n + 1;
-  if code is null or length(code) <> 6 then raise exception 'ECHEC : le parent n''a pas de code d''invitation' using errcode = 'ZZ001'; end if; n := n + 1;
-  if (select parent_id from public.profiles where id = s) is distinct from p then raise exception 'ECHEC : l''élève n''est pas rattaché au parent par son code' using errcode = 'ZZ001'; end if; n := n + 1;
-  if (select mode from public.solution_modes where student_id = s) is distinct from 'deferred' then raise exception 'ECHEC : pas de corrigé différé par défaut' using errcode = 'ZZ001'; end if; n := n + 1;
   begin
-    insert into auth.users (id, email, raw_user_meta_data) values (gen_random_uuid(), 'x@test.invalid', '{"role":"student","invite_code":"ZZZZZZ"}');
-    raise exception 'ECHEC : un code d''invitation inconnu a été accepté' using errcode = 'ZZ001';
+    insert into auth.users (id, email, raw_user_meta_data) values (h, 'h@test.invalid', '{"role":"admin","name":"Pirate"}');
+    raise exception 'ECHEC : une inscription directe demandant le rôle admin a été acceptée' using errcode = 'ZZ001';
   exception when raise_exception then if sqlerrm like 'ECHEC%' then raise; end if; end;
   n := n + 1;
+  begin
+    insert into auth.users (id, email, raw_user_meta_data) values (gen_random_uuid(), 'e@test.invalid', '{"role":"student","name":"Seul","level":"tle"}');
+    raise exception 'ECHEC : un élève s''est inscrit sans parent' using errcode = 'ZZ001';
+  exception when raise_exception then if sqlerrm like 'ECHEC%' then raise; end if; end;
+  n := n + 1;
+  if code is null or length(code) <> 6 then raise exception 'ECHEC : le parent n''a pas de code d''invitation' using errcode = 'ZZ001'; end if; n := n + 1;
+  if (select parent_id from public.profiles where id = s) is distinct from p then raise exception 'ECHEC : l''élève n''est pas rattaché à son parent' using errcode = 'ZZ001'; end if; n := n + 1;
+  if (select mode from public.solution_modes where student_id = s) is distinct from 'deferred' then raise exception 'ECHEC : pas de corrigé différé par défaut' using errcode = 'ZZ001'; end if; n := n + 1;
 
   -- 2. L'élève S : écrit ses données, pas celles des autres, ne se promeut pas
   perform set_config('request.jwt.claims', json_build_object('sub', s, 'role', 'authenticated')::text, true);
