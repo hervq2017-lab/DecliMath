@@ -259,7 +259,12 @@ export function setLessonValidated(notionId: string, ok: boolean) {
   });
 }
 
-export const uid = () => Math.random().toString(36).slice(2, 10);
+/** Identifiant unique au format UUID : c'est ce qu'attend la base (colonnes uuid) pour synchroniser la progression. */
+export const uid = (): string => {
+  const c = (globalThis as { crypto?: { randomUUID?: () => string } }).crypto;
+  if (c?.randomUUID) return c.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (ch) => { const r = (Math.random() * 16) | 0; return (ch === "x" ? r : (r & 3) | 8).toString(16); });
+};
 export const currentUser = (s: State) => { const u = s.users.find((x) => x.id === s.sessionId); return u && !u.suspended ? u : null; };
 
 // ---------- Authentification (prototype) ----------
@@ -389,8 +394,12 @@ export function logIn(email: string, password: string): string | null {
   return null;
 }
 /** Si un aperçu administrateur est en cours, on restaure d'abord l'état réel. */
+let beforeLogout: (() => Promise<void>) | null = null;
+/** Permet à la synchronisation d'envoyer les dernières réponses avant la fermeture de la session. */
+export const setBeforeLogout = (fn: (() => Promise<void>) | null) => { beforeLogout = fn; };
 export const logOut = () => {
-  void supabase?.auth.signOut();
+  const done = beforeLogout ? beforeLogout().catch(() => undefined) : Promise.resolve();
+  void done.then(() => supabase?.auth.signOut());
   update((s) => ({ ...(s.previewBackup ? (JSON.parse(s.previewBackup) as State) : s), previewBackup: undefined, sessionId: null }));
 };
 

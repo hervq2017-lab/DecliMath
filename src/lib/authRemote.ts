@@ -4,6 +4,7 @@
 import type { LevelId } from "../curriculum";
 import { ChildInput, DEFAULT_PREFS, getState, Prefs, Role, SolutionMode, subscribe, update, User } from "../store";
 import { supabase, supabaseReady } from "./supabase";
+import { pullProgress, resetProgressTracking, startProgressSync } from "./progressSync";
 
 /** Les comptes enfants n'ont pas d'e-mail : on leur en fabrique un interne à partir de leur identifiant (création côté serveur, étape 3). */
 export const CHILD_DOMAIN = "eleves.declickmath.invalid";
@@ -112,6 +113,7 @@ async function hydrate(freshLogin: boolean): Promise<string | null> {
     solutionMode: { ...s.solutionMode, ...modeMap },
     sessionId: s.previewBackup ? s.sessionId : uid,
   }));
+  await pullProgress(); // progression de l'élève (ou de ses enfants) enregistrée sur le serveur
   // Enfants saisis à l'inscription du parent : créés par le serveur à sa première connexion confirmée.
   const pending = session.user.user_metadata?.pending_children as ChildInput[] | undefined;
   if (row.role === "parent" && pending?.length && !creatingPending) {
@@ -126,12 +128,13 @@ async function hydrate(freshLogin: boolean): Promise<string | null> {
 /** À appeler une fois au démarrage : reprend la session Supabase existante, ou déconnecte une ancienne session locale. */
 export async function initRemoteSession(): Promise<void> {
   if (!supabase) return;
+  startProgressSync();
   const { data: { session } } = await supabase.auth.getSession();
   if (session) await hydrate(false);
   else update((s) => (s.previewBackup ? s : { ...s, sessionId: null }));
   supabase.auth.onAuthStateChange((event) => {
     if (event !== "SIGNED_OUT") return;
-    pushedProfile.clear(); pushedMode.clear();
+    pushedProfile.clear(); pushedMode.clear(); resetProgressTracking();
     update((s) => (s.previewBackup ? s : { ...s, sessionId: null }));
   });
 }
