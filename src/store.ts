@@ -18,7 +18,6 @@ export interface User {
   level?: LevelId; // élève
   serie?: string; // lycée : A, A1, A2, C, D
   inviteCode?: string; // parent
-  familyCode?: string; // parent : code commun des comptes enfants (leur mot de passe)
   parentId?: string; // élève
   goal?: string; // objectif choisi à l'accueil
   placed?: boolean; // test de positionnement fait
@@ -318,13 +317,12 @@ function newLogin(name: string, taken: Set<string>): string {
 
 /** Crée les comptes élèves (identifiant + mot de passe générés) rattachés au parent. */
 function buildChildren(parent: User, kids: ChildInput[], existing: User[]): User[] {
-  const password = parent.familyCode ?? newPassword();
   const taken = new Set(existing.map((u) => u.email));
   return kids.map((k) => {
     const login = newLogin(k.name, taken);
     taken.add(login);
     return {
-      id: uid(), role: "student" as const, name: k.name.trim(), email: login, password, country: parent.country,
+      id: uid(), role: "student" as const, name: k.name.trim(), email: login, password: newPassword(), country: parent.country,
       level: k.level, serie: k.serie || undefined, parentId: parent.id, createdAt: Date.now(),
     };
   });
@@ -353,26 +351,9 @@ export function addChildren(parentId: string, kids: ChildInput[]) {
   });
 }
 
-/** Code famille du parent (créé au besoin) : c'est le mot de passe de tous ses enfants. `renew` en génère un nouveau. */
-export function ensureFamilyCode(parentId: string, renew = false): void {
-  const parent = state.users.find((u) => u.id === parentId && u.role === "parent");
-  if (!parent || (parent.familyCode && !renew)) return;
-  const code = newPassword();
-  update((s) => ({ ...s, users: s.users.map((u) => (u.id === parentId ? { ...u, familyCode: code } : u.parentId === parentId ? { ...u, password: code } : u)) }));
-}
-
-/** Enfants d'une famille à partir de son code (écran de connexion). */
-export function familyChildren(code: string): { name: string; login: string }[] {
-  const parent = state.users.find((u) => u.role === "parent" && u.familyCode && u.familyCode === code.trim());
-  return parent ? studentsOf(state, parent.id).filter((c) => !c.suspended).map((c) => ({ name: c.name, login: c.email })) : [];
-}
-
-/** Génère un nouveau mot de passe pour l'enfant (l'ancien cesse de fonctionner). Illimité. */
-export function regenerateAccess(parentId: string, childId: string): string | null {
-  if (!state.users.some((u) => u.id === childId && u.parentId === parentId)) return null;
-  const password = newPassword();
-  update((s) => ({ ...s, users: s.users.map((u) => (u.id === childId ? { ...u, password } : u)) }));
-  return password;
+/** Nouveau mot de passe pour un enfant (mode local). */
+export function resetChildPassword(parentId: string, childId: string) {
+  update((s) => ({ ...s, users: s.users.map((u) => (u.id === childId && u.parentId === parentId ? { ...u, password: newPassword() } : u)) }));
 }
 
 /** Nouvel identifiant + nouveau mot de passe (si l'identifiant a fuité). */

@@ -1,7 +1,7 @@
 // Fonction serveur (Vercel) : le parent crée et gère les accès de ses enfants. La clé SUPABASE_SERVICE_ROLE_KEY reste ICI, jamais dans l'application.
 // L'appelant est identifié par son jeton de session Supabase ; il ne peut agir que sur ses propres enfants.
 // Variables : SUPABASE_SERVICE_ROLE_KEY (obligatoire), VITE_SUPABASE_URL (ou SUPABASE_URL).
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import { randomInt } from "node:crypto";
 
 interface Req { method?: string; body?: unknown; headers: Record<string, string | string[] | undefined> }
@@ -17,34 +17,20 @@ const newLogin = (name: string) => {
   return `${base}.${randomInt(1000, 10000)}`;
 };
 
-/** Code famille : mot de passe commun des comptes enfants. Créé au besoin ; `renew` en génère un nouveau et l'applique à tous les enfants. */
-async function familyCode(admin: SupabaseClient, parentId: string, renew = false): Promise<string | null> {
-  const { data: p } = await admin.from("profiles").select("family_code").eq("id", parentId).single();
-  if (p?.family_code && !renew) return p.family_code;
-  for (let attempt = 0; attempt < 5; attempt++) {
-    const code = newPassword();
-    const { error } = await admin.from("profiles").update({ family_code: code }).eq("id", parentId);
-    if (error) continue; // code déjà pris : on en tire un autre
-    const { data: kids } = await admin.from("profiles").select("id").eq("parent_id", parentId);
-    for (const k of kids ?? []) await admin.auth.admin.updateUserById(k.id, { password: code });
-    return code;
-  }
-  return null;
-}
-
 interface Kid { name?: unknown; level?: unknown; serie?: unknown }
 interface Body { action?: string; children?: Kid[]; childId?: string }
 
 type Admin = ReturnType<typeof createClient>;
 interface Created { id: string; name: string; login: string; password: string }
 
-/** Crée les comptes enfants d'un parent, tous avec le code famille comme mot de passe ; renvoie null si Supabase échoue pour une raison autre qu'un identifiant déjà pris. */
-async function createKids(admin: Admin, parent: { id: string; country: string }, kids: Kid[], password: string): Promise<Created[] | null> {
+/** Crée les comptes enfants d'un parent : chacun reçoit son propre identifiant et son propre mot de passe ; renvoie null si Supabase échoue pour une raison autre qu'un identifiant déjà pris. */
+async function createKids(admin: Admin, parent: { id: string; country: string }, kids: Kid[]): Promise<Created[] | null> {
   const created: Created[] = [];
   for (const k of kids) {
     const name = String(k.name).trim().slice(0, 80);
     const level = /^[a-z0-9]{1,5}$/.test(String(k.level)) ? String(k.level) : "3e";
     const serie = typeof k.serie === "string" ? k.serie.slice(0, 4) : "";
+    const password = newPassword();
     for (let attempt = 0; attempt < 5; attempt++) {
       const login = newLogin(name);
       const { data, error } = await admin.auth.admin.createUser({
@@ -78,11 +64,10 @@ export default async function handler(req: Req, res: Res) {
     const kids = pending.filter((k) => typeof k.name === "string" && k.name.trim()).slice(0, MAX_CHILDREN);
     const { data: parent } = await admin.from("profiles").select("id, country").eq("id", user.id).single();
     if (!parent) return res.status(404).json({ error: "Profil du parent introuvable." });
-    const code = await familyCode(admin, parent.id);
-    const created = code ? await createKids(admin, parent, kids, code) : null;
-    if (!code || !created?.length) return res.status(500).json({ error: "Création impossible." });
+    const created = await createKids(admin, parent, kids);
+    if (!created?.length) return res.status(500).json({ error: "Création impossible." });
     await admin.auth.admin.updateUserById(user.id, { user_metadata: { ...user.user_metadata, pending_children: [] } });
-    return res.status(200).json({ created, code });
+    return res.status(200).json({ created });
   }
 
   const auth = String(req.headers.authorization ?? "");
@@ -97,19 +82,12 @@ export default async function handler(req: Req, res: Res) {
 
   const body = (typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body ?? {}) as Body;
 
-  if (body.action === "family" || body.action === "reset-family") {
-    const code = await familyCode(admin, parent.id, body.action === "reset-family");
-    return code ? res.status(200).json({ code }) : res.status(500).json({ error: "Code famille indisponible. Réessaie." });
-  }
-
   if (body.action === "create") {
-    const code = await familyCode(admin, parent.id);
-    if (!code) return res.status(500).json({ error: "Code famille indisponible. Réessaie." });
     const kids = (body.children ?? []).filter((k) => typeof k.name === "string" && k.name.trim());
     if (!kids.length) return res.status(400).json({ error: "Aucun enfant à créer." });
     const { count } = await admin.from("profiles").select("id", { count: "exact", head: true }).eq("parent_id", parent.id);
     if ((count ?? 0) + kids.length > MAX_CHILDREN) return res.status(400).json({ error: `Maximum ${MAX_CHILDREN} enfants par compte.` });
-    const created = await createKids(admin, parent, kids, code);
+    const created = await createKids(admin, parent, kids);
     if (created === null) return res.status(500).json({ error: "Création impossible." });
     return res.status(200).json({ created });
   }
@@ -126,6 +104,17 @@ export default async function handler(req: Req, res: Res) {
       return res.status(200).json({ id: child.id, login });
     }
     return res.status(500).json({ error: "Changement impossible." });
+  }
+
+  // Nouveau mot de passe pour un enfant (identifiant inchangé) ; le parent le lit à l'écran et le transmet.
+  if (body.action === "reset-password") {
+    const childId = String(body.childId ?? "");
+    const { data: child } = await admin.from("profiles").select("id").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
+    if (!child) return res.status(404).json({ error: "Enfant introuvable." });
+    const password = newPassword();
+    const { error } = await admin.auth.admin.updateUserById(child.id, { password });
+    if (error) return res.status(500).json({ error: "Changement impossible." });
+    return res.status(200).json({ id: child.id, password });
   }
 
   // Supprime l'accès d'un enfant : son compte, son profil et sa progression disparaissent (suppression en cascade). Irréversible.

@@ -7,8 +7,8 @@ import { useSearchParams } from "react-router-dom";
 import { Chip, Logo } from "../components/ui";
 import "./auth.css";
 import { COUNTRIES, LEVELS, LevelId, seriesAt } from "../curriculum";
-import { ChildInput, familyChildren, logIn, Role, signUp, signUpParent } from "../store";
-import { FamilyChild, remoteFamilyChildren, remoteForgotPassword, remoteLogIn, remoteSignUp } from "../lib/authRemote";
+import { ChildInput, logIn, Role, signUp, signUpParent } from "../store";
+import { remoteForgotPassword, remoteLogIn, remoteSignUp } from "../lib/authRemote";
 import { supabaseReady } from "../lib/supabase";
 
 /** Toque de diplômé (illustration de l'en-tête). */
@@ -24,61 +24,6 @@ function GradCap() {
       <path d="M80 30L38 50l42 22 42-22z" fill="url(#capg)" stroke="#9fd8ff" strokeWidth="2" strokeLinejoin="round" />
       <path d="M100 52v24" stroke="#ffc63d" strokeWidth="3" strokeLinecap="round" /><circle cx="100" cy="80" r="4" fill="#ffc63d" />
     </svg>
-  );
-}
-
-/** Connexion des enfants : code famille, puis choix du prénom. Le code famille est le mot de passe de chaque enfant. */
-function FamilyLogin({ onBack }: { onBack: () => void }) {
-  const [code, setCode] = useState("");
-  const [kids, setKids] = useState<FamilyChild[] | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function find(e: FormEvent) {
-    e.preventDefault();
-    setError(null); setBusy(true);
-    const c = code.trim();
-    const res = supabaseReady ? await remoteFamilyChildren(c) : { children: familyChildren(c), error: undefined };
-    setBusy(false);
-    if (res.error) setError(res.error);
-    else if (!res.children?.length) setError("Code famille inconnu.");
-    else setKids(res.children);
-  }
-
-  async function enter(kid: FamilyChild) {
-    setError(null); setBusy(true);
-    const err = supabaseReady ? (await remoteLogIn(kid.login, code.trim())).error : logIn(kid.login, code.trim());
-    setBusy(false);
-    setError(err);
-  }
-
-  return (
-    <form onSubmit={find} className="auth-card">
-      <label className="auth-label">
-        <span className="auth-lbl"><KeyRound size={26} aria-hidden="true" /> Code famille<span className="req" aria-hidden="true">*</span></span>
-        <span className="auth-input">
-          <KeyRound size={22} aria-hidden="true" />
-          <input value={code} onChange={(e) => { setCode(e.target.value); setKids(null); }} required autoCapitalize="none" autoComplete="off" spellCheck={false} placeholder="Le code donné par ton parent" />
-        </span>
-      </label>
-      {kids && (
-        <div className="auth-label" role="group" aria-label="Qui es-tu ?">
-          <span className="auth-lbl"><Users size={26} aria-hidden="true" /> Qui es-tu ?</span>
-          {kids.map((k) => (
-            <button key={k.login} type="button" className="auth-submit" disabled={busy} onClick={() => void enter(k)}>
-              <User size={22} aria-hidden="true" /> {k.name}
-            </button>
-          ))}
-        </div>
-      )}
-      {error && <p className="auth-error" role="alert">{error}</p>}
-      {!kids && (
-        <button className="auth-submit" type="submit" disabled={busy} aria-busy={busy}>
-          Voir mon prénom <ArrowRight size={22} aria-hidden="true" />
-        </button>
-      )}
-      <p className="auth-switch"><button type="button" onClick={onBack}>Je me connecte autrement</button></p>
-    </form>
   );
 }
 
@@ -113,7 +58,7 @@ function ForgotPassword({ onBack }: { onBack: () => void }) {
         <Mail size={22} aria-hidden="true" /> Envoyer le lien <ArrowRight size={22} aria-hidden="true" />
       </button>
       <p className="auth-switch"><button type="button" onClick={onBack}>Retour à la connexion</button></p>
-      <p className="auth-note" style={{ textAlign: "center" }}>Élève ? Ton parent te redonne le code famille depuis son espace.</p>
+      <p className="auth-note" style={{ textAlign: "center" }}>Élève ? Demande à ton parent un nouveau mot de passe depuis son espace.</p>
     </form>
   );
 }
@@ -123,9 +68,8 @@ const GOALS = ["Rattraper mon retard", "Préparer un contrôle", "Préparer l'ex
 export default function Auth() {
   const [params] = useSearchParams();
   const [step, setStep] = useState<"welcome" | "signup" | "login">(params.get("c") === "login" ? "login" : params.get("r") === "parent" ? "signup" : "welcome");
-  /** À la connexion : qui se connecte. L'élève entre par le code famille, le parent par e-mail. */
+  /** À la connexion : qui se connecte. L'élève entre avec l'identifiant et le mot de passe donnés par son parent, le parent par e-mail. */
   const [who, setWho] = useState<"parent" | "student">(params.get("r") === "student" ? "student" : "parent");
-  const [idForm, setIdForm] = useState(false);
   const [forgot, setForgot] = useState(false);
   const [role, setRole] = useState<Role>("parent");
   const [level, setLevel] = useState<LevelId>("3e");
@@ -157,7 +101,7 @@ export default function Auth() {
       setBusy(false);
       // Élève : l'identifiant complet porte un numéro (ex. bola.7892) ; un prénom seul ne suffit pas.
       setError(step === "login" && who === "student" && res.error
-        ? `Identifiant ou mot de passe incorrect. L'identifiant complet ressemble à « bola.7892 » (avec le numéro) et le mot de passe est le code famille. Le plus simple : « Entrer avec le code famille ».`
+        ? "Identifiant ou mot de passe incorrect. L'identifiant complet ressemble à « bola.7892 » (avec le numéro). Vérifie-les avec ton parent."
         : res.error);
       if (res.info) { setInfo(res.info); setStep("login"); }
       return;
@@ -194,8 +138,8 @@ export default function Auth() {
           </section>
           <section className="card stack" style={{ background: "#fff", color: "#3d3868", borderColor: "#fff" }}>
             <h2 style={{ fontSize: "1.1rem", color: "#1c1545" }}>Je suis élève</h2>
-            <p className="small" style={{ color: "#5f5a85" }}>Entre avec le code famille donné par ton parent, puis choisis ton prénom.</p>
-            <button className="btn primary block" onClick={() => { setWho("student"); setIdForm(false); setStep("login"); }}>Me connecter</button>
+            <p className="small" style={{ color: "#5f5a85" }}>Entre avec l'identifiant et le mot de passe que ton parent t'a donnés.</p>
+            <button className="btn primary block" onClick={() => { setWho("student"); setStep("login"); }}>Me connecter</button>
           </section>
         </main>
       </div>
@@ -234,14 +178,14 @@ export default function Auth() {
           <div className="auth-who" role="tablist" aria-label="Je me connecte en tant que">
             {([["parent", "Parent", Users], ["student", "Élève", GraduationCap]] as const).map(([id, label, Icon]) => (
               <button key={id} type="button" role="tab" aria-selected={who === id} className={who === id ? "on" : ""}
-                onClick={() => { setError(null); setInfo(null); setWho(id); setIdForm(false); setForgot(false); }}>
+                onClick={() => { setError(null); setInfo(null); setWho(id); setForgot(false); }}>
                 <Icon size={20} aria-hidden="true" /> {label}
               </button>
             ))}
           </div>
         )}
 
-        {isLogin && who === "parent" && forgot ? <ForgotPassword onBack={() => setForgot(false)} /> : isLogin && who === "student" && !idForm ? <FamilyLogin onBack={() => setIdForm(true)} /> : (
+        {isLogin && who === "parent" && forgot ? <ForgotPassword onBack={() => setForgot(false)} /> : (
         <form onSubmit={submit} className="auth-card">
           {!isLogin && (
             <>
@@ -361,9 +305,6 @@ export default function Auth() {
             {isLogin ? "Se connecter" : "Créer mon compte"}
             <ArrowRight size={22} aria-hidden="true" />
           </button>
-          {isLogin && who === "student" && (
-            <p className="auth-switch"><button type="button" onClick={() => { setError(null); setIdForm(false); }}>← Plus simple : entrer avec le code famille</button></p>
-          )}
           <p className="auth-switch">
             {isLogin ? (who === "parent" ? "Parent sans compte ?" : "Ton parent n'a pas de compte ?") : "Déjà un compte ?"}{" "}
             <button type="button" onClick={() => { setError(null); setWho("parent"); setStep(isLogin ? "signup" : "login"); }}>

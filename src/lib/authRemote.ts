@@ -11,7 +11,7 @@ export const CHILD_DOMAIN = "eleves.declickmath.invalid";
 
 interface ProfileRow {
   id: string; role: Role; name: string; login: string | null; country: string; level: string | null; serie: string | null;
-  invite_code: string | null; family_code: string | null; parent_id: string | null; goal: string | null; placed: boolean; prefs: Partial<Prefs> | null;
+  invite_code: string | null; parent_id: string | null; goal: string | null; placed: boolean; prefs: Partial<Prefs> | null;
   suspended: boolean; paid_until: string | null; notif_seen: string | null; last_login: string | null; created_at: string;
 }
 
@@ -21,7 +21,7 @@ const iso = (t?: number) => (t ? new Date(t).toISOString() : null);
 function toUser(r: ProfileRow, email: string): User {
   return {
     id: r.id, role: r.role, name: r.name, email: r.login ?? email, password: "", country: r.country,
-    level: (r.level ?? undefined) as LevelId | undefined, serie: r.serie ?? undefined, inviteCode: r.invite_code ?? undefined, familyCode: r.family_code ?? undefined,
+    level: (r.level ?? undefined) as LevelId | undefined, serie: r.serie ?? undefined, inviteCode: r.invite_code ?? undefined,
     parentId: r.parent_id ?? undefined, goal: r.goal ?? undefined, placed: r.placed,
     prefs: r.prefs && Object.keys(r.prefs).length ? { ...DEFAULT_PREFS, ...r.prefs } : undefined,
     suspended: r.suspended || undefined, paidUntil: ms(r.paid_until), createdAt: ms(r.created_at), lastLogin: ms(r.last_login), notifSeen: ms(r.notif_seen),
@@ -196,17 +196,6 @@ export async function remoteLogIn(identifier: string, password: string): Promise
   return { error: await hydrate(true) };
 }
 
-export interface FamilyChild { name: string; login: string; level?: string | null; serie?: string | null }
-
-/** Écran de connexion des enfants : prénoms de la famille à partir de son code (fonction serveur api/family.ts). */
-export async function remoteFamilyChildren(code: string): Promise<{ error?: string; children?: FamilyChild[] }> {
-  try {
-    const r = await fetch("/api/family", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code }) });
-    const j = await r.json().catch(() => ({}));
-    return r.ok ? { children: j.children ?? [] } : { error: j.error ?? "Code famille inconnu." };
-  } catch { return { error: "Pas de connexion au serveur. Vérifie ta connexion Internet." }; }
-}
-
 export interface SignUpInput {
   role: Role; name: string; email: string; password: string; country: string;
   level?: LevelId; serie?: string; goal?: string; inviteCode?: string; children?: ChildInput[];
@@ -245,7 +234,7 @@ export async function remoteSignUp(i: SignUpInput): Promise<AuthResult> {
       update((s) => ({
         ...s,
         users: [...s.users.filter((u) => !made.some((m) => m.id === u.id)), ...made.map((m, n): User => ({
-          id: m.id, role: "student", name: m.name, email: m.login ?? "", password: String(j.code ?? m.password), country: i.country, level: kids[n]?.level, serie: kids[n]?.serie, parentId: data.user!.id,
+          id: m.id, role: "student", name: m.name, email: m.login ?? "", password: m.password, country: i.country, level: kids[n]?.level, serie: kids[n]?.serie, parentId: data.user!.id,
         }))],
       }));
       const lines = made.map((m) => `• ${m.name} : identifiant ${m.login}, mot de passe ${m.password}`).join("\n");
@@ -286,11 +275,19 @@ export async function remoteCreateChildren(kids: ChildInput[]): Promise<string |
   return res.error && made.length < kids.filter((k) => k.name.trim()).length ? res.error : err;
 }
 
-/** Nouvel identifiant pour un enfant (le code famille reste le même). */
+/** Nouvel identifiant pour un enfant (son mot de passe ne change pas). */
 export async function remoteResetChild(childId: string): Promise<string | null> {
   const res = (await callChildren({ action: "reset-login", childId })) as { error?: string; login?: string };
   if (res.error || !res.login) return res.error ?? "Changement impossible.";
   await hydrateAfter([{ id: childId, login: res.login, password: "" }]);
+  return null;
+}
+
+/** Nouveau mot de passe pour un enfant (son identifiant ne change pas) ; le parent le lit ensuite dans sa fiche. */
+export async function remoteResetChildPassword(childId: string): Promise<string | null> {
+  const res = (await callChildren({ action: "reset-password", childId })) as { error?: string; password?: string };
+  if (res.error || !res.password) return res.error ?? "Changement impossible.";
+  await hydrateAfter([{ id: childId, login: null, password: res.password }]);
   return null;
 }
 
@@ -302,15 +299,9 @@ export async function remoteDeleteChild(childId: string): Promise<string | null>
   return null;
 }
 
-/** Code famille du parent connecté (créé au besoin) ; `renew` en génère un nouveau pour toute la famille. */
-export async function remoteFamilyCode(renew = false): Promise<string | null> {
-  const res = (await callChildren({ action: renew ? "reset-family" : "family" })) as { error?: string; code?: string };
-  if (!res.code) return res.error ?? "Code famille indisponible.";
-  update((s) => ({ ...s, users: s.users.map((u) => (u.id === s.sessionId ? { ...u, familyCode: res.code } : u)) }));
-  return null;
-}
-
 async function hydrateAfter(access: Access[]) {
-  update((s) => ({ ...s, users: s.users.map((u) => { const a = access.find((x) => x.id === u.id); return a ? { ...u, email: a.login ?? u.email } : u; }) }));
+  update((s) => ({ ...s, users: s.users.map((u) => { const a = access.find((x) => x.id === u.id); return a ? { ...u, email: a.login ?? u.email, password: a.password || u.password } : u; }) }));
   await hydrate(false);
+  // Le serveur ne garde pas les mots de passe : on conserve ceux qu'il vient de renvoyer pour que le parent puisse les lire.
+  update((s) => ({ ...s, users: s.users.map((u) => { const a = access.find((x) => x.id === u.id); return a?.password ? { ...u, password: a.password } : u; }) }));
 }
