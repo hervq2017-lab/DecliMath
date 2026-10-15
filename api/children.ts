@@ -49,7 +49,10 @@ export default async function handler(req: Req, res: Res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "POST") return res.status(405).json({ error: "Méthode non autorisée." });
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return res.status(503).json({ error: "Serveur non configuré (SUPABASE_SERVICE_ROLE_KEY manquante)." });
+  if (!url || !key) {
+    const missing = [!url && "SUPABASE_URL (ou VITE_SUPABASE_URL)", !key && "SUPABASE_SERVICE_ROLE_KEY"].filter(Boolean).join(" et ");
+    return res.status(503).json({ error: `Serveur non configuré (${missing} manquante).` });
+  }
 
   // Inscription d'un parent : ses enfants doivent pouvoir se connecter tout de suite, sans attendre la confirmation de l'e-mail du parent.
   // Pas de jeton ici (le parent n'a pas encore de session) : l'identifiant du compte, que seul l'inscrit connaît, suffit ; les enfants
