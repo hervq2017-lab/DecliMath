@@ -11,3 +11,6 @@ dist
 .vercel
 .env*
 scripts/.e2e-shots/
+
+# Valeurs publiques du build de production (pas de secret ici)
+!.env.production
