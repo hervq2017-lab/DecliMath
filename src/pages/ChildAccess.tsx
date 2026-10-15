@@ -37,18 +37,23 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
       <h2 id="acces" style={{ fontSize: "1.05rem" }}><KeyRound size={18} aria-hidden="true" style={{ verticalAlign: "-3px" }} /> Accès de connexion de mes enfants</h2>
       <p className="muted small">Chaque enfant a son propre identifiant et son propre mot de passe. Transmettez-les-lui : il les saisit sur l'écran de connexion, onglet « Élève ». Chacun garde son compte et sa progression.</p>
       <h3 style={{ fontSize: "1rem", borderTop: "1px solid var(--line, #8883)", paddingTop: 10 }}>Enfants enregistrés ({children.length})</h3>
+      {children.length > 1 && (
+        <button type="button" className="btn ghost" onClick={copyAll}><Copy size={16} aria-hidden="true" /> {copied === "all" ? "Copié" : "Copier les accès de tous les enfants"}</button>
+      )}
       {children.length === 0 && <p className="muted small">Aucun enfant pour l'instant. Ajoutez-en un ci-dessous.</p>}
       <ul className="stack-sm" style={{ listStyle: "none", padding: 0, margin: 0 }}>
         {children.map((c) => (
           <li key={c.id} className="stack-sm" style={{ paddingBottom: 10, borderBottom: "1px solid var(--line, #8883)" }}>
             <span><b>{c.name}</b> <span className="muted small">• {levelById(c.level ?? "tle").label}{c.serie ? ` ${c.serie}` : ""}</span></span>
-            <span>Identifiant : <code style={{ fontSize: "1.05rem" }}>{c.email}</code></span>
+            <span>Identifiant : <code style={{ fontSize: "1.05rem", userSelect: "all" }}>{c.email}</code>{" "}
+              <button type="button" className="btn link" aria-label={`Copier l'identifiant de ${c.name}`} onClick={() => copyText(`${c.id}-l`, c.email)}>{copied === `${c.id}-l` ? "Copié" : "Copier"}</button></span>
             <span>Mot de passe : {c.password
-              ? <code style={{ fontSize: "1.05rem", letterSpacing: ".06em" }}>{c.password}</code>
+              ? <><code style={{ fontSize: "1.05rem", letterSpacing: ".06em", userSelect: "all" }}>{c.password}</code>{" "}
+                <button type="button" className="btn link" aria-label={`Copier le mot de passe de ${c.name}`} onClick={() => copyText(`${c.id}-p`, c.password)}>{copied === `${c.id}-p` ? "Copié" : "Copier"}</button></>
               : <span className="muted small">non affiché sur cet appareil — générez-en un nouveau</span>}
             </span>
             <span className="row" style={{ flexWrap: "wrap" }}>
-              <button type="button" className="btn ghost" disabled={!c.password} onClick={() => copy(c.id, c.email, c.password)}><Copy size={16} aria-hidden="true" /> {copied === c.id ? "Copié" : "Copier"}</button>
+              <button type="button" className="btn ghost" disabled={!c.password} onClick={() => copyOne(c.id, c.name, c.email, c.password)}><Copy size={16} aria-hidden="true" /> {copied === c.id ? "Copié" : "Copier les deux"}</button>
               <button type="button" className="btn ghost" disabled={busy} onClick={() => newPassword(c.id, c.name)}><RefreshCw size={16} aria-hidden="true" /> Nouveau mot de passe</button>
               <button type="button" className="btn link" disabled={busy} onClick={() => { if (supabaseReady) void run(() => remoteResetChild(c.id)); else regenerateLogin(parentId, c.id); }}>Nouvel identifiant</button>
               <button type="button" className="btn link" disabled={busy} style={{ color: "var(--danger, #ff6b6b)" }} onClick={() => removeAccess(c.id, c.name)}>
