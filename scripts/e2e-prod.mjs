@@ -113,13 +113,21 @@ try {
   for (const k of pk) ok(!!(await loginAs(k.login, k.password)).session, `inscription : ${k.name} se connecte avec « ${k.login} »`);
   ok((await api({ action: "provision", userId: su?.user?.id })).status === 403, "inscription : l'opération ne peut pas être rejouée");
 } catch (e) {
-  ok(false, "le test s'est arrêté", e.message);
+  const cause = e?.cause ? ` (${e.cause.code ?? e.cause.message ?? e.cause})` : "";
+  ok(false, "le test s'est arrêté", `${e.message}${cause} — vérifiez votre connexion Internet, puis relancez`);
 } finally {
-  // nettoyage : tout ce que le test a créé est effacé (les profils et la progression partent en cascade)
-  let removed = 0;
-  for (const id of created) { const { error } = await admin.auth.admin.deleteUser(id); if (!error) removed++; }
-  const { data: rest } = await admin.from("profiles").select("id").in("id", created);
-  ok(removed === created.length && (rest ?? []).length === 0, `nettoyage : ${removed}/${created.length} comptes de test effacés`);
+  // nettoyage : tout ce que le test a créé est effacé (les profils et la progression partent en cascade).
+  // Un compte déjà supprimé par le test lui-même compte comme effacé ; on balaie aussi les restes d'un test interrompu.
+  const gone = async (id) => { const { data } = await admin.auth.admin.getUserById(id); return !data?.user; };
+  for (const id of created) if (!(await gone(id))) await admin.auth.admin.deleteUser(id);
+  try {
+    const { data: all } = await admin.auth.admin.listUsers({ page: 1, perPage: 200 });
+    for (const u of all?.users ?? []) if (u.email?.startsWith("e2e-declick-")) await admin.auth.admin.deleteUser(u.id);
+  } catch { /* balayage facultatif */ }
+  const left = [];
+  for (const id of created) if (!(await gone(id))) left.push(id);
+  const { data: rest } = created.length ? await admin.from("profiles").select("id").in("id", created) : { data: [] };
+  ok(left.length === 0 && (rest ?? []).length === 0, `nettoyage : les ${created.length} comptes de test sont effacés (aucune trace dans la base)`);
 }
 console.log(fails ? `\n${fails} échec(s)` : "\nTout est en ordre : le parcours parent → enfants fonctionne en ligne");
 process.exit(fails ? 1 : 0);

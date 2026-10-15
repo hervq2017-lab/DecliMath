@@ -13,7 +13,8 @@ try {
   const js = html.match(/assets\/index-[^"]+\.js/)?.[0];
   const bundle = js ? await (await get("/" + js)).text() : "";
   ok(/[a-z0-9]{20}\.supabase\.co/.test(bundle), "l'application est reliée à VOTRE projet Supabase (VITE_SUPABASE_URL présente au build)");
-  ok(bundle.includes("cm9sZSI6ImFub24i"), "la clé publique (anon) est présente au build : sans elle l'application reste en mode local");
+  // Une vraie clé publique est un JWT complet (3 segments) ; sans la variable VITE_SUPABASE_ANON_KEY au build, le site reste en mode local.
+  ok(/eyJ[A-Za-z0-9_-]{15,}\.eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}/.test(bundle), "la clé publique (VITE_SUPABASE_ANON_KEY) est présente au build : sans elle le site reste en mode local");
   ok(!/Code famille/.test(bundle), "version à jour : plus de code famille");
 
   const spa = await get("/commencer?c=login");

@@ -10,7 +10,8 @@
     "test": "tsx scripts/test-parent-access.ts && tsx scripts/test-children-api.ts && tsx scripts/test-progress-sync.ts",
     "verify": "tsc --noEmit && npm test && vite build",
     "check:deploy": "node scripts/check-deploy.mjs",
-    "e2e:prod": "node scripts/e2e-prod.mjs"
+    "e2e:prod": "node scripts/e2e-prod.mjs",
+    "e2e:browser": "node scripts/e2e-browser.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",
