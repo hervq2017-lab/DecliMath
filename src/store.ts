@@ -3,6 +3,7 @@ import { LevelId, Subject, subjectsAt } from "./curriculum";
 import type { Notion } from "./curriculum";
 import type { ExamItem } from "./engine";
 import type { PaperSpec } from "./paper";
+import { supabase } from "./lib/supabase";
 
 export type Role = "student" | "parent" | "admin";
 export type SolutionMode = "free" | "deferred" | "blocked";
@@ -17,6 +18,7 @@ export interface User {
   level?: LevelId; // élève
   serie?: string; // lycée : A, A1, A2, C, D
   inviteCode?: string; // parent
+  familyCode?: string; // parent : code commun des comptes enfants (leur mot de passe)
   parentId?: string; // élève
   goal?: string; // objectif choisi à l'accueil
   placed?: boolean; // test de positionnement fait
@@ -219,6 +221,13 @@ export function update(fn: (s: State) => State) {
   listeners.forEach((l) => l());
 }
 
+/** Lecture directe de l'état et abonnement aux changements (pour la synchronisation Supabase, hors composants React). */
+export const getState = () => state;
+export function subscribe(l: () => void) {
+  listeners.add(l);
+  return () => { listeners.delete(l); };
+}
+
 export function useStore(): State {
   return useSyncExternalStore(
     (cb) => {
@@ -291,7 +300,7 @@ export function signUp(input: {
 export interface ChildInput { name: string; level: LevelId; serie?: string }
 
 const PWD_CHARS = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans caractères ambigus (0/O, 1/l/I)
-function newPassword(): string {
+export function newPassword(): string {
   const bytes = crypto.getRandomValues(new Uint8Array(8));
   return Array.from(bytes, (b) => PWD_CHARS[b % PWD_CHARS.length]).join("");
 }
@@ -304,12 +313,13 @@ function newLogin(name: string, taken: Set<string>): string {
 
 /** Crée les comptes élèves (identifiant + mot de passe générés) rattachés au parent. */
 function buildChildren(parent: User, kids: ChildInput[], existing: User[]): User[] {
+  const password = parent.familyCode ?? newPassword();
   const taken = new Set(existing.map((u) => u.email));
   return kids.map((k) => {
     const login = newLogin(k.name, taken);
     taken.add(login);
     return {
-      id: uid(), role: "student" as const, name: k.name.trim(), email: login, password: newPassword(), country: parent.country,
+      id: uid(), role: "student" as const, name: k.name.trim(), email: login, password, country: parent.country,
       level: k.level, serie: k.serie || undefined, parentId: parent.id, createdAt: Date.now(),
     };
   });
@@ -338,6 +348,20 @@ export function addChildren(parentId: string, kids: ChildInput[]) {
   });
 }
 
+/** Code famille du parent (créé au besoin) : c'est le mot de passe de tous ses enfants. `renew` en génère un nouveau. */
+export function ensureFamilyCode(parentId: string, renew = false): void {
+  const parent = state.users.find((u) => u.id === parentId && u.role === "parent");
+  if (!parent || (parent.familyCode && !renew)) return;
+  const code = newPassword();
+  update((s) => ({ ...s, users: s.users.map((u) => (u.id === parentId ? { ...u, familyCode: code } : u.parentId === parentId ? { ...u, password: code } : u)) }));
+}
+
+/** Enfants d'une famille à partir de son code (écran de connexion). */
+export function familyChildren(code: string): { name: string; login: string }[] {
+  const parent = state.users.find((u) => u.role === "parent" && u.familyCode && u.familyCode === code.trim());
+  return parent ? studentsOf(state, parent.id).filter((c) => !c.suspended).map((c) => ({ name: c.name, login: c.email })) : [];
+}
+
 /** Génère un nouveau mot de passe pour l'enfant (l'ancien cesse de fonctionner). Illimité. */
 export function regenerateAccess(parentId: string, childId: string): string | null {
   if (!state.users.some((u) => u.id === childId && u.parentId === parentId)) return null;
@@ -352,7 +376,7 @@ export function regenerateLogin(parentId: string, childId: string) {
     const child = s.users.find((u) => u.id === childId && u.parentId === parentId);
     if (!child) return s;
     const email = newLogin(child.name, new Set(s.users.map((u) => u.email)));
-    return { ...s, users: s.users.map((u) => (u.id === childId ? { ...u, email, password: newPassword() } : u)) };
+    return { ...s, users: s.users.map((u) => (u.id === childId ? { ...u, email } : u)) };
   });
 }
 
@@ -365,7 +389,10 @@ export function logIn(email: string, password: string): string | null {
   return null;
 }
 /** Si un aperçu administrateur est en cours, on restaure d'abord l'état réel. */
-export const logOut = () => update((s) => ({ ...(s.previewBackup ? (JSON.parse(s.previewBackup) as State) : s), previewBackup: undefined, sessionId: null }));
+export const logOut = () => {
+  void supabase?.auth.signOut();
+  update((s) => ({ ...(s.previewBackup ? (JSON.parse(s.previewBackup) as State) : s), previewBackup: undefined, sessionId: null }));
+};
 
 export const markNotificationsSeen = (id: string) => update((s) => ({ ...s, users: s.users.map((u) => (u.id === id ? { ...u, notifSeen: Date.now() } : u)) }));
 

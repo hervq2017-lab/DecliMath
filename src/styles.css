@@ -98,7 +98,8 @@ button { cursor: pointer; }
 .bar-onnavy { background: rgba(0, 0, 0, .3); } .bar-onnavy > span { background: var(--yellow); }
 
 .logo { display: flex; align-items: center; gap: 12px; font: 800 1.4rem var(--font-head); color: #fff; }
-.logo-mark { width: 48px; height: 48px; border-radius: 50%; background: var(--yellow); color: var(--on-yellow); display: grid; place-items: center; }
+.logo-mark { height: 48px; aspect-ratio: 1.55; display: block; flex: none; filter: drop-shadow(0 2px 8px rgba(0, 140, 255, .35)); }
+.logo-mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .icon-tile { width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; flex: none; background: var(--primary); color: #fff; }
 .icon-tile.blue { background: var(--blue); } .icon-tile.green { background: var(--green); } .icon-tile.yellow { background: var(--yellow); color: var(--on-yellow); }
 .icon-tile.sm { width: 44px; height: 44px; border-radius: 14px; }
@@ -110,8 +111,9 @@ button { cursor: pointer; }
 .navy::before { width: 380px; height: 380px; top: -170px; right: -160px; } .navy::after { width: 420px; height: 420px; left: -220px; top: 280px; }
 .navy > * { position: relative; z-index: 1; }
 .navy h1 { color: #fff; font-size: 2.4rem; } .navy .lead { color: var(--on-navy-soft); font-size: 1.15rem; }
-.hero-mark { width: 128px; height: 128px; border-radius: 36px; background: var(--yellow); color: var(--on-yellow); display: grid; place-items: center; position: relative; }
-.hero-bubble { position: absolute; top: -14px; right: -34px; background: #fff; color: var(--navy); font-weight: 800; padding: 6px 14px; border-radius: 999px; }
+.hero-mark { width: min(300px, 78vw); position: relative; }
+.hero-mark img { width: 100%; height: auto; display: block; filter: drop-shadow(0 6px 24px rgba(0, 140, 255, .35)); }
+.hero-bubble { position: absolute; top: -10px; right: -12px; background: #fff; color: var(--navy); font-weight: 800; padding: 6px 14px; border-radius: 999px; }
 
 /* ---- Accueil ---- */
 .weekdots { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
@@ -273,7 +275,7 @@ div.hero-card, div.list-card, div.chap { cursor: default; }
   #root:has(.bottom-nav) { padding-left: 264px; }
   .bottom-nav { width: 264px; gap: 8px; padding: 24px 16px; background: linear-gradient(180deg, #07163f 0%, #050d2b 100%); border-right: 2px solid rgba(135, 156, 224, .16); }
   .side-brand { display: flex; align-items: center; gap: 12px; padding: 0 8px 20px; margin-bottom: 8px; border-bottom: 2px solid rgba(135, 156, 224, .16); }
-  .side-brand .logo-mark { width: 40px; height: 40px; }
+  .side-brand .logo-mark { height: 40px; }
   .side-name { font: 800 1.35rem var(--font-head); color: var(--ink); }
   .nav-item { min-height: 52px; padding: 0 12px; font-weight: 700; color: rgba(219, 226, 251, .8); }
   .nav-pill { width: 32px; height: 32px; border-radius: 10px; background: none !important; }
@@ -285,6 +287,11 @@ div.hero-card, div.list-card, div.chap { cursor: default; }
   .side-foot .btn { min-height: 40px; margin-top: 4px; }
   .topbar { display: flex; align-items: center; gap: 14px; max-width: 1080px; margin: 0 auto; padding: 24px 24px 0; }
   .topbar .wave { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--card); border: 2px solid var(--line); font-size: 1.4rem; }
+  .topbar-logo { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; padding-right: 14px; margin-right: 4px; border-right: 2px solid var(--line); }
+  .topbar-logo .logo-mark { height: 44px; }
+  .topbar-brand { font: 800 1.2rem var(--font-head); }
+  .topbar-brand b { color: var(--yellow); }
+  a.side-brand { color: inherit; text-decoration: none; }
   .topbar-h { font: 800 1.2rem var(--font-head); color: var(--ink); }
   .user-chip { display: inline-flex; align-items: center; gap: 10px; padding: 4px 16px 4px 4px; border-radius: 999px; background: var(--card); border: 2px solid var(--line); font-weight: 700; color: var(--ink); }
   .user-chip .avatar { width: 40px; height: 40px; font-size: 1.05rem; }

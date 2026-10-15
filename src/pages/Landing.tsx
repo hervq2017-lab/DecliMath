@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { currentUser, useStore } from "../store";
 import { COUNTRIES, Country, countryByCode } from "../curriculum";
 import "./landing.css";
 
@@ -373,7 +374,7 @@ function Brand({ small }: { small?: boolean }) {
   return (
     <Link to="/" className="lx-brand" aria-label="DeclickMath, accueil">
       <span className="lx-mark">
-        <Lightbulb size={small ? 20 : 24} strokeWidth={2.4} aria-hidden="true" />
+        <img src="/logo-icon.png" alt="" width="68" height="44" draggable={false} />
       </span>
       <div className="lx-brand-text">
         <b className="lx-brand-title">DeclickMath</b>
@@ -412,7 +413,7 @@ function PhoneOffer() {
         <div className="lx-phone-inner">
           <div className="lx-phone-header">
             <div className="lx-phone-logo sm">
-              <Lightbulb size={12} strokeWidth={2.5} />
+              <img src="/logo-icon.png" alt="" width="20" height="13" />
               <span>DeclickMath</span>
             </div>
           </div>
@@ -447,6 +448,7 @@ function PhoneOffer() {
    PAGE D'ACCUEIL COMPLÈTE
    ========================================================================== */
 export default function Landing() {
+  const connected = !!currentUser(useStore());
   const track = useRef<HTMLUListElement>(null);
   const [slide, setSlide] = useState(0);
   const [openAll, setOpenAll] = useState(false);
@@ -538,12 +540,18 @@ export default function Landing() {
 
           <div className="lx-nav-cta">
             <CountryPicker value={code} onChange={pickCountry} />
-            <Link className="lx-btn ghost-nav sm" to="/commencer?c=login">
-              Se connecter
-            </Link>
-            <Link className="lx-btn yellow sm font-bold" to={signupUrl}>
-              Commencer maintenant
-            </Link>
+            {connected ? (
+              <Link className="lx-btn yellow sm font-bold" to="/">Mon espace</Link>
+            ) : (
+              <>
+                <Link className="lx-btn ghost-nav sm" to="/commencer?c=login">
+                  Se connecter
+                </Link>
+                <Link className="lx-btn yellow sm font-bold" to={signupUrl}>
+                  Commencer maintenant
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>

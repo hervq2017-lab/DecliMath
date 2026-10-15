@@ -37,10 +37,15 @@ export function ChapterIcon({ chapter, size = 24 }: { chapter: string; size?: nu
   return <I size={size} strokeWidth={2} aria-hidden="true" />;
 }
 
+/** Emblème DeclickMath (cerveau) ; décoratif, le nom est écrit à côté. */
+export function LogoMark() {
+  return <span className="logo-mark" aria-hidden="true"><img src="/logo-icon.png" alt="" width="68" height="44" draggable={false} /></span>;
+}
+
 export function Logo() {
   return (
     <div className="logo">
-      <span className="logo-mark"><Lightbulb size={22} aria-hidden="true" /></span>
+      <LogoMark />
       <span>Declick<b>Math</b></span>
     </div>
   );
@@ -102,10 +107,10 @@ interface RailItem { to: string; label: string; Icon: LucideIcon; end?: boolean 
 function Rail({ label, items, foot }: { label: string; items: RailItem[]; foot?: ReactNode }) {
   return (
     <nav className="bottom-nav" aria-label={label}>
-      <div className="side-brand">
-        <span className="logo-mark" aria-hidden="true"><Lightbulb size={22} /></span>
+      <Link className="side-brand" to="/accueil" aria-label="DeclickMath, page d'accueil">
+        <LogoMark />
         <span className="side-id"><span className="side-name">Declick<b>Math</b></span><small className="side-tag">Apprendre • S'entraîner • Réussir</small></span>
-      </div>
+      </Link>
       {items.map(({ to, label: text, Icon, end }) => (
         <NavLink key={to} to={to} end={end} className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
           <span className="nav-pill"><Icon size={24} aria-hidden="true" /></span>
@@ -197,7 +202,10 @@ export function BottomNav() {
 export function TopBar({ name, sub, profileTo }: { name: string; sub: string; profileTo?: string }) {
   return (
     <div className="topbar">
-      <span className="wave" aria-hidden="true">👋</span>
+      <Link className="topbar-logo" to="/accueil" aria-label="DeclickMath, page d'accueil" title="Page d'accueil DeclickMath">
+        <LogoMark />
+        <span className="topbar-brand">Declick<b>Math</b></span>
+      </Link>
       <div className="grow">
         <p className="topbar-h">Bonjour !</p>
         <p className="muted small">{sub}</p>

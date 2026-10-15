@@ -4,6 +4,8 @@ import { StreakChip, Toggle } from "../components/ui";
 import { countryByCode, LEVELS, LevelId, seriesAt } from "../curriculum";
 import { playFeedback } from "../lib/sound";
 import { attemptsOf, streak } from "../lib/stats";
+import { remoteLinkStudent } from "../lib/authRemote";
+import { supabaseReady } from "../lib/supabase";
 import { currentUser, DEFAULT_PREFS, linkStudent, logOut, setLevel, setPrefs, setSerie, THEMES, themeOf, useStore } from "../store";
 
 export default function Profile() {
@@ -17,7 +19,9 @@ export default function Profile() {
 
   function link(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setErr(linkStudent(me.id, String(new FormData(e.currentTarget).get("code"))));
+    const code = String(new FormData(e.currentTarget).get("code"));
+    if (supabaseReady) void remoteLinkStudent(code).then(setErr);
+    else setErr(linkStudent(me.id, code));
   }
   const rows: { Icon: typeof Moon; t: string; d: string; v: boolean; set: (v: boolean) => void; off?: boolean }[] = [
     { Icon: Moon, t: "Mode sombre", d: "Repose les yeux le soir", v: dark, set: (v) => setPrefs(me.id, { dark: v, theme: v ? "nuit" : "clair" }) },

@@ -54,6 +54,7 @@ function AppInner() {
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
 
   if (!user) return <Routes><Route path="/" element={<Landing />} /><Route path="*" element={<Auth />} /></Routes>;
+  if (pathname === "/accueil") return <Landing />; // la page d'accueil reste visitable une fois connecté (logo DeclickMath)
   if (user.role === "admin") {
     return (
       <>

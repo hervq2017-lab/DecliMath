@@ -7,3 +7,6 @@ dist
 *.zip
 *.bak
 .claude
+
+.vercel
+.env*

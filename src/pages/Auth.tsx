@@ -1,5 +1,5 @@
 import {
-  ArrowRight, BarChart3, ChevronDown, Zap, Eye, EyeOff, GraduationCap, Globe, KeyRound, Lightbulb, Lock, LogIn, Mail,
+  ArrowRight, BarChart3, ChevronDown, Zap, Eye, EyeOff, GraduationCap, Globe, KeyRound, Lock, LogIn, Mail,
   ShieldCheck, Target, User, UserPlus, Users,
 } from "lucide-react";
 import { FormEvent, useState } from "react";
@@ -7,7 +7,9 @@ import { useSearchParams } from "react-router-dom";
 import { Chip, Logo } from "../components/ui";
 import "./auth.css";
 import { COUNTRIES, LEVELS, LevelId, seriesAt } from "../curriculum";
-import { ChildInput, logIn, resetAllData, Role, signUp, signUpParent } from "../store";
+import { ChildInput, familyChildren, logIn, Role, signUp, signUpParent } from "../store";
+import { FamilyChild, remoteFamilyChildren, remoteLogIn, remoteSignUp } from "../lib/authRemote";
+import { supabaseReady } from "../lib/supabase";
 
 /** Toque de diplômé (illustration de l'en-tête). */
 function GradCap() {
@@ -25,15 +27,73 @@ function GradCap() {
   );
 }
 
+/** Connexion des enfants : code famille, puis choix du prénom. Le code famille est le mot de passe de chaque enfant. */
+function FamilyLogin({ onBack }: { onBack: () => void }) {
+  const [code, setCode] = useState("");
+  const [kids, setKids] = useState<FamilyChild[] | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function find(e: FormEvent) {
+    e.preventDefault();
+    setError(null); setBusy(true);
+    const c = code.trim();
+    const res = supabaseReady ? await remoteFamilyChildren(c) : { children: familyChildren(c), error: undefined };
+    setBusy(false);
+    if (res.error) setError(res.error);
+    else if (!res.children?.length) setError("Code famille inconnu.");
+    else setKids(res.children);
+  }
+
+  async function enter(kid: FamilyChild) {
+    setError(null); setBusy(true);
+    const err = supabaseReady ? (await remoteLogIn(kid.login, code.trim())).error : logIn(kid.login, code.trim());
+    setBusy(false);
+    setError(err);
+  }
+
+  return (
+    <form onSubmit={find} className="auth-card">
+      <label className="auth-label">
+        <span className="auth-lbl"><KeyRound size={26} aria-hidden="true" /> Code famille<span className="req" aria-hidden="true">*</span></span>
+        <span className="auth-input">
+          <KeyRound size={22} aria-hidden="true" />
+          <input value={code} onChange={(e) => { setCode(e.target.value); setKids(null); }} required autoCapitalize="none" autoComplete="off" spellCheck={false} placeholder="Le code donné par ton parent" />
+        </span>
+      </label>
+      {kids && (
+        <div className="auth-label" role="group" aria-label="Qui es-tu ?">
+          <span className="auth-lbl"><Users size={26} aria-hidden="true" /> Qui es-tu ?</span>
+          {kids.map((k) => (
+            <button key={k.login} type="button" className="auth-submit" disabled={busy} onClick={() => void enter(k)}>
+              <User size={22} aria-hidden="true" /> {k.name}
+            </button>
+          ))}
+        </div>
+      )}
+      {error && <p className="auth-error" role="alert">{error}</p>}
+      {!kids && (
+        <button className="auth-submit" type="submit" disabled={busy} aria-busy={busy}>
+          Voir mon prénom <ArrowRight size={22} aria-hidden="true" />
+        </button>
+      )}
+      <p className="auth-switch"><button type="button" onClick={onBack}>Je me connecte autrement</button></p>
+    </form>
+  );
+}
+
 const GOALS = ["Rattraper mon retard", "Préparer un contrôle", "Préparer l'examen", "Prendre de l'avance"];
 
 export default function Auth() {
   const [params] = useSearchParams();
   const [step, setStep] = useState<"welcome" | "signup" | "login">(params.get("c") === "login" ? "login" : params.get("r") === "parent" ? "signup" : "welcome");
-  const [role, setRole] = useState<Role>(params.get("r") === "parent" ? "parent" : "student");
+  const [kidLogin, setKidLogin] = useState(false);
+  const [role, setRole] = useState<Role>("parent");
   const [level, setLevel] = useState<LevelId>("3e");
   const [goal, setGoal] = useState(GOALS[0]);
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
   const [pwd, setPwd] = useState("");
   const [kids, setKids] = useState<ChildInput[]>([{ name: "", level: "3e" }]);
@@ -41,17 +101,32 @@ export default function Auth() {
   const resize = (n: number) => setKids((k) => Array.from({ length: n }, (_, i) => k[i] ?? { name: "", level: "3e" as LevelId }));
   const strength = [pwd.length >= 8, /[A-Za-z]/.test(pwd) && /\d/.test(pwd), pwd.length >= 12 || /[^A-Za-z0-9]/.test(pwd)].filter(Boolean).length;
 
-  function submit(e: FormEvent<HTMLFormElement>) {
+  async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const email = String(f.get("email")), password = String(f.get("password"));
+    const country = String(f.get("country") ?? "CI"), name = [f.get("name"), f.get("lastname")].map((v) => String(v ?? "").trim()).filter(Boolean).join(" ");
+    setInfo(null);
+    if (supabaseReady) {
+      if (role === "parent" && step !== "login" && !kids.some((k) => k.name.trim())) { setError("Ajoutez au moins un enfant."); return; }
+      setBusy(true);
+      const res = step === "login"
+        ? await remoteLogIn(email, password)
+        : await remoteSignUp(role === "parent"
+          ? { role, name, email, password, country, children: kids }
+          : { role, name, email, password, country, level, goal, inviteCode: String(f.get("code") ?? "") });
+      setBusy(false);
+      setError(res.error);
+      if (res.info) { setInfo(res.info); setStep("login"); }
+      return;
+    }
     setError(
       step === "login"
         ? logIn(email, password)
         : role === "parent"
-          ? signUpParent({ name: String(f.get("name")), email, password, country: String(f.get("country") ?? "CI"), children: kids })
+          ? signUpParent({ name, email, password, country, children: kids })
           : signUp({
-            role, name: String(f.get("name")), email, password, country: String(f.get("country") ?? "CI"),
+            role, name, email, password, country,
             level: role === "student" ? level : undefined, goal: role === "student" ? goal : undefined, inviteCode: String(f.get("code") ?? ""),
           }),
     );
@@ -61,30 +136,21 @@ export default function Auth() {
     return (
       <div className="navy">
         <main className="shell no-nav stack" style={{ gap: 28 }}>
-          <Logo />
           <div className="center stack" style={{ alignItems: "center" }}>
             <div className="hero-mark">
-              <Lightbulb size={64} aria-hidden="true" />
+              <img src="/logo-full.png" alt="DeclickMath : comprendre, s'entraîner, réussir" width="260" height="161" />
               <span className="hero-bubble">Salut !</span>
             </div>
             <h1>Le déclic en maths, enfin.</h1>
             <p className="lead">Un coach bienveillant qui explique, jamais un prof sévère.</p>
           </div>
-          <section className="card stack" aria-labelledby="q-class" style={{ background: "#fff", color: "#3d3868", borderColor: "#fff" }}>
-            <h2 id="q-class" style={{ fontSize: "1.1rem", color: "#1c1545" }}>Tu es en quelle classe ?</h2>
-            <div className="chips scroll" role="group" aria-labelledby="q-class">
-              {LEVELS.map((l) => <Chip key={l.id} active={level === l.id} onClick={() => setLevel(l.id)}>{l.label}</Chip>)}
-            </div>
-            <h2 style={{ fontSize: "1.1rem", color: "#1c1545" }} id="q-goal">Ton objectif</h2>
-            <div className="chips" role="group" aria-labelledby="q-goal">
-              {GOALS.map((g) => <Chip key={g} active={goal === g} onClick={() => setGoal(g)}><Target size={16} aria-hidden="true" style={{ verticalAlign: "-3px" }} /> {g}</Chip>)}
-            </div>
-            <button className="btn primary block" onClick={() => { setRole("student"); setStep("signup"); }}>Commencer mon test (5 questions)</button>
-            <p className="center small" style={{ color: "#5f5a85" }}>2 min • Sans note • Zéro pression</p>
+          <section className="card stack" style={{ background: "#fff", color: "#3d3868", borderColor: "#fff" }}>
+            <h2 style={{ fontSize: "1.1rem", color: "#1c1545" }}>Tu es élève ?</h2>
+            <p className="small" style={{ color: "#5f5a85" }}>Ton compte est créé par ton parent. Connecte-toi avec l'identifiant et le mot de passe qu'il t'a donnés.</p>
+            <button className="btn primary block" onClick={() => setStep("login")}>Me connecter</button>
           </section>
           <div className="row" style={{ justifyContent: "center" }}>
-            <button className="btn link" style={{ color: "#fff" }} onClick={() => setStep("login")}>J'ai déjà un compte</button>
-            <button className="btn link" style={{ color: "#fff" }} onClick={() => { setRole("parent"); setStep("signup"); }}>Je suis parent</button>
+            <button className="btn link" style={{ color: "#fff" }} onClick={() => setStep("signup")}>Je suis parent : créer mon espace</button>
           </div>
         </main>
       </div>
@@ -98,7 +164,7 @@ export default function Auth() {
     <div className="auth-page">
       <main className="auth-panel">
         <div className="auth-brand">
-          <span className="auth-brand-mark"><Lightbulb size={30} aria-hidden="true" /></span>
+          <span className="auth-brand-mark"><img src="/logo-icon.png" alt="" width="78" height="50" draggable={false} /></span>
           <div>
             <p className="auth-brand-name">Declick<span>Math</span></p>
             <p className="auth-brand-tag">Apprendre aujourd'hui, réussir demain</p>
@@ -119,20 +185,17 @@ export default function Auth() {
           <GradCap />
         </header>
 
-        {!isLogin && (
-          <div className="auth-tabs" role="group" aria-label="Type de compte">
-            <button type="button" className="auth-tab" aria-pressed={!isParent} onClick={() => setRole("student")}>
-              <GraduationCap size={22} aria-hidden="true" /> Élève
-            </button>
-            <button type="button" className="auth-tab" aria-pressed={isParent} onClick={() => setRole("parent")}>
-              <Users size={22} aria-hidden="true" /> Parent
-            </button>
-          </div>
-        )}
-
+        {isLogin && kidLogin ? <FamilyLogin onBack={() => setKidLogin(false)} /> : (
         <form onSubmit={submit} className="auth-card">
           {!isLogin && (
             <>
+              <label className="auth-label">
+                <span>Nom<span className="req" aria-hidden="true">*</span></span>
+                <span className="auth-input">
+                  <User size={22} aria-hidden="true" />
+                  <input name="lastname" required autoComplete="family-name" placeholder="Votre nom" />
+                </span>
+              </label>
               <label className="auth-label">
                 <span>Prénom<span className="req" aria-hidden="true">*</span></span>
                 <span className="auth-input">
@@ -233,36 +296,31 @@ export default function Auth() {
             </label>
           )}
           {error && <p className="auth-error" role="alert">{error}</p>}
-          <button className="auth-submit" type="submit">
+          {info && <p className="auth-error" role="status" style={{ color: "var(--green, #2e9e5b)", whiteSpace: "pre-line" }}>{info}</p>}
+          <button className="auth-submit" type="submit" disabled={busy} aria-busy={busy}>
             {isLogin ? <LogIn size={22} aria-hidden="true" /> : <UserPlus size={22} aria-hidden="true" />}
             {isLogin ? "Se connecter" : "Créer mon compte"}
             <ArrowRight size={22} aria-hidden="true" />
           </button>
+          {isLogin && (
+            <p className="auth-switch">
+              Tu es un enfant ? <button type="button" onClick={() => { setError(null); setKidLogin(true); }}>Entrer avec le code famille</button>
+            </p>
+          )}
           <p className="auth-switch">
-            {isLogin ? "Pas encore de compte ?" : "Déjà un compte ?"}{" "}
+            {isLogin ? "Parent sans compte ?" : "Déjà un compte ?"}{" "}
             <button type="button" onClick={() => { setError(null); setStep(isLogin ? "signup" : "login"); }}>
-              {isLogin ? "Créer un compte" : "Se connecter"}
+              {isLogin ? "Créer un espace parent" : "Se connecter"}
             </button>
             <ArrowRight size={18} aria-hidden="true" />
           </p>
-          <button
-            type="button"
-            className="auth-reset"
-            onClick={() => {
-              if (window.confirm("Supprimer tous les comptes et toutes les données de test de ce navigateur ?")) {
-                resetAllData();
-                setError(null);
-              }
-            }}
-          >
-            Réinitialiser les données de test
-          </button>
           <ul className="auth-trust">
             <li><span><ShieldCheck size={26} aria-hidden="true" /></span><p><b>Connexion sécurisée</b>Vos données sont protégées</p></li>
             <li><span><Zap size={26} aria-hidden="true" /></span><p><b>Accès immédiat</b>Reprenez où vous en étiez</p></li>
             <li><span><BarChart3 size={26} aria-hidden="true" /></span><p><b>Progression continue</b>Vers vos objectifs</p></li>
           </ul>
         </form>
+        )}
         <p className="auth-proto">Prototype : les données restent dans ce navigateur.</p>
       </main>
     </div>

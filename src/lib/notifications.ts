@@ -55,7 +55,9 @@ function parentNotifs(s: State, u: User, now: number): Notif[] {
     s.checks.filter((c) => c.studentId === k.id && now - c.ts < 14 * DAY).forEach((c) => out.push({ id: `kc-${c.id}`, ts: c.ts, kind: c.passed ? "trophy" : "alert", title: `${k.name} : contrôle ${c.passed ? "réussi" : "à retenter"}`, text: notionById(c.notionId)?.title ?? "Notion", to: `/enfant/${k.id}/progres` }));
     s.exams.filter((e) => e.studentId === k.id && e.status === "done" && e.finishedAt && now - e.finishedAt < 14 * DAY).forEach((e) => out.push({ id: `ke-${e.id}`, ts: e.finishedAt!, kind: "exam", title: `${k.name} a terminé une épreuve`, text: `${e.label} : ${e.score ?? 0}/${e.outOf}.`, to: `/enfant/${k.id}/progres` }));
   });
-  if (!s.users.some((k) => k.parentId === u.id)) out.push({ id: "no-kid", ts: u.createdAt ?? 0, kind: "user", title: "Aucun enfant lié", text: `Donnez votre code d'invitation ${u.inviteCode ?? ""} à votre enfant pour qu'il le saisisse à l'inscription.` });
+  const kids = s.users.filter((k) => k.parentId === u.id);
+  if (!kids.length) out.push({ id: "no-kid", ts: u.createdAt ?? 0, kind: "user", title: "Aucun enfant ajouté", text: "Ajoutez vos enfants depuis l'accueil : un identifiant et un mot de passe de connexion sont créés pour chacun.", to: "/" });
+  else out.push({ id: `kid-access-${kids.length}`, ts: u.createdAt ?? 0, kind: "user", title: kids.length > 1 ? "Vos enfants peuvent se connecter" : `${kids[0].name} peut se connecter`, text: "Sur l'écran de connexion, il saisit son identifiant et son mot de passe, que vous retrouvez sur l'accueil.", to: "/" });
   if (u.paidUntil && u.paidUntil > now && u.paidUntil - now < 7 * DAY) out.push({ id: `plan-${u.paidUntil}`, ts: now - 1, kind: "money", title: "Votre abonnement se termine bientôt", text: `Il expire dans ${Math.ceil((u.paidUntil - now) / DAY)} ${plural(Math.ceil((u.paidUntil - now) / DAY), "jour", "jours")}.` });
   return out;
 }
