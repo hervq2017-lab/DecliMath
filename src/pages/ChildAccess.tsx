@@ -18,10 +18,23 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
   /** Sur le serveur, les accès se créent côté serveur ; en mode local, directement dans le navigateur. */
   async function run(job: () => Promise<string | null>) { setBusy(true); setError(null); setError(await job()); setBusy(false); }
 
-  const copy = (id: string, login: string, password: string) => {
-    navigator.clipboard?.writeText(`Identifiant : ${login}\nMot de passe : ${password}`).catch(() => {});
-    setCopied(id);
+  /** Copie dans le presse-papiers ; repli sur une sélection temporaire si l'API n'est pas disponible. */
+  const copyText = async (key: string, text: string) => {
+    try { await navigator.clipboard.writeText(text); }
+    catch {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch { /* ignoré */ }
+      ta.remove();
+    }
+    setCopied(key);
+    window.setTimeout(() => setCopied((k) => (k === key ? null : k)), 2000);
   };
+  const copyOne = (id: string, name: string, login: string, password: string) =>
+    copyText(id, `${name}\nIdentifiant : ${login}\nMot de passe : ${password}`);
+  const copyAll = () =>
+    copyText("all", children.map((c) => `${c.name}\nIdentifiant : ${c.email}\nMot de passe : ${c.password || "(non affiché)"}`).join("\n\n"));
   const removeAccess = (id: string, childName: string) => {
     if (!window.confirm(`Supprimer l'accès de ${childName} ? Son compte et toute sa progression seront effacés définitivement.`)) return;
     if (supabaseReady) void run(() => remoteDeleteChild(id)); else removeChild(parentId, id);
