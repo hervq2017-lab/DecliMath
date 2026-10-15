@@ -8,7 +8,7 @@ import { Chip, Logo } from "../components/ui";
 import "./auth.css";
 import { COUNTRIES, LEVELS, LevelId, seriesAt } from "../curriculum";
 import { ChildInput, familyChildren, logIn, Role, signUp, signUpParent } from "../store";
-import { FamilyChild, remoteFamilyChildren, remoteLogIn, remoteSignUp } from "../lib/authRemote";
+import { FamilyChild, remoteFamilyChildren, remoteForgotPassword, remoteLogIn, remoteSignUp } from "../lib/authRemote";
 import { supabaseReady } from "../lib/supabase";
 
 /** Toque de diplômé (illustration de l'en-tête). */
@@ -82,6 +82,42 @@ function FamilyLogin({ onBack }: { onBack: () => void }) {
   );
 }
 
+/** Mot de passe oublié (parent) : envoie un lien de réinitialisation par e-mail. */
+function ForgotPassword({ onBack }: { onBack: () => void }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
+
+  async function send(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const email = String(new FormData(e.currentTarget).get("email"));
+    setError(null); setInfo(null); setBusy(true);
+    const res = await remoteForgotPassword(email);
+    setBusy(false);
+    setError(res.error); setInfo(res.info ?? null);
+  }
+
+  return (
+    <form onSubmit={send} className="auth-card">
+      <p className="auth-note">Indique l'e-mail de ton espace parent : nous t'envoyons un lien pour choisir un nouveau mot de passe.</p>
+      <label className="auth-label">
+        <span className="auth-lbl"><Mail size={26} aria-hidden="true" /> E-mail<span className="req" aria-hidden="true">*</span></span>
+        <span className="auth-input">
+          <Mail size={22} aria-hidden="true" />
+          <input name="email" type="email" required autoComplete="email" autoCapitalize="none" placeholder="votre@email.com" />
+        </span>
+      </label>
+      {error && <p className="auth-error" role="alert">{error}</p>}
+      {info && <p className="auth-error" role="status" style={{ color: "var(--green, #2e9e5b)" }}>{info}</p>}
+      <button className="auth-submit" type="submit" disabled={busy} aria-busy={busy}>
+        <Mail size={22} aria-hidden="true" /> Envoyer le lien <ArrowRight size={22} aria-hidden="true" />
+      </button>
+      <p className="auth-switch"><button type="button" onClick={onBack}>Retour à la connexion</button></p>
+      <p className="auth-note" style={{ textAlign: "center" }}>Élève ? Ton parent te redonne le code famille depuis son espace.</p>
+    </form>
+  );
+}
+
 const GOALS = ["Rattraper mon retard", "Préparer un contrôle", "Préparer l'examen", "Prendre de l'avance"];
 
 export default function Auth() {
@@ -90,6 +126,7 @@ export default function Auth() {
   /** À la connexion : qui se connecte. L'élève entre par le code famille, le parent par e-mail. */
   const [who, setWho] = useState<"parent" | "student">(params.get("r") === "student" ? "student" : "parent");
   const [idForm, setIdForm] = useState(false);
+  const [forgot, setForgot] = useState(false);
   const [role, setRole] = useState<Role>("parent");
   const [level, setLevel] = useState<LevelId>("3e");
   const [goal, setGoal] = useState(GOALS[0]);
@@ -194,14 +231,14 @@ export default function Auth() {
           <div className="auth-who" role="tablist" aria-label="Je me connecte en tant que">
             {([["parent", "Parent", Users], ["student", "Élève", GraduationCap]] as const).map(([id, label, Icon]) => (
               <button key={id} type="button" role="tab" aria-selected={who === id} className={who === id ? "on" : ""}
-                onClick={() => { setError(null); setInfo(null); setWho(id); setIdForm(false); }}>
+                onClick={() => { setError(null); setInfo(null); setWho(id); setIdForm(false); setForgot(false); }}>
                 <Icon size={20} aria-hidden="true" /> {label}
               </button>
             ))}
           </div>
         )}
 
-        {isLogin && who === "student" && !idForm ? <FamilyLogin onBack={() => setIdForm(true)} /> : (
+        {isLogin && who === "parent" && forgot ? <ForgotPassword onBack={() => setForgot(false)} /> : isLogin && who === "student" && !idForm ? <FamilyLogin onBack={() => setIdForm(true)} /> : (
         <form onSubmit={submit} className="auth-card">
           {!isLogin && (
             <>
@@ -254,6 +291,9 @@ export default function Auth() {
               </button>
             </span>
           </div>
+          {isLogin && who === "parent" && (
+            <p className="auth-forgot"><button type="button" onClick={() => { setError(null); setInfo(null); setForgot(true); }}>Mot de passe oublié ?</button></p>
+          )}
           {!isLogin && (
             <>
               <div className="auth-meter" data-level={pwd ? strength : 0} aria-hidden="true"><i /><i /><i /></div>

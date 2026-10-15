@@ -139,6 +139,7 @@ export async function initRemoteSession(): Promise<void> {
   if (session) await hydrate(false);
   else update((s) => (s.previewBackup ? s : { ...s, sessionId: null }));
   supabase.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") setRecovery(true);
     if (event !== "SIGNED_OUT") return;
     pushedProfile.clear(); pushedMode.clear(); resetProgressTracking();
     update((s) => (s.previewBackup ? s : { ...s, sessionId: null }));
@@ -146,6 +147,45 @@ export async function initRemoteSession(): Promise<void> {
 }
 
 export interface AuthResult { error: string | null; info?: string }
+
+// ---------- Mot de passe oublié ----------
+// Le lien reçu par e-mail ramène sur le site avec « type=recovery » dans l'adresse : on le repère au chargement (avant que Supabase ne nettoie l'adresse).
+let recovery = typeof window !== "undefined" && /[#&?]type=recovery/.test(window.location.hash + window.location.search);
+const recoveryListeners = new Set<() => void>();
+function setRecovery(v: boolean) { recovery = v; recoveryListeners.forEach((f) => f()); }
+export const recoveryActive = () => recovery;
+export function subscribeRecovery(cb: () => void) { recoveryListeners.add(cb); return () => { recoveryListeners.delete(cb); }; }
+
+/** Envoie le lien de réinitialisation. La réponse est la même que l'adresse existe ou non (on ne révèle pas quels e-mails ont un compte). */
+export async function remoteForgotPassword(email: string): Promise<AuthResult> {
+  if (!supabase) return { error: "La réinitialisation n'est disponible qu'avec un compte en ligne." };
+  const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo: `${window.location.origin}/reinitialiser` });
+  if (error && /rate limit|too many|failed to fetch|network|valid email|invalid email/i.test(error.message)) return { error: fr(error.message) };
+  return { error: null, info: "Si un compte existe avec cette adresse, un e-mail vient de partir avec un lien pour choisir un nouveau mot de passe. Pense à regarder dans les courriers indésirables." };
+}
+
+/** Enregistre le nouveau mot de passe (session de récupération ouverte par le lien), puis connecte le parent. */
+export async function remoteSetPassword(password: string): Promise<string | null> {
+  if (!supabase) return "Serveur non configuré.";
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return "Ce lien a expiré ou a déjà servi. Demande un nouveau lien depuis la page de connexion.";
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    if (error.message.toLowerCase().includes("different from the old")) return "Choisis un mot de passe différent de l'ancien.";
+    return fr(error.message);
+  }
+  window.history.replaceState(null, "", "/");
+  const err = await hydrate(true);
+  setRecovery(false);
+  return err;
+}
+
+/** Abandon : on quitte la session de récupération sans changer le mot de passe. */
+export async function cancelRecovery() {
+  window.history.replaceState(null, "", "/");
+  setRecovery(false);
+  await supabase?.auth.signOut();
+}
 
 export async function remoteLogIn(identifier: string, password: string): Promise<AuthResult> {
   if (!supabase) return { error: "Serveur non configuré." };

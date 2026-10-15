@@ -1,8 +1,10 @@
-﻿import { useEffect } from "react";
+﻿import { useEffect, useSyncExternalStore } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AdminNav, BottomNav, TopBar } from "./components/ui";
 import Admin from "./pages/Admin";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
+import { recoveryActive, subscribeRecovery } from "./lib/authRemote";
 import Landing from "./pages/Landing";
 import Catalogue from "./pages/Catalogue";
 import Check from "./pages/Check";
@@ -39,6 +41,7 @@ function AppInner() {
   const state = useStore();
   const user = currentUser(state);
   const { pathname } = useLocation();
+  const recovering = useSyncExternalStore(subscribeRecovery, recoveryActive);
   const prefs = { ...DEFAULT_PREFS, ...user?.prefs };
 
   // préférences d'affichage : thème (sinon système), police adaptée, animations réduites
@@ -53,6 +56,7 @@ function AppInner() {
 
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
 
+  if (recovering) return <ResetPassword />; // lien « mot de passe oublié » : on choisit le nouveau mot de passe avant tout
   if (!user) return <Routes><Route path="/" element={<Landing />} /><Route path="*" element={<Auth />} /></Routes>;
   if (pathname === "/accueil") return <Landing />; // la page d'accueil reste visitable une fois connecté (logo DeclickMath)
   if (user.role === "admin") {

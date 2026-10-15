@@ -295,3 +295,8 @@
 .auth-who button { min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 13px; background: none; color: var(--a-muted); font: 700 1rem var(--font-body); cursor: pointer; }
 .auth-who button.on { background: linear-gradient(135deg, #35b6ff, #8a4dff); color: #fff; }
 .auth-who button:focus-visible { outline: 3px solid #ffc63d; outline-offset: 2px; }
+
+/* Mot de passe oublié */
+.auth-forgot { margin: -6px 0 0; text-align: right; }
+.auth-forgot button { min-height: 40px; padding: 0 6px; border: 0; background: none; color: #19d3ff; font: 600 .95rem var(--font-body); text-decoration: underline; cursor: pointer; }
+.auth-forgot button:hover { color: #fff; }
