@@ -1816,3 +1816,9 @@ html:has(.lx) { scroll-behavior: smooth; }
   .lx-hero-trust li, .lx-demo-play, .lx-hero-photo-box, .lx-dash, .lx-float-chip, .lx-float-prog, .lx-subj,
   .lx-subj-bar span, .lx-dash-hello svg { animation: none !important; }
 }
+
+/* Navbar : conteneur élargi (le cadre de 1200 px était trop étroit) et compaction plus précoce */
+.lx-nav .lx-nav-in { max-width: 1480px; padding: 0 clamp(14px, 2vw, 32px); }
+@media (max-width: 1560px) { .lx-nav-cta .lx-btn.ghost-nav { display: none; } }
+@media (max-width: 1360px) { .lx-links { gap: 14px; } .lx-nav-link { font-size: .9rem; } .lx-country select { width: 112px; } }
+@media (max-width: 1100px) { .lx-links { gap: 10px; } .lx-nav-link { font-size: .85rem; } .lx-country select { width: 96px; } .lx-country { padding: 0 8px 0 10px; } }
