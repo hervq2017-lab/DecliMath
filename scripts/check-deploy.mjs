@@ -13,6 +13,7 @@ try {
   const js = html.match(/assets\/index-[^"]+\.js/)?.[0];
   const bundle = js ? await (await get("/" + js)).text() : "";
   ok(/[a-z0-9]{20}\.supabase\.co/.test(bundle), "l'application est reliée à VOTRE projet Supabase (VITE_SUPABASE_URL présente au build)");
+  ok(bundle.includes("cm9sZSI6ImFub24i"), "la clé publique (anon) est présente au build : sans elle l'application reste en mode local");
   ok(!/Code famille/.test(bundle), "version à jour : plus de code famille");
 
   const spa = await get("/commencer?c=login");
