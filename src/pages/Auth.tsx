@@ -155,7 +155,10 @@ export default function Auth() {
           ? { role, name, email, password, country, children: kids }
           : { role, name, email, password, country, level, goal, inviteCode: String(f.get("code") ?? "") });
       setBusy(false);
-      setError(res.error);
+      // Élève : l'identifiant complet porte un numéro (ex. bola.7892) ; un prénom seul ne suffit pas.
+      setError(step === "login" && who === "student" && res.error
+        ? `Identifiant ou mot de passe incorrect. L'identifiant complet ressemble à « bola.7892 » (avec le numéro) et le mot de passe est le code famille. Le plus simple : « Entrer avec le code famille ».`
+        : res.error);
       if (res.info) { setInfo(res.info); setStep("login"); }
       return;
     }
@@ -272,7 +275,7 @@ export default function Auth() {
             <span className="auth-lbl"><Mail size={26} aria-hidden="true" /> {isLogin ? (who === "parent" ? "E-mail" : "Identifiant") : "E-mail"}<span className="req" aria-hidden="true">*</span></span>
             <span className="auth-input">
               <Mail size={22} aria-hidden="true" />
-              <input name="email" type={isLogin && who === "student" ? "text" : "email"} required autoComplete={isLogin ? "username" : "email"} autoCapitalize="none" placeholder={isLogin && who === "student" ? "Identifiant de l'élève" : "votre@email.com"} />
+              <input name="email" type={isLogin && who === "student" ? "text" : "email"} required autoComplete={isLogin ? "username" : "email"} autoCapitalize="none" placeholder={isLogin && who === "student" ? "Identifiant complet, ex. bola.7892" : "votre@email.com"} />
             </span>
           </label>
           <div className="auth-label">
@@ -359,7 +362,7 @@ export default function Auth() {
             <ArrowRight size={22} aria-hidden="true" />
           </button>
           {isLogin && who === "student" && (
-            <p className="auth-switch"><button type="button" onClick={() => { setError(null); setIdForm(false); }}>Entrer avec le code famille</button></p>
+            <p className="auth-switch"><button type="button" onClick={() => { setError(null); setIdForm(false); }}>← Plus simple : entrer avec le code famille</button></p>
           )}
           <p className="auth-switch">
             {isLogin ? (who === "parent" ? "Parent sans compte ?" : "Ton parent n'a pas de compte ?") : "Déjà un compte ?"}{" "}
