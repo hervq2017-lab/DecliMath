@@ -1728,3 +1728,91 @@ html:has(.lx) { scroll-behavior: smooth; }
   .lx-hero-aura { animation: none; }
   .lx-hero-photo-img, .lx-hero-photo-img img { transform: none !important; transition: none; }
 }
+
+
+/* ==========================================================================
+   RETOUCHE — barre de navigation sans débordement, hero recentré et animé
+   ========================================================================== */
+
+/* Navbar : 3 zones (logo | liens centrés | actions) qui ne débordent jamais */
+.lx-nav-in { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: clamp(10px, 1.6vw, 24px); }
+.lx-brand { min-width: 0; flex: none; }
+.lx-links { justify-content: center; gap: clamp(12px, 1.7vw, 28px); min-width: 0; }
+.lx-nav-link { white-space: nowrap; }
+.lx-nav-link::before {
+  content: ""; position: absolute; left: 50%; bottom: 0; width: 0; height: 2px; border-radius: 99px;
+  background: var(--grad); transform: translateX(-50%); transition: width 260ms cubic-bezier(.16, 1, .3, 1);
+}
+.lx-nav-link:hover::before { width: 100%; }
+.lx-nav-cta { justify-self: end; flex: none; gap: 10px; }
+.lx-nav-cta .lx-btn { flex: none; white-space: nowrap; }
+.lx-nav-cta .lx-btn.yellow { padding: 0 20px; }
+@media (max-width: 1500px) { .lx-brand-sub { display: none; } }
+@media (max-width: 1240px) {
+  .lx-nav-cta .lx-btn.ghost-nav { display: none; }
+  .lx-country select { width: 96px; }
+}
+@media (max-width: 1020px) { .lx-country select { width: 76px; } .lx-nav-cta { gap: 8px; } }
+@media (max-width: 899px) { .lx-nav-in { grid-template-columns: auto 1fr; } }
+@media (max-width: 420px) { .lx-brand-title { font-size: 1.05rem; } .lx-country select { width: 60px; } .lx-nav-cta .lx-btn.yellow { padding: 0 12px; font-size: .78rem; } }
+
+/* Hero : colonnes équilibrées, contenu centré verticalement, rien ne dépasse */
+.lx-hero { padding: clamp(40px, 6vw, 72px) 0 clamp(64px, 8vw, 104px); }
+.lx-hero-in { align-items: center; }
+@media (min-width: 992px) { .lx-hero-in { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(24px, 3vw, 48px); } }
+.lx-hero-copy { min-width: 0; }
+.lx-hero-visual { min-width: 0; }
+@media (min-width: 992px) { .lx-hero-visual { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); } }
+.lx-hero-cta-box .lx-btn { max-width: 100%; }
+@media (max-width: 991px) {
+  .lx-hero-copy { align-items: center; text-align: center; }
+  .lx-hero-text { margin-inline: auto; }
+  .lx-hero-cta-box, .lx-hero-trust { justify-content: center; }
+  .lx-hero-trust { justify-items: center; }
+  .lx-hero-visual { max-width: 560px; width: 100%; margin-inline: auto; }
+}
+@media (max-width: 520px) { .lx-hero-trust li { justify-content: center; } .lx-btn.lx-hero-btn { width: 100%; padding: 0 20px; } }
+
+/* Animations d'entrée en cascade */
+@keyframes lxRise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes lxPop { from { opacity: 0; transform: translateY(18px) scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes lxSlideIn { from { opacity: 0; transform: translateX(44px); } to { opacity: 1; transform: none; } }
+@keyframes lxFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes lxFloatB { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(8px) rotate(-1.2deg); } }
+@keyframes lxBarGrow { from { width: 0; } }
+@keyframes lxShimmer { to { background-position: 200% center; } }
+@keyframes lxDotPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(46, 168, 255, .7); } 50% { box-shadow: 0 0 0 8px rgba(46, 168, 255, 0); } }
+@keyframes lxWave { 0%, 60%, 100% { transform: rotate(0); } 10%, 30% { transform: rotate(16deg); } 20%, 40% { transform: rotate(-10deg); } 50% { transform: rotate(8deg); } }
+@keyframes lxRowIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: none; } }
+
+.lx-badge-capsule { animation: lxPop .7s cubic-bezier(.16, 1, .3, 1) .05s both; }
+.lx-capsule-dot { animation: lxDotPulse 2.2s ease-out infinite; }
+.lx-hero h1 { animation: lxRise .8s cubic-bezier(.16, 1, .3, 1) .15s both; }
+.lx-hero .lx-grad-text { background: linear-gradient(90deg, #10c6ff, #6a8bff, #a35cff, #10c6ff); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; animation: lxShimmer 5s linear infinite; }
+.lx-hero-text { animation: lxRise .8s cubic-bezier(.16, 1, .3, 1) .3s both; }
+.lx-hero-cta-box { animation: lxRise .8s cubic-bezier(.16, 1, .3, 1) .45s both; }
+.lx-hero-trust li { animation: lxRise .7s cubic-bezier(.16, 1, .3, 1) both; }
+.lx-hero-trust li:nth-child(1) { animation-delay: .6s; }
+.lx-hero-trust li:nth-child(2) { animation-delay: .72s; }
+.lx-hero-trust li:nth-child(3) { animation-delay: .84s; }
+.lx-trust-round { transition: transform 300ms cubic-bezier(.34, 1.56, .64, 1), background 200ms; }
+.lx-hero-trust li:hover .lx-trust-round { transform: scale(1.15) rotate(-6deg); background: rgba(60, 100, 255, .45); }
+.lx-demo-play { animation: lxDotPulse 2.6s ease-out infinite; }
+
+.lx-hero-photo-box { animation: lxPop .9s cubic-bezier(.16, 1, .3, 1) .25s both; }
+.lx-dash { animation: lxSlideIn .9s cubic-bezier(.16, 1, .3, 1) .55s both, lxFloat 6.5s ease-in-out 1.6s infinite; }
+.lx-float-chip { animation: lxPop .7s cubic-bezier(.16, 1, .3, 1) .9s both, lxFloat 5s ease-in-out 1.7s infinite; }
+.lx-float-prog { animation: lxPop .7s cubic-bezier(.16, 1, .3, 1) 1.05s both, lxFloatB 6s ease-in-out 1.8s infinite; }
+.lx-subj { animation: lxRowIn .6s cubic-bezier(.16, 1, .3, 1) both; transition: transform 250ms ease, border-color 250ms ease, background 250ms ease; }
+.lx-subj:nth-child(1) { animation-delay: .9s; }
+.lx-subj:nth-child(2) { animation-delay: 1.05s; }
+.lx-subj:nth-child(3) { animation-delay: 1.2s; }
+.lx-subj:hover { transform: translateX(4px); border-color: rgba(120, 160, 255, .7); background: rgba(25, 45, 130, .8); }
+.lx-subj-bar span { animation: lxBarGrow 1.4s cubic-bezier(.16, 1, .3, 1) 1.1s both; }
+.lx-dash-hello svg { transform-origin: 70% 70%; animation: lxWave 3.5s ease-in-out 1.6s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lx-badge-capsule, .lx-capsule-dot, .lx-hero h1, .lx-hero .lx-grad-text, .lx-hero-text, .lx-hero-cta-box,
+  .lx-hero-trust li, .lx-demo-play, .lx-hero-photo-box, .lx-dash, .lx-float-chip, .lx-float-prog, .lx-subj,
+  .lx-subj-bar span, .lx-dash-hello svg { animation: none !important; }
+}

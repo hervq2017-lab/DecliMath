@@ -107,12 +107,18 @@ async function hydrate(freshLogin: boolean): Promise<string | null> {
   if (row.role !== "student") Object.entries(modeMap).forEach(([id, m]) => pushedMode.set(id, m));
 
   if (freshLogin) users[0].lastLogin = Date.now();
-  update((s) => ({
-    ...s,
-    users: [...s.users.filter((u) => !users.some((x) => x.id === u.id)), ...users],
-    solutionMode: { ...s.solutionMode, ...modeMap },
-    sessionId: s.previewBackup ? s.sessionId : uid,
-  }));
+  // Le serveur fait foi : les comptes qu'il ne connaît pas (restes du mode local, ou d'une autre session) sont retirés de l'appareil, avec leurs données.
+  update((s) => {
+    if (s.previewBackup) return { ...s, users: [...s.users.filter((u) => !users.some((x) => x.id === u.id)), ...users], solutionMode: { ...s.solutionMode, ...modeMap } };
+    const mine = new Set(users.map((u) => u.id));
+    const own = <T extends { studentId: string }>(rows: T[] | undefined) => (rows ?? []).filter((r) => mine.has(r.studentId));
+    return {
+      ...s, users, sessionId: uid,
+      attempts: own(s.attempts), checks: own(s.checks), exams: own(s.exams), papers: own(s.papers), evidence: own(s.evidence), bilans: own(s.bilans),
+      memory: Object.fromEntries(Object.entries(s.memory ?? {}).filter(([, m]) => mine.has(m.studentId))),
+      solutionMode: modeMap,
+    };
+  });
   await pullProgress(); // progression de l'élève (ou de ses enfants) enregistrée sur le serveur
   // Enfants saisis à l'inscription du parent : créés par le serveur à sa première connexion confirmée.
   const pending = session.user.user_metadata?.pending_children as ChildInput[] | undefined;
