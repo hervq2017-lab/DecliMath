@@ -6,7 +6,7 @@ import { countryByCode, LEVELS } from "../curriculum";
 import { buildPaper } from "../paper";
 import { answerView, sessionsOf } from "../lib/reponses";
 import { attemptsOf, notionTitle, streak } from "../lib/stats";
-import { currentUser, DEFAULT_PREFS, studentsOf, useStore } from "../store";
+import { acceptedStudentsOf, currentUser, DEFAULT_PREFS, useStore } from "../store";
 import Catalogue from "./Catalogue";
 import Home from "./Home";
 import Progress from "./Progress";
@@ -18,7 +18,7 @@ export default function ParentChild({ tab }: { tab: Tab }) {
   const state = useStore();
   const { id = "" } = useParams();
   const me = currentUser(state)!;
-  const pool = me.role === "admin" ? state.users.filter((u) => u.role === "student") : studentsOf(state, me.id);
+  const pool = me.role === "admin" ? state.users.filter((u) => u.role === "student") : acceptedStudentsOf(state, me.id);
   const child = pool.find((c) => c.id === id);
   if (!child) return <Navigate to="/" replace />;
 

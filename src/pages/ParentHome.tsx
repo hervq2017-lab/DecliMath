@@ -6,7 +6,7 @@ import { Chip, ParentChildNav, ProgressBar, StreakChip, TopBar } from "../compon
 import { countryByCode, levelById, notionsOf, SUBJECT_LABEL, subjectsAt } from "../curriculum";
 import { hasContent } from "../engine";
 import { attemptsOf, minutesSpent, pointsOf, relativeDay, streak, weekDays } from "../lib/stats";
-import { currentUser, logOut, MASTERY_LABEL, masteryFor, SolutionMode, studentsOf, update, useStore } from "../store";
+import { currentUser, hasAcceptedParentLink, logOut, MASTERY_LABEL, masteryFor, SolutionMode, studentsOf, update, useStore } from "../store";
 
 const MODES: { value: SolutionMode; label: string; help: string }[] = [
   { value: "free", label: "Autoriser", help: "Après une première réponse, le corrigé est toujours accessible." },
@@ -25,8 +25,13 @@ export default function ParentHome() {
 
   return (
     <>
-      {child && <ParentChildNav id={child.id} />}
-      <TopBar name={me.name} sub={child ? `Voici le résumé et le suivi de ${child.name}.` : "Gérez les accès de vos enfants et suivez leurs progrès."} />
+      {child && hasAcceptedParentLink(child) && <ParentChildNav id={child.id} />}
+      <TopBar
+        name={me.name}
+        sub={child
+          ? hasAcceptedParentLink(child) ? `Voici le résumé et le suivi de ${child.name}.` : `L'activité de ${child.name} restera privée jusqu'à son acceptation.`
+          : "Gérez les accès de vos enfants et suivez leurs progrès."}
+      />
       <main className="shell wide stack">
         <header className="row between">
           <div className="row">
@@ -41,7 +46,7 @@ export default function ParentHome() {
         {children.length === 0 && (
           <section className="card stack">
             <h1>Bienvenue {me.name}</h1>
-            <p>Ajoutez un enfant ci-dessus pour lui créer son accès unique et un QR code d'activation immédiat.</p>
+            <p>Ajoutez un enfant ci-dessus, puis envoyez-lui une invitation QR personnelle à accepter.</p>
             <p className="muted small">{countryByCode(me.country).name} • Vous verrez ses efforts et ses progrès en temps réel.</p>
           </section>
         )}
@@ -62,7 +67,7 @@ export default function ParentHome() {
           </section>
         )}
 
-        {child && <Child key={child.id} id={child.id} code={me.inviteCode ?? ""} />}
+        {child && <Child key={child.id} id={child.id} />}
       </main>
     </>
   );
@@ -84,7 +89,7 @@ function Kid({ id, selected, onSelect }: { id: string; selected: boolean; onSele
   const successCount = all.filter((a) => a.correct).length;
   const successRate = all.length ? Math.round((successCount / all.length) * 100) : null;
   const isSuspended = !!c.suspended;
-  const isPending = c.mustChangePassword || !c.passwordCustomized;
+  const isPending = !hasAcceptedParentLink(c);
 
   return (
     <article className={`card kid${selected ? " sel" : ""}`} aria-label={`Résumé de ${c.name}`}>
@@ -94,7 +99,7 @@ function Kid({ id, selected, onSelect }: { id: string; selected: boolean; onSele
           <div>
             <h3>{c.name}</h3>
             <p className="muted small" style={{ fontWeight: 600 }}>{levelById(level).label}{c.serie ? ` ${c.serie}` : ""} • {country.name}</p>
-            <p className="muted small">{last ? `Dernière activité : ${relativeDay(last)}` : "Pas encore d'activité"}</p>
+            <p className="muted small">{isPending ? "Activité privée jusqu'à l'acceptation" : last ? `Dernière activité : ${relativeDay(last)}` : "Pas encore d'activité"}</p>
           </div>
         </div>
         <div className="stack-sm" style={{ alignItems: "flex-end" }}>
@@ -111,10 +116,16 @@ function Kid({ id, selected, onSelect }: { id: string; selected: boolean; onSele
               <Check size={12} style={{ verticalAlign: "-2px" }} /> Actif
             </span>
           )}
-          <StreakChip n={streak(all)} />
+          {!isPending && <StreakChip n={streak(all)} />}
         </div>
       </div>
 
+      {isPending ? (
+        <p className="muted small" style={{ margin: 0, padding: "10px 12px", borderRadius: 10, background: "#fef3c7", color: "#92400e" }}>
+          Le suivi restera privé jusqu'à ce que {c.name} accepte l'invitation et choisisse son mot de passe.
+        </p>
+      ) : (
+        <>
       <div className="meta" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
         <div>
           <b>{all.length}</b>
@@ -141,11 +152,13 @@ function Kid({ id, selected, onSelect }: { id: string; selected: boolean; onSele
         </button>
         <Link className="btn ghost grow" to={`/enfant/${id}`}>Son écran</Link>
       </div>
+        </>
+      )}
     </article>
   );
 }
 
-function Child({ id, code }: { id: string; code: string }) {
+function Child({ id }: { id: string }) {
   const state = useStore();
   const child = state.users.find((u) => u.id === id)!;
   const level = child.level ?? "tle";
@@ -157,6 +170,17 @@ function Child({ id, code }: { id: string; code: string }) {
   const exams = state.exams.filter((e) => e.studentId === id && e.status === "done");
   const goal = state.goals[id] ?? "";
   const [plan, setPlan] = useState(false);
+
+  if (!hasAcceptedParentLink(child)) {
+    return (
+      <section className="card stack parent-detail">
+        <h2 style={{ margin: 0 }}>Invitation en attente pour {child.name}</h2>
+        <p className="muted">
+          Son activité restera privée. Envoyez-lui le QR code depuis « Accès et connexions » ; il devra l'accepter et créer son mot de passe pour activer le suivi.
+        </p>
+      </section>
+    );
+  }
 
   const successCount = all.filter((a) => a.correct).length;
   const successRate = all.length ? Math.round((successCount / all.length) * 100) : null;

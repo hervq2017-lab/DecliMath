@@ -2,7 +2,7 @@ const mem = new Map<string, string>();
 (globalThis as any).localStorage = { getItem: (k: string) => mem.get(k) ?? null, setItem: (k: string, v: string) => void mem.set(k, v) };
 (globalThis as any).sessionStorage = { getItem: (k: string) => mem.get("s:" + k) ?? null, setItem: (k: string, v: string) => void mem.set("s:" + k, v), removeItem: (k: string) => void mem.delete("s:" + k) };
 
-const { signUpParent, logIn, logOut, resetChildPassword, setChildPassword, quickSwitchToChild, restoreParentSession, regenerateLogin, removeChild, addChildren, studentsOf, currentUser, modeFor } = await import("../src/store");
+const { signUpParent, logIn, logOut, resetChildPassword, setChildPassword, quickSwitchToChild, restoreParentSession, regenerateLogin, removeChild, addChildren, studentsOf, currentUser, modeFor, createQrToken, consumeQrToken, hasAcceptedParentLink } = await import("../src/store");
 const store = await import("../src/store");
 
 let fails = 0;
@@ -17,11 +17,14 @@ const kids = studentsOf(st(), parent.id);
 ok(parent.role === "parent" && kids.length === 3, "3 enfants rattachés au parent");
 ok(kids[0].level === "tle" && kids[0].serie === "C" && kids[1].level === "3e" && kids[2].level === "6e", "classes et série respectées");
 ok(new Set(kids.map((k) => k.email)).size === 3, "identifiants uniques (deux Koffi inclus)");
-ok(new Set(kids.map((k) => k.password)).size === 3, "un mot de passe propre à chaque enfant (pas de code partagé)");
-ok(kids.every((k) => /^[a-z0-9]+\.\d{4}$/.test(k.email) && k.password.length === 8), "format identifiant / mot de passe");
+ok(kids.every((k) => !k.password && !hasAcceptedParentLink(k)), "les enfants attendent leur invitation sans mot de passe partagé");
+ok(kids.every((k) => /^[a-z0-9]+\.\d{4}$/.test(k.email)), "format identifiant élève");
 ok(kids.every((k) => modeFor(st(), k.id) === "deferred"), "règle de corrigé « différer » par défaut");
 
-const [k0] = kids; const oldPwd = k0.password;
+const [k0] = kids;
+const initialInvite = createQrToken(parent.id, k0.id)!;
+ok(consumeQrToken(initialInvite.token, "EleveSecret123").success && hasAcceptedParentLink(st().users.find((u) => u.id === k0.id)!), "l'élève accepte son invitation et active le suivi");
+const oldPwd = "EleveSecret123";
 logOut();
 ok(logIn(k0.email, oldPwd) === null && currentUser(st())?.id === k0.id, "l'enfant se connecte avec ses accès");
 ok(currentUser(st())?.role === "student", "session élève");
@@ -41,7 +44,7 @@ for (let i = 0; i < 200; i++) {
 }
 ok(unique && oldRefused, "200 nouveaux mots de passe : chacun marche, l'ancien est refusé");
 const sibling = kids[1];
-ok(st().users.find((u) => u.id === sibling.id)!.password === sibling.password, "le mot de passe d'un frère / d'une sœur ne change pas");
+ok(st().users.find((u) => u.id === sibling.id)!.password === "", "le mot de passe du frère ou de la sœur reste privé");
 
 const oldLogin = k0.email;
 regenerateLogin(parent.id, k0.id);
@@ -73,7 +76,10 @@ ok(!st().attempts.some((a) => a.studentId === gone.id), "sa progression est supp
 logOut(); ok(logIn(gone.email, gone.password) !== null, "l'enfant supprimé ne peut plus se connecter");
 
 logIn("awa@test.com", "motdepasse1");
-ok(setChildPassword(parent.id, sibling.id, "soleil12") === null, "définition d'un mot de passe personnalisé par le parent");
+const siblingInvite = createQrToken(parent.id, sibling.id)!;
+ok(consumeQrToken(siblingInvite.token, "SiblingSecret123").success, "le deuxième enfant accepte sa propre invitation");
+logOut(); logIn("awa@test.com", "motdepasse1");
+ok(setChildPassword(parent.id, sibling.id, "soleil12") === null, "réinitialisation parentale du mot de passe après acceptation");
 logOut();
 ok(logIn(sibling.email, "soleil12") === null && currentUser(st())?.id === sibling.id, "connexion élève avec le mot de passe personnalisé");
 logOut();

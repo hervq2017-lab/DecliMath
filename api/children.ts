@@ -43,7 +43,7 @@ interface Body {
 }
 
 type Admin = ReturnType<typeof createClient<any>>;
-interface Created { id: string; name: string; login: string; password: string }
+interface Created { id: string; name: string; login: string }
 
 /** Prend le jeton en une seule opération : si deux appels arrivent ensemble, un seul réussit (usage unique garanti par la base). */
 async function claimToken(admin: Admin, id: string): Promise<boolean> {
@@ -52,14 +52,14 @@ async function claimToken(admin: Admin, id: string): Promise<boolean> {
   return !!data?.length;
 }
 
-/** Crée les comptes enfants d'un parent : chacun reçoit son propre identifiant et son propre mot de passe. */
+/** Crée les comptes en attente : le mot de passe définitif appartient à l'élève, lors de l'acceptation. */
 async function createKids(admin: Admin, parent: { id: string; country: string }, kids: Kid[]): Promise<Created[] | null> {
   const created: Created[] = [];
   for (const k of kids) {
     const name = String(k.name).trim().slice(0, 80);
     const level = /^[a-z0-9]{1,5}$/.test(String(k.level)) ? String(k.level) : "3e";
     const serie = typeof k.serie === "string" ? k.serie.slice(0, 4) : "";
-    const password = typeof k.password === "string" && k.password.length >= 6 ? k.password : newPassword();
+    const password = newPassword();
     for (let attempt = 0; attempt < 5; attempt++) {
       const login = newLogin(name);
       const { data, error } = await admin.auth.admin.createUser({
@@ -82,7 +82,7 @@ async function createKids(admin: Admin, parent: { id: string; country: string },
         if (pe?.code === "23505") continue; // identifiant déjà pris : on en tire un autre
         return created.length ? created : null;
       }
-      created.push({ id: data.user.id, name, login, password });
+      created.push({ id: data.user.id, name, login });
       break;
     }
   }
@@ -112,7 +112,7 @@ export default async function handler(req: Req, res: Res) {
     const pending = user?.user_metadata?.pending_children as Kid[] | undefined;
     if (!user || user.user_metadata?.role !== "parent" || !pending?.length || Date.now() - Date.parse(user.created_at) > 30 * 60_000) return res.status(403).json({ error: "Création refusée." });
     const kids = pending.filter((k) => typeof k.name === "string" && k.name.trim()).slice(0, MAX_CHILDREN);
-    const { data: parent } = await admin.from("profiles").select("id, country").eq("id", user.id).single();
+    const { data: parent } = await admin.from("profiles").select("id, country, name").eq("id", user.id).single();
     if (!parent) return res.status(404).json({ error: "Profil du parent introuvable." });
     const created = await createKids(admin, parent, kids);
     if (!created?.length) return res.status(500).json({ error: "Création impossible." });
@@ -145,12 +145,15 @@ export default async function handler(req: Req, res: Res) {
 
     const { data: student, error: studentErr } = await admin
       .from("profiles")
-      .select("id, name, login, level, serie, country, suspended, must_change_password, password_customized")
+      .select("id, name, login, level, serie, country, parent_id, parent_linked_at, suspended, must_change_password, password_customized")
       .eq("id", row.student_id)
       .single();
 
     if (studentErr || !student) return res.status(404).json({ error: "Compte élève introuvable." });
     if (student.suspended) return res.status(403).json({ error: "Ce compte élève est actuellement suspendu." });
+    if (row.purpose === "quick_login" && !student.parent_linked_at) return res.status(403).json({ error: "Accepte d'abord l'invitation de ton parent avec le QR code d'activation." });
+    const { data: parentProfile, error: parentErr } = await admin.from("profiles").select("name").eq("id", student.parent_id).single();
+    if (parentErr || !parentProfile) return res.status(500).json({ error: "Profil du parent invitant introuvable." });
 
     return res.status(200).json({
       valid: true,
@@ -162,6 +165,7 @@ export default async function handler(req: Req, res: Res) {
         level: student.level,
         serie: student.serie,
         country: student.country,
+        parentName: parentProfile.name,
         mustChangePassword: student.must_change_password,
         passwordCustomized: student.password_customized,
       },
@@ -187,7 +191,7 @@ export default async function handler(req: Req, res: Res) {
 
     const { data: student } = await admin
       .from("profiles")
-      .select("id, name, login, country, level, serie, suspended")
+      .select("id, name, login, country, level, serie, parent_id, parent_linked_at, suspended")
       .eq("id", row.student_id)
       .single();
 
@@ -208,7 +212,12 @@ export default async function handler(req: Req, res: Res) {
         return res.status(500).json({ error: "Erreur lors de la mise à jour du mot de passe." });
       }
 
-      await admin.from("profiles").update({ must_change_password: false, password_customized: true }).eq("id", student.id);
+      const { error: profileErr } = await admin.from("profiles").update({
+        must_change_password: false,
+        password_customized: true,
+        parent_linked_at: student.parent_linked_at ?? new Date().toISOString(),
+      }).eq("id", student.id);
+      if (profileErr) return res.status(500).json({ error: "Mot de passe enregistré, mais l'invitation n'a pas pu être validée. Demande à ton parent de créer un nouveau QR code." });
       return res.status(200).json({
         ok: true,
         purpose: "activation",
@@ -217,6 +226,7 @@ export default async function handler(req: Req, res: Res) {
     }
 
     if (row.purpose === "quick_login") {
+      if (!student.parent_linked_at) return res.status(403).json({ error: "Accepte d'abord l'invitation de ton parent avec le QR code d'activation." });
       if (!(await claimToken(admin, row.id))) return res.status(410).json({ error: "Ce QR code a déjà été utilisé." });
       const email = `${student.login}@${CHILD_DOMAIN}`;
       const { data: linkData, error: linkErr } = await admin.auth.admin.generateLink({
@@ -271,9 +281,15 @@ export default async function handler(req: Req, res: Res) {
     const { data: child } = await admin.from("profiles").select("id, name, login, suspended").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
     if (!child) return res.status(404).json({ error: "Enfant introuvable." });
     if (child.suspended) return res.status(400).json({ error: "Le compte de cet enfant est suspendu. Réactivez-le d'abord." });
+    if (purpose === "quick_login") {
+      const { data: accepted, error } = await admin.from("profiles").select("parent_linked_at").eq("id", child.id).single();
+      if (error) return res.status(500).json({ error: "Impossible de vérifier l'acceptation de l'invitation." });
+      if (!accepted?.parent_linked_at) return res.status(400).json({ error: "L'enfant doit d'abord accepter son invitation." });
+    }
 
     // Révoquer les anciens jetons non consommés pour cette même fin
-    await admin.from("student_qr_tokens").update({ revoked_at: new Date().toISOString() }).eq("student_id", child.id).eq("purpose", purpose).is("used_at", null).is("revoked_at", null);
+    const { error: revokeErr } = await admin.from("student_qr_tokens").update({ revoked_at: new Date().toISOString() }).eq("student_id", child.id).eq("purpose", purpose).is("used_at", null).is("revoked_at", null);
+    if (revokeErr) return res.status(500).json({ error: "Impossible de remplacer l'ancien QR code." });
 
     const rawToken = generateToken();
     const tokenHash = hashToken(rawToken);
@@ -303,7 +319,8 @@ export default async function handler(req: Req, res: Res) {
     const childId = String(body.childId ?? "");
     const { data: child } = await admin.from("profiles").select("id").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
     if (!child) return res.status(404).json({ error: "Enfant introuvable." });
-    await admin.from("student_qr_tokens").update({ revoked_at: new Date().toISOString() }).eq("student_id", child.id).is("used_at", null).is("revoked_at", null);
+    const { error } = await admin.from("student_qr_tokens").update({ revoked_at: new Date().toISOString() }).eq("student_id", child.id).is("used_at", null).is("revoked_at", null);
+    if (error) return res.status(500).json({ error: "Impossible de révoquer le QR code." });
     return res.status(200).json({ ok: true });
   }
 
@@ -313,10 +330,16 @@ export default async function handler(req: Req, res: Res) {
     const { data: child } = await admin.from("profiles").select("id, suspended").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
     if (!child) return res.status(404).json({ error: "Enfant introuvable." });
     const suspended = typeof body.suspended === "boolean" ? body.suspended : !child.suspended;
+    if (suspended) {
+      const { error: revokeErr } = await admin.from("student_qr_tokens").update({ revoked_at: new Date().toISOString() }).eq("student_id", child.id).is("used_at", null).is("revoked_at", null);
+      if (revokeErr) return res.status(500).json({ error: "Impossible de révoquer les invitations actives." });
+    }
     const { error: upErr } = await admin.from("profiles").update({ suspended }).eq("id", child.id);
     if (upErr) return res.status(500).json({ error: "Changement de statut impossible." });
-    if (suspended) {
-      await admin.from("student_qr_tokens").update({ revoked_at: new Date().toISOString() }).eq("student_id", child.id).is("used_at", null).is("revoked_at", null);
+    const { error: banErr } = await admin.auth.admin.updateUserById(child.id, { ban_duration: suspended ? "876000h" : "none" });
+    if (banErr) {
+      const { error: rollbackErr } = await admin.from("profiles").update({ suspended: child.suspended }).eq("id", child.id);
+      return res.status(500).json({ error: rollbackErr ? "La connexion n'a pas été suspendue et le statut du profil doit être vérifié." : "Le statut du compte n'a pas pu être appliqué à la connexion." });
     }
     return res.status(200).json({ id: child.id, suspended });
   }

@@ -15,7 +15,7 @@ const store = await import("../src/store");
 const {
   signUpParent, logIn, logOut, addChildren, resetChildPassword, toggleSuspendChild,
   changeStudentPassword, createQrToken, revokeQrTokens, verifyQrToken, consumeQrToken,
-  studentsOf, currentUser, modeFor, update
+  studentsOf, acceptedStudentsOf, hasAcceptedParentLink, currentUser, modeFor, update
 } = store;
 
 let fails = 0;
@@ -40,7 +40,7 @@ ok(
     country: "SN",
     children: [
       { name: "Amadou", level: "3e" },
-      { name: "Aïcha", level: "tle", serie: "C", password: "MonSuperPass99" },
+      { name: "Aïcha", level: "tle", serie: "C" },
     ],
   }) === null,
   "Parent créé avec 2 enfants"
@@ -51,20 +51,27 @@ ok(parent1.role === "parent", "Rôle parent authentifié");
 const kids = studentsOf(st(), parent1.id);
 ok(kids.length === 2, "2 enfants créés et rattachés");
 const [amadou, aicha] = kids;
-ok(aicha.password === "MonSuperPass99", "Mot de passe personnalisé respecté à la création");
-ok(amadou.password.length === 8, "Mot de passe aléatoire généré si non fourni");
+ok(kids.every((c) => !c.password && !c.parentLinkedAt), "Les profils restent en attente sans mot de passe ni partage");
+ok(acceptedStudentsOf(st(), parent1.id).length === 0, "Le parent ne voit aucun enfant avant acceptation");
+ok(logIn(amadou.email, "") !== null, "Un enfant ne peut pas se connecter avant d'accepter son invitation");
 
-// 2. Connexion de chaque enfant
-logOut();
-ok(logIn(amadou.email, amadou.password) === null, "Amadou se connecte avec son identifiant et son mot de passe");
-ok(currentUser(st())?.id === amadou.id && currentUser(st())?.role === "student", "Session active pour Amadou");
-logOut();
-ok(logIn(aicha.email.toUpperCase(), "MonSuperPass99") === null, "Aïcha se connecte (identifiant insensible à la casse)");
-ok(currentUser(st())?.id === aicha.id, "Session active pour Aïcha");
-logOut();
+// 2. Génération QR code d'invitation
+logIn(parent1.email, "Password123");
+const qrAct = createQrToken(parent1.id, amadou.id, "activation");
+ok(qrAct !== null && qrAct.token.length > 20, "QR code d'invitation généré pour Amadou");
+ok(createQrToken(parent1.id, amadou.id, "quick_login") === null, "Aucune connexion rapide avant acceptation");
+const verify1 = verifyQrToken(qrAct!.token);
+ok(verify1.valid && verify1.student?.id === amadou.id && verify1.purpose === "activation", "Vérification QR code valide");
 
-// 3. Enregistrement d'exercices et persistance après déconnexion
-logIn(amadou.email, amadou.password);
+// 3. Acceptation de l'invitation (usage unique + choix du mot de passe)
+logOut();
+const consume1 = consumeQrToken(qrAct!.token, "NouveauSecret2026");
+ok(consume1.success && currentUser(st())?.id === amadou.id, "Invitation acceptée et session élève ouverte");
+ok(st().users.find((u) => u.id === amadou.id)!.password === "NouveauSecret2026", "Nouveau mot de passe secret enregistré");
+ok(!!st().users.find((u) => u.id === amadou.id)!.parentLinkedAt, "L'acceptation active le lien parent-enfant");
+ok(acceptedStudentsOf(st(), parent1.id).length === 1 && hasAcceptedParentLink(st().users.find((u) => u.id === amadou.id)!), "Seul l'enfant ayant accepté est visible dans le suivi parent");
+
+// 4. Enregistrement et persistance de l'activité après acceptation
 update((s) => ({
   ...s,
   attempts: [
@@ -100,25 +107,10 @@ update((s) => ({
   ],
 }));
 logOut();
-
-// Reconnexion : Amadou retrouve ses tentatives
-logIn(amadou.email, amadou.password);
+ok(logIn(amadou.email, "NouveauSecret2026") === null, "Amadou se reconnecte après acceptation");
 const amadouAttempts = st().attempts.filter((a) => a.studentId === amadou.id);
 ok(amadouAttempts.length === 2 && amadouAttempts[0].correct === true, "Persistance des exercices après reconnexion");
 logOut();
-
-// 4. Génération QR code d'activation
-logIn(parent1.email, "Password123");
-const qrAct = createQrToken(parent1.id, amadou.id, "activation");
-ok(qrAct !== null && qrAct.token.length > 20, "QR code d'activation généré pour Amadou");
-const verify1 = verifyQrToken(qrAct!.token);
-ok(verify1.valid && verify1.student?.id === amadou.id && verify1.purpose === "activation", "Vérification QR code valide");
-
-// 5. Consommation QR code (usage unique + choix du mot de passe)
-logOut();
-const consume1 = consumeQrToken(qrAct!.token, "NouveauSecret2026");
-ok(consume1.success && currentUser(st())?.id === amadou.id, "QR code d'activation consommé et session ouverte");
-ok(st().users.find((u) => u.id === amadou.id)!.password === "NouveauSecret2026", "Nouveau mot de passe secret enregistré");
 
 // Re-tentative d'utilisation du même QR code
 const verifyReused = verifyQrToken(qrAct!.token);
@@ -199,6 +191,7 @@ function addServerUser(email: string, password: string, meta: any, app: any = {}
     level: meta.level ?? null,
     serie: meta.serie ?? null,
     parent_id: app.parent_id ?? null,
+    parent_linked_at: null,
     login: app.login ?? null,
     suspended: false,
     must_change_password: true,
@@ -310,15 +303,20 @@ const parentToken = `token-${parentUser.id}`;
 const apiCreateQr = await callApi({ action: "create-qr", childId: childUser.id, purpose: "activation" }, parentToken);
 ok(apiCreateQr.status === 200 && apiCreateQr.json.token, "Serveur API : create-qr génère un token aléatoire");
 const rawApiToken = apiCreateQr.json.token;
+const pendingQuickQr = await callApi({ action: "create-qr", childId: childUser.id, purpose: "quick_login" }, parentToken);
+ok(pendingQuickQr.status === 400, "Serveur API : aucun QR de connexion rapide avant acceptation");
 
 // 2. Action verify-qr publique
 const apiVerify = await callApi({ action: "verify-qr", token: rawApiToken });
-ok(apiVerify.status === 200 && apiVerify.json.valid === true && apiVerify.json.student.login === "enfant.5555", "Serveur API : verify-qr valide le jeton publiquement");
+ok(apiVerify.status === 200 && apiVerify.json.valid === true && apiVerify.json.student.login === "enfant.5555" && apiVerify.json.student.parentName === "Parent Test", "Serveur API : verify-qr valide le jeton et identifie le parent invitant");
 
 // 3. Action consume-qr publique avec mot de passe
 const apiConsume = await callApi({ action: "consume-qr", token: rawApiToken, newPassword: "MonSecretServer12" });
 ok(apiConsume.status === 200 && apiConsume.json.ok === true && apiConsume.json.login === "enfant.5555", "Serveur API : consume-qr consomme le jeton et applique le mot de passe");
 ok(serverUsers.get(childUser.id)!.password === "MonSecretServer12", "Serveur API : mot de passe mis à jour dans Auth");
+ok(!!serverProfiles.find((p) => p.id === childUser.id)!.parent_linked_at, "Serveur API : l'acceptation active le partage parent-enfant");
+const acceptedQuickQr = await callApi({ action: "create-qr", childId: childUser.id, purpose: "quick_login" }, parentToken);
+ok(acceptedQuickQr.status === 200 && acceptedQuickQr.json.token, "Serveur API : le QR de connexion est disponible après acceptation");
 
 // 4. Usage unique : verify-qr après consommation renvoie 410
 const apiVerifyAgain = await callApi({ action: "verify-qr", token: rawApiToken });

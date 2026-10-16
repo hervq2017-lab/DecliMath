@@ -5,7 +5,7 @@ import { BackButton } from "../components/ui";
 import { levelById, notionById, Subject } from "../curriculum";
 import { hasContent } from "../engine";
 import { buildPaper, Paper, PaperSpec } from "../paper";
-import { currentUser, studentsOf, update, useStore } from "../store";
+import { acceptedStudentsOf, currentUser, update, useStore } from "../store";
 
 const fmt = (n: number) => String(n).replace(".", ",");
 
@@ -118,7 +118,7 @@ export function SujetParent() {
   const me = currentUser(state)!;
   const rec = state.papers.find((p) => p.id === decodeURIComponent(pid) && p.studentId === id);
   const [corrige, setCorrige] = useState(true);
-  const allowed = me.role === "admin" || studentsOf(state, me.id).some((c) => c.id === id);
+  const allowed = me.role === "admin" || acceptedStudentsOf(state, me.id).some((c) => c.id === id);
   const paper = useMemo(() => (rec ? buildPaper(rec.spec) : null), [rec]);
   if (!allowed || !rec || !paper) return <Navigate to={`/enfant/${id}/sujets`} replace />;
   return (

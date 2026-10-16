@@ -40,7 +40,7 @@ Commandes de contrôle de référence :
 - [ ] Consentement parental enregistré (date, version des conditions)
 - [ ] Migration : `store.ts` lit et écrit sur le serveur, `localStorage` seulement en cache
 - [ ] Mode hors ligne : les tentatives se synchronisent au retour du réseau
-- **Tests de sortie :** création de compte élève et parent, lien parent-enfant, connexion depuis deux appareils avec la même progression, tentative d'accès aux données d'un autre compte refusée, mot de passe jamais visible en clair
+- **Tests de sortie :** invitation parent-enfant par QR à usage unique, activité invisible avant acceptation, création du mot de passe par l'élève, suivi visible après acceptation, révocation et suspension vérifiées, tentative d'accès aux données d'un autre compte refusée
 
 ## Phase 4 — Parent, corrigés et suivi
 - [ ] Parent : voir la progression de l'enfant, règle du corrigé (autoriser, différer, bloquer)

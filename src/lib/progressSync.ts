@@ -1,7 +1,7 @@
 // Synchronisation de la progression avec Supabase : tentatives, preuves, révisions, contrôles, bilans, épreuves, sujets imprimés, cours validés.
 // Même principe que authRemote.ts : les écrans écrivent dans l'état local comme avant ; on envoie ce que le serveur ne connaît pas encore
 // et on récupère ce qu'il a (autre appareil, enfants du parent). L'état local sert de cache et de file d'attente hors ligne.
-import { getState, setBeforeLogout, subscribe, update } from "../store";
+import { acceptedStudentsOf, getState, setBeforeLogout, subscribe, update } from "../store";
 import type { Attempt, BilanRun, CheckResult, Evidence, ExamRun, MemItem, PaperRecord, State } from "../store";
 import { supabase, supabaseReady } from "./supabase";
 
@@ -197,16 +197,33 @@ async function fetchAll(table: string, studentIds: string[], order: string): Pro
 /** Charge la progression de l'élève connecté, ou celle des enfants du parent. À appeler après le chargement des profils. */
 export async function pullProgress(): Promise<void> {
   if (!supabase) return;
-  const s = getState();
-  const me = s.users.find((u) => u.id === s.sessionId);
+  let s = getState();
+  let me = s.users.find((u) => u.id === s.sessionId);
   if (!me || s.previewBackup) return;
+  if (me.role === "parent") {
+    const { data: links, error } = await supabase.from("profiles").select("id, parent_linked_at").eq("parent_id", me.id);
+    if (error) {
+      console.warn("État des invitations non actualisé :", error.message);
+    } else {
+      update((st) => ({
+        ...st,
+        users: st.users.map((u) => {
+          const link = (links ?? []).find((row: { id: string }) => row.id === u.id) as { id: string; parent_linked_at: string | null } | undefined;
+          return link ? { ...u, parentLinkedAt: link.parent_linked_at ? Date.parse(link.parent_linked_at) : undefined } : u;
+        }),
+      }));
+      s = getState();
+      me = s.users.find((u) => u.id === s.sessionId);
+      if (!me) return;
+    }
+  }
   const { data: vl } = await supabase.from("validated_lessons").select("notion_id, validated_at");
   if (vl) {
     knownValidated = new Set(vl.map((v: Row) => v.notion_id as string));
     update((st) => ({ ...st, validated: Object.fromEntries(vl.map((v: Row) => [v.notion_id as string, ms(v.validated_at as string)!])) }));
   }
   if (me.role === "admin") return;
-  const studentIds = me.role === "student" ? [me.id] : s.users.filter((u) => u.parentId === me.id).map((u) => u.id);
+  const studentIds = me.role === "student" ? [me.id] : acceptedStudentsOf(s, me.id).map((u) => u.id);
   if (!studentIds.length) return;
 
   const [append, exams, mem] = await Promise.all([

@@ -1,5 +1,5 @@
 // Tests des notifications : contenu concret par rôle, non-lu / lu, pas de doublon ni de texte invalide.
-import { signUp, update, uid, State, markNotificationsSeen, User } from "../src/store";
+import { consumeQrToken, createQrToken, signUpParent, studentsOf, update, uid, State, markNotificationsSeen, User } from "../src/store";
 import { notificationsFor, unreadCount } from "../src/lib/notifications";
 import { addPayment } from "../src/adminActions";
 let fail = 0;
@@ -9,9 +9,12 @@ const user = (e: string): User => get().users.find((u) => u.email === e)!;
 const att = (studentId: string, ts: number, correct = true) => ({ id: uid(), studentId, templateId: "t", notionId: "maths:6e:x", ctx: "c", seed: 1, correct, helpLevel: 0, solutionViewed: false, solutionViewedBeforeAttempt: false, kind: "practice" as const, ts });
 const now = Date.now(), DAY = 864e5;
 
-signUp({ role: "parent", name: "Maman", email: "p@x.ci", password: "secret1", country: "CI" });
-signUp({ role: "student", name: "Awa", email: "e@x.ci", password: "secret2", country: "CI", level: "tle", inviteCode: user("p@x.ci").inviteCode });
-const e = user("e@x.ci"), p = user("p@x.ci");
+signUpParent({ name: "Maman", email: "p@x.ci", password: "secret1", country: "CI", children: [{ name: "Awa", level: "tle" }] });
+const p = user("p@x.ci");
+const child = studentsOf(get(), p.id)[0];
+const invitation = createQrToken(p.id, child.id)!;
+consumeQrToken(invitation.token, "secret2");
+const e = get().users.find((u) => u.id === child.id)!;
 let n = notificationsFor(get(), e, now);
 ok(n.some((x) => x.title.includes("premier exercice")), "élève neuf : invitation à commencer");
 ok(!n.some((x) => x.title.includes("parent")), "élève lié : pas de rappel de parent");
@@ -32,7 +35,8 @@ ok(new Set(n.map((x) => x.id)).size === n.length && n.length <= 12, "identifiant
 ok(n.every((x, i) => i === 0 || n[i - 1].ts >= x.ts), "triées du plus récent au plus ancien");
 const before = unreadCount(n, e.notifSeen);
 markNotificationsSeen(e.id);
-const after = unreadCount(notificationsFor(get(), user("e@x.ci"), Date.now()), user("e@x.ci").notifSeen);
+const seenStudent = get().users.find((u) => u.id === e.id)!;
+const after = unreadCount(notificationsFor(get(), seenStudent, Date.now()), seenStudent.notifSeen);
 ok(before > 0 && after === 0, `lu après ouverture (${before} → ${after})`);
 
 // parent

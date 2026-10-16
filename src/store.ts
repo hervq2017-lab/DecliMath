@@ -19,6 +19,7 @@ export interface User {
   serie?: string; // lycée : A, A1, A2, C, D
   inviteCode?: string; // parent
   parentId?: string; // élève
+  parentLinkedAt?: number; // acceptation explicite du partage de progression
   goal?: string; // objectif choisi à l'accueil
   placed?: boolean; // test de positionnement fait
   prefs?: Prefs;
@@ -284,23 +285,14 @@ export const currentUser = (s: State) => { const u = s.users.find((x) => x.id ==
 // ---------- Authentification (prototype) ----------
 
 export function signUp(input: {
-  role: Role; name: string; email: string; password: string; country: string; level?: LevelId; inviteCode?: string; goal?: string;
+  role: Role; name: string; email: string; password: string; country: string; level?: LevelId; goal?: string;
 }): string | null {
   const email = input.email.trim().toLowerCase();
   if (state.users.some((u) => u.email === email)) return "Un compte existe déjà avec cet e-mail.";
   if (input.password.length < 6) return "Le mot de passe doit contenir au moins 6 caractères.";
-  let parentId: string | undefined;
-  let country = input.country;
-  if (input.role === "student" && input.inviteCode?.trim()) {
-    const parent = state.users.find((u) => u.inviteCode === input.inviteCode!.trim().toUpperCase());
-    if (!parent) return "Code d'invitation inconnu.";
-    parentId = parent.id;
-    country = parent.country;
-  }
   const user: User = {
-    id: uid(), role: ADMIN_EMAILS.includes(email) ? "admin" : input.role, name: input.name.trim(), email, password: input.password, country, createdAt: Date.now(),
+    id: uid(), role: ADMIN_EMAILS.includes(email) ? "admin" : input.role, name: input.name.trim(), email, password: input.password, country: input.country, createdAt: Date.now(),
     level: input.role === "student" && !ADMIN_EMAILS.includes(email) ? input.level ?? "tle" : undefined,
-    parentId,
     goal: input.goal,
     inviteCode: input.role === "parent" ? Math.random().toString(36).slice(2, 8).toUpperCase() : undefined,
     lastLogin: Date.now(),
@@ -309,14 +301,13 @@ export function signUp(input: {
     ...s,
     users: [...s.users, user],
     sessionId: user.id,
-    solutionMode: parentId ? { ...s.solutionMode, [user.id]: "deferred" } : s.solutionMode,
   }));
   return null;
 }
 
 // ---------- Comptes enfants créés par le parent ----------
 
-export interface ChildInput { name: string; level: LevelId; serie?: string; password?: string }
+export interface ChildInput { name: string; level: LevelId; serie?: string }
 
 const PWD_CHARS = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans caractères ambigus (0/O, 1/l/I)
 export function newPassword(): string {
@@ -336,9 +327,8 @@ function buildChildren(parent: User, kids: ChildInput[], existing: User[]): User
   return kids.map((k) => {
     const login = newLogin(k.name, taken);
     taken.add(login);
-    const pwd = typeof k.password === "string" && k.password.length >= 6 ? k.password : newPassword();
     return {
-      id: uid(), role: "student" as const, name: k.name.trim(), email: login, password: pwd, country: parent.country,
+      id: uid(), role: "student" as const, name: k.name.trim(), email: login, password: "", country: parent.country,
       level: k.level, serie: k.serie || undefined, parentId: parent.id, createdAt: Date.now(),
       mustChangePassword: true, passwordCustomized: false,
     };
@@ -407,6 +397,7 @@ export function createQrToken(parentId: string, studentId: string, purpose: "act
   const parent = state.users.find((u) => u.id === parentId);
   const child = state.users.find((u) => u.id === studentId && u.parentId === parentId);
   if (!parent || !child || child.suspended) return null;
+  if (purpose === "quick_login" && !hasAcceptedParentLink(child)) return null;
 
   const token = uid().replace(/-/g, "") + uid().replace(/-/g, "");
   const durationMs = purpose === "quick_login" ? 15 * 60_000 : 48 * 3600_000;
@@ -474,7 +465,7 @@ export function consumeQrToken(rawToken: string, newPasswordStr?: string): { suc
     update((s) => ({
       ...s,
       qrTokens: (s.qrTokens ?? []).map((x) => (x.token === rawToken.trim() ? { ...x, usedAt: now } : x)),
-      users: s.users.map((u) => (u.id === student.id ? { ...u, password: newPasswordStr.trim(), mustChangePassword: false, passwordCustomized: true, lastLogin: now } : u)),
+      users: s.users.map((u) => (u.id === student.id ? { ...u, password: newPasswordStr.trim(), mustChangePassword: false, passwordCustomized: true, parentLinkedAt: u.parentLinkedAt ?? now, lastLogin: now } : u)),
       sessionId: student.id,
     }));
     return { success: true, student: state.users.find((u) => u.id === student.id) };
@@ -582,6 +573,10 @@ export function logIn(email: string, password: string): string | null {
     }
   }
 
+  if (u?.role === "student" && u.parentId && !hasAcceptedParentLink(u)) {
+    return "Accepte d'abord l'invitation QR envoyée par ton parent pour créer ton mot de passe.";
+  }
+
   if (!u) {
     const knownStudent = state.users.find(
       (x) =>
@@ -625,17 +620,6 @@ export function setPrefs(id: string, patch: Partial<Prefs>) {
 
 export function setLevel(studentId: string, level: LevelId) {
   update((s) => ({ ...s, users: s.users.map((u) => (u.id === studentId ? { ...u, level } : u)) }));
-}
-
-export function linkStudent(studentId: string, code: string): string | null {
-  const parent = state.users.find((u) => u.inviteCode === code.trim().toUpperCase());
-  if (!parent) return "Code d'invitation inconnu.";
-  update((s) => ({
-    ...s,
-    users: s.users.map((u) => (u.id === studentId ? { ...u, parentId: parent.id } : u)),
-    solutionMode: { ...s.solutionMode, [studentId]: s.solutionMode[studentId] ?? "deferred" },
-  }));
-  return null;
 }
 
 // ---------- Règles de corrigé ----------
@@ -696,4 +680,6 @@ export function recommendation(status: Mastery): string {
 }
 
 export const studentsOf = (s: State, parentId: string) => s.users.filter((u) => u.parentId === parentId);
+export const hasAcceptedParentLink = (u: User) => !!u.parentId && (!!u.parentLinkedAt || (u.passwordCustomized && !u.mustChangePassword));
+export const acceptedStudentsOf = (s: State, parentId: string) => studentsOf(s, parentId).filter(hasAcceptedParentLink);
 export { subjectsAt };

@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { levelById } from "../curriculum";
 import { remoteConsumeQr, remoteLogIn, remoteOpenQuickSession, remoteVerifyQr } from "../lib/authRemote";
 import { supabaseReady } from "../lib/supabase";
-import { consumeQrToken, verifyQrToken } from "../store";
+import { consumeQrToken, useStore, verifyQrToken } from "../store";
 import "./auth.css";
 
 interface StudentInfo {
@@ -14,10 +14,12 @@ interface StudentInfo {
   level: string;
   serie?: string;
   mustChangePassword?: boolean;
+  parentName?: string;
 }
 
 export default function StudentActivation() {
   const [params] = useSearchParams();
+  const state = useStore();
   // Le jeton est gardé en mémoire puis retiré de la barre d'adresse : il ne reste ni dans l'historique ni dans un lien partagé.
   const [token] = useState(() => params.get("token")?.trim() || "");
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ export default function StudentActivation() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [accepted, setAccepted] = useState(false);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -66,6 +69,7 @@ export default function StudentActivation() {
             login: res.student.email,
             level: res.student.level ?? "3e",
             serie: res.student.serie,
+            parentName: state.users.find((u) => u.id === res.student?.parentId)?.name,
           });
           setPurpose(res.purpose ?? "activation");
         }
@@ -87,6 +91,10 @@ export default function StudentActivation() {
     if (!token || !student) return;
 
     if (purpose === "activation") {
+      if (!accepted) {
+        setError("Coche la case pour accepter l'invitation et le partage de ta progression.");
+        return;
+      }
       if (password.length < 6) {
         setError("Le mot de passe doit comporter au moins 6 caractères.");
         return;
@@ -119,7 +127,7 @@ export default function StudentActivation() {
         return;
       }
 
-      setSuccess("Compte activé avec succès ! Redirection en cours...");
+      setSuccess(purpose === "quick_login" ? "Connexion ouverte avec succès !" : "Invitation acceptée ! Ton parent pourra maintenant suivre tes progrès.");
       window.setTimeout(() => navigate("/", { replace: true }), 1200);
     } else {
       const consumeRes = consumeQrToken(token, password);
@@ -129,7 +137,7 @@ export default function StudentActivation() {
         return;
       }
 
-      setSuccess("Compte activé avec succès ! Redirection en cours...");
+      setSuccess(purpose === "quick_login" ? "Connexion ouverte avec succès !" : "Invitation acceptée ! Ton parent pourra maintenant suivre tes progrès.");
       window.setTimeout(() => navigate("/", { replace: true }), 1000);
     }
   }
@@ -200,10 +208,10 @@ export default function StudentActivation() {
               <form onSubmit={handleActivation} className="stack-sm">
                 <div style={{ background: "rgba(53, 182, 255, 0.08)", border: "1px solid rgba(53, 182, 255, 0.25)", borderRadius: 12, padding: 14 }}>
                   <p style={{ margin: 0, fontSize: "0.95rem", color: "var(--ink, #1c1545)" }}>
-                    <Sparkles size={16} style={{ verticalAlign: "-2px", color: "var(--primary)" }} /> <b>Bienvenue sur DeclickMath !</b>
+                    <Sparkles size={16} style={{ verticalAlign: "-2px", color: "var(--primary)" }} /> <b>Invitation de {student.parentName || "ton parent"}</b>
                   </p>
                   <p className="small muted" style={{ margin: "6px 0 0" }}>
-                    Pour sécuriser ton compte, choisis ton <b>mot de passe secret personnel</b>. Tu pourras ensuite l'utiliser pour te reconnecter facilement.
+                    Choisis ton <b>mot de passe secret personnel</b>. Ton parent pourra voir ton activité et tes progrès uniquement après ton acceptation.
                   </p>
                 </div>
 
@@ -223,6 +231,19 @@ export default function StudentActivation() {
                     <button type="button" className="auth-eye" onClick={() => setShowPassword((v) => !v)} aria-label={showPassword ? "Masquer" : "Afficher"}>
                       {showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
                     </button>
+                  </span>
+                </label>
+
+                <label className="row small" style={{ alignItems: "flex-start", gap: 10, padding: "10px 12px", borderRadius: 10, border: "1px solid var(--line, #8883)" }}>
+                  <input
+                    type="checkbox"
+                    required
+                    checked={accepted}
+                    onChange={(e) => setAccepted(e.target.checked)}
+                    style={{ marginTop: 3 }}
+                  />
+                  <span>
+                    J'accepte l'invitation de <b>{student.parentName || "mon parent"}</b> et je comprends que ma progression lui sera partagée.
                   </span>
                 </label>
 
@@ -256,7 +277,7 @@ export default function StudentActivation() {
 
                 <button className="auth-submit" type="submit" disabled={busy} aria-busy={busy}>
                   <GraduationCap size={22} aria-hidden="true" />
-                  {busy ? "Activation en cours..." : "Valider et commencer mes exercices !"}
+                  {busy ? "Acceptation en cours..." : "Accepter l'invitation et commencer"}
                   <ArrowRight size={20} aria-hidden="true" />
                 </button>
               </form>

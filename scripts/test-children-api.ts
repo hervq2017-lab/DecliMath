@@ -92,19 +92,22 @@ ok((await call({ action: "create", children: [{ name: "Bola", level: "3e" }] }))
 ok((await call({ action: "create", children: [{ name: "Bola", level: "3e" }] }, tokenOf(kid))).status === 403, "un élève ne peut pas créer d'accès");
 
 const made = await call({ action: "create", children: [{ name: "Bola", level: "3e" }, { name: "Sosthène", level: "4e", serie: "" }, { name: "Bola", level: "6e" }] }, T);
-const kids: { id: string; name: string; login: string; password: string }[] = made.json.created ?? [];
+const kids: { id: string; name: string; login: string; password?: string }[] = made.json.created ?? [];
 ok(made.status === 200 && kids.length === 3, "création de 3 enfants");
-ok(kids.every((k) => /^[a-z0-9]+\.\d{4}$/.test(k.login) && k.password.length === 8), "identifiant « prenom.1234 » et mot de passe de 8 caractères");
-ok(new Set(kids.map((k) => k.login)).size === 3 && new Set(kids.map((k) => k.password)).size === 3, "identifiants et mots de passe tous différents");
-ok(kids.every((k) => users.get(k.id)?.password === k.password && users.get(k.id)?.email === `${k.login}@eleves.declickmath.invalid`), "le compte créé correspond à ce que voit le parent (connexion possible)");
+ok(kids.every((k) => /^[a-z0-9]+\.\d{4}$/.test(k.login) && !k.password), "identifiant élève généré sans exposer de mot de passe provisoire");
+const initialPasswords = kids.map((k) => users.get(k.id)!.password);
+ok(new Set(kids.map((k) => k.login)).size === 3 && new Set(initialPasswords).size === 3, "identifiants et secrets internes tous différents");
+ok(kids.every((k) => !!users.get(k.id)?.password && users.get(k.id)?.email === `${k.login}@eleves.declickmath.invalid`), "le compte attend que l'élève choisisse son mot de passe");
 ok(kids.every((k) => profiles.find((p) => p.id === k.id)?.parent_id === awa.id), "chaque enfant est rattaché au parent");
+ok(kids.every((k) => !profiles.find((p) => p.id === k.id)?.parent_linked_at), "l'activité reste non partagée avant acceptation");
 ok(kids.every((k) => profiles.find((p) => p.id === k.id)?.login === k.login && profiles.find((p) => p.id === k.id)?.role === "student"), "le profil de chaque élève est créé par le serveur, avec son identifiant");
 ok(kids.every((k) => solutionModes.some((m) => m.student_id === k.id && m.mode === "deferred")), "corrigé « différé » par défaut pour chaque élève");
 
 const [b0, b1] = kids;
+const b1InitialPassword = users.get(b1.id)!.password;
 const rp = await call({ action: "reset-password", childId: b0.id }, T);
-ok(rp.status === 200 && rp.json.password && rp.json.password !== b0.password && users.get(b0.id)!.password === rp.json.password, "nouveau mot de passe : appliqué et renvoyé au parent");
-ok(users.get(b1.id)!.password === b1.password, "le mot de passe des autres enfants ne change pas");
+ok(rp.status === 200 && rp.json.password && rp.json.password !== initialPasswords[0] && users.get(b0.id)!.password === rp.json.password, "nouveau mot de passe de récupération : appliqué");
+ok(users.get(b1.id)!.password === b1InitialPassword, "le mot de passe des autres enfants ne change pas");
 ok(users.get(b0.id)!.email === `${b0.login}@eleves.declickmath.invalid`, "l'identifiant ne change pas avec le mot de passe");
 const customPassword = await call({ action: "reset-password", childId: kids[2].id, customPassword: "custom123" }, T);
 ok(customPassword.status === 200 && customPassword.json.password === "custom123" && users.get(kids[2].id)!.password === "custom123", "l'ancien champ customPassword reste compatible");

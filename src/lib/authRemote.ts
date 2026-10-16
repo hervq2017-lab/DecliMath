@@ -13,7 +13,7 @@ interface ProfileRow {
   id: string; role: Role; name: string; login: string | null; country: string; level: string | null; serie: string | null;
   invite_code: string | null; parent_id: string | null; goal: string | null; placed: boolean; prefs: Partial<Prefs> | null;
   suspended: boolean; paid_until: string | null; notif_seen: string | null; last_login: string | null; created_at: string;
-  must_change_password?: boolean; password_customized?: boolean;
+  must_change_password?: boolean; password_customized?: boolean; parent_linked_at?: string | null;
 }
 
 const ms = (t: string | null) => (t ? Date.parse(t) : undefined);
@@ -23,7 +23,7 @@ function toUser(r: ProfileRow, email: string): User {
   return {
     id: r.id, role: r.role, name: r.name, email: r.login ?? email, password: "", country: r.country,
     level: (r.level ?? undefined) as LevelId | undefined, serie: r.serie ?? undefined, inviteCode: r.invite_code ?? undefined,
-    parentId: r.parent_id ?? undefined, goal: r.goal ?? undefined, placed: r.placed,
+    parentId: r.parent_id ?? undefined, parentLinkedAt: ms(r.parent_linked_at ?? null), goal: r.goal ?? undefined, placed: r.placed,
     prefs: r.prefs && Object.keys(r.prefs).length ? { ...DEFAULT_PREFS, ...r.prefs } : undefined,
     suspended: r.suspended || undefined, paidUntil: ms(r.paid_until), createdAt: ms(r.created_at), lastLogin: ms(r.last_login), notifSeen: ms(r.notif_seen),
     mustChangePassword: r.must_change_password, passwordCustomized: r.password_customized,
@@ -44,7 +44,7 @@ function fr(message: string): string {
   if (m.includes("already registered") || m.includes("already been registered")) return "Un compte existe déjà avec cet e-mail.";
   if (m.includes("password") && (m.includes("least") || m.includes("weak") || m.includes("short"))) return "Le mot de passe est trop faible (6 caractères minimum).";
   if (m.includes("rate limit") || m.includes("too many")) return "Trop d'essais. Réessaie dans quelques minutes.";
-  if (m.includes("database error saving new user")) return "Inscription impossible : vérifie le code d'invitation.";
+  if (m.includes("database error saving new user")) return "Inscription impossible. Vérifie les informations saisies.";
   if (m.includes("valid email") || m.includes("invalid email")) return "Adresse e-mail invalide.";
   if (m.includes("failed to fetch") || m.includes("network")) return "Pas de connexion au serveur. Vérifie ta connexion Internet.";
   return "Une erreur est survenue. Réessaie dans un instant.";
@@ -114,7 +114,7 @@ async function hydrate(freshLogin: boolean): Promise<string | null> {
     return "Ce compte est suspendu. Contactez le support.";
   }
 
-  // Le serveur ne garde pas les mots de passe en clair : on conserve celui que le parent a vu à la création sur cet appareil.
+  // Le serveur ne garde pas les mots de passe en clair ; seuls les mots de passe explicitement réinitialisés restent cachés sur cet appareil.
   const known = new Map(getState().users.map((u) => [u.id, u.password]));
   const cached = getStoredPasswords();
   const users = [
@@ -225,7 +225,7 @@ export async function remoteLogIn(identifier: string, password: string): Promise
 
 export interface SignUpInput {
   role: Role; name: string; email: string; password: string; country: string;
-  level?: LevelId; serie?: string; goal?: string; inviteCode?: string; children?: ChildInput[];
+  level?: LevelId; serie?: string; goal?: string; children?: ChildInput[];
 }
 
 export async function remoteSignUp(i: SignUpInput): Promise<AuthResult> {
@@ -240,7 +240,6 @@ export async function remoteSignUp(i: SignUpInput): Promise<AuthResult> {
       // « pending_children » attend l'étape 3 : les comptes enfants seront créés par le serveur à la première connexion du parent.
       data: {
         role: i.role, name: i.name.trim(), country: i.country, level: i.level, serie: i.serie, goal: i.goal,
-        invite_code: i.inviteCode?.trim() || undefined,
         pending_children: i.children?.filter((k) => k.name.trim()),
       },
     },
@@ -252,7 +251,7 @@ export async function remoteSignUp(i: SignUpInput): Promise<AuthResult> {
     const base = "Compte créé. Ouvre le message que nous t'avons envoyé, clique sur le lien pour confirmer ton adresse, puis connecte-toi.";
     const kids = i.children?.filter((k) => k.name.trim());
     if (i.role !== "parent" || !kids?.length || !data.user) return { error: null, info: base };
-    // Les enfants n'attendent pas la confirmation du parent : leurs accès sont créés maintenant et affichés ici.
+    // Les profils enfants attendent l'acceptation du QR code avant tout partage de progression.
     try {
       const r = await fetch("/api/children", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "provision", userId: data.user.id }) });
       const j = await r.json().catch(() => ({}));
@@ -261,26 +260,17 @@ export async function remoteSignUp(i: SignUpInput): Promise<AuthResult> {
       update((s) => ({
         ...s,
         users: [...s.users.filter((u) => !made.some((m) => m.id === u.id)), ...made.map((m, n): User => ({
-          id: m.id, role: "student", name: m.name, email: m.login ?? "", password: m.password, country: i.country, level: kids[n]?.level, serie: kids[n]?.serie, parentId: data.user!.id,
+          id: m.id, role: "student", name: m.name, email: m.login ?? "", password: "", country: i.country, level: kids[n]?.level, serie: kids[n]?.serie, parentId: data.user!.id,
         }))],
       }));
-      const lines = made.map((m) => `• ${m.name} : identifiant ${m.login}, mot de passe ${m.password}`).join("\n");
-      return { error: null, info: `${base}\n\nTes enfants peuvent déjà se connecter ici avec leur identifiant et leur mot de passe. Note-les maintenant :\n${lines}` };
+      return { error: null, info: `${base}\n\nAprès confirmation et connexion, vous pourrez envoyer à chaque enfant son QR code d'invitation. Il choisira son mot de passe et devra accepter le partage de sa progression.` };
     } catch { return { error: null, info: base }; }
   }
   return { error: await hydrate(true) };
 }
 
-/** Rattache l'élève connecté à un parent grâce à son code (fonction link_student côté serveur). */
-export async function remoteLinkStudent(code: string): Promise<string | null> {
-  if (!supabase) return "Serveur non configuré.";
-  const { error } = await supabase.rpc("link_student", { code });
-  if (error) return error.message.includes("inconnu") ? "Code d'invitation inconnu." : fr(error.message);
-  return hydrate(false);
-}
-
 // ---------- Comptes enfants (créés par le serveur : api/children.ts) ----------
-interface Access { id: string; login: string | null; password: string }
+interface Access { id: string; login: string | null; password?: string }
 
 async function callChildren(payload: object): Promise<{ error?: string; [k: string]: unknown }> {
   if (!supabase) return { error: "Serveur non configuré." };
@@ -293,7 +283,7 @@ async function callChildren(payload: object): Promise<{ error?: string; [k: stri
   } catch { return { error: "Pas de connexion au serveur. Vérifie ta connexion Internet." }; }
 }
 
-/** Crée les comptes enfants ; renvoie un message d'erreur ou null. Identifiant et mot de passe sont ensuite lisibles dans la fiche de l'enfant. */
+/** Crée des invitations en attente ; chaque élève choisit son mot de passe en acceptant son QR code. */
 export async function remoteCreateChildren(kids: ChildInput[]): Promise<string | null> {
   const res = await callChildren({ action: "create", children: kids.filter((k) => k.name.trim()) });
   const made = (res.created ?? []) as (Access & { name: string })[];
@@ -356,7 +346,7 @@ export async function remoteVerifyQr(token: string): Promise<{
   error: string | null;
   valid?: boolean;
   purpose?: "activation" | "quick_login";
-  student?: { id: string; name: string; level: string; serie?: string; login: string };
+  student?: { id: string; name: string; level: string; serie?: string; login: string; parentName?: string };
 }> {
   try {
     const r = await fetch("/api/children", {

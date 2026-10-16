@@ -1,5 +1,5 @@
 import {
-  ArrowRight, BarChart3, ChevronDown, Zap, Eye, EyeOff, GraduationCap, Globe, KeyRound, Lock, LogIn, Mail,
+  ArrowRight, BarChart3, ChevronDown, Zap, Eye, EyeOff, GraduationCap, Globe, Lock, LogIn, Mail,
   ShieldCheck, Target, User, UserPlus, Users,
 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
@@ -122,7 +122,7 @@ export default function Auth({ defaultWho }: { defaultWho?: "parent" | "student"
         ? await remoteLogIn(rawEmail, rawPassword)
         : await remoteSignUp(role === "parent"
           ? { role, name, email: rawEmail, password: rawPassword, country, children: kids }
-          : { role, name, email: rawEmail, password: rawPassword, country, level, goal, inviteCode: String(f.get("code") ?? "") });
+          : { role, name, email: rawEmail, password: rawPassword, country, level, goal });
       setBusy(false);
       // Message clair et aidant pour l'élève en cas d'erreur
       setError(step === "login" && targetWho === "student" && res.error === "E-mail ou mot de passe incorrect."
@@ -137,7 +137,7 @@ export default function Auth({ defaultWho }: { defaultWho?: "parent" | "student"
         ? signUpParent({ name, email: rawEmail, password: rawPassword, country, children: kids })
         : signUp({
           role, name, email: rawEmail, password: rawPassword, country,
-          level: role === "student" ? level : undefined, goal: role === "student" ? goal : undefined, inviteCode: String(f.get("code") ?? ""),
+          level: role === "student" ? level : undefined, goal: role === "student" ? goal : undefined,
         });
     setError(err);
   }
@@ -358,14 +358,7 @@ export default function Auth({ defaultWho }: { defaultWho?: "parent" | "student"
             </fieldset>
           )}
           {!isLogin && !isParent && (
-            <label className="auth-label">
-              Code d'invitation de ton parent (facultatif)
-              <span className="auth-input">
-                <KeyRound size={22} aria-hidden="true" />
-                <input name="code" placeholder="ex. A1B2C3" autoCapitalize="characters" />
-              </span>
-              <span className="auth-note">Avec un code, ton parent peut suivre tes efforts et régler les corrigés.</span>
-            </label>
+            <p className="auth-note">Pour que ton parent suive tes progrès, demande-lui de créer ton profil et de t'envoyer ton invitation QR personnelle.</p>
           )}
           {error && <p className="auth-error" role="alert">{error}</p>}
           {info && <p className="auth-error" role="status" style={{ color: "var(--green, #2e9e5b)", whiteSpace: "pre-line" }}>{info}</p>}

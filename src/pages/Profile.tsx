@@ -1,28 +1,18 @@
 import { Bell, Moon, PenLine, Target, Type, Volume2, Zap } from "lucide-react";
-import { FormEvent, useState } from "react";
 import { StreakChip, Toggle } from "../components/ui";
 import { countryByCode, LEVELS, LevelId, seriesAt } from "../curriculum";
 import { playFeedback } from "../lib/sound";
 import { attemptsOf, streak } from "../lib/stats";
-import { remoteLinkStudent } from "../lib/authRemote";
-import { supabaseReady } from "../lib/supabase";
-import { currentUser, DEFAULT_PREFS, linkStudent, logOut, setLevel, setPrefs, setSerie, THEMES, themeOf, useStore } from "../store";
+import { currentUser, DEFAULT_PREFS, hasAcceptedParentLink, logOut, setLevel, setPrefs, setSerie, THEMES, themeOf, useStore } from "../store";
 
 export default function Profile() {
   const state = useStore();
   const me = currentUser(state)!;
   const prefs = { ...DEFAULT_PREFS, ...me.prefs };
   const dark = THEMES.find((t) => t.id === themeOf(prefs))!.dark; // sombre par défaut, comme dans App.tsx
-  const [err, setErr] = useState<string | null>(null);
   const s = streak(attemptsOf(state, me.id));
   const level = me.level ?? "tle";
 
-  function link(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const code = String(new FormData(e.currentTarget).get("code"));
-    if (supabaseReady) void remoteLinkStudent(code).then(setErr);
-    else setErr(linkStudent(me.id, code));
-  }
   const rows: { Icon: typeof Moon; t: string; d: string; v: boolean; set: (v: boolean) => void; off?: boolean }[] = [
     { Icon: Moon, t: "Mode sombre", d: "Repose les yeux le soir", v: dark, set: (v) => setPrefs(me.id, { dark: v, theme: v ? "nuit" : "clair" }) },
     { Icon: Type, t: "Police adaptée dyslexie", d: "Plus espacée, plus lisible", v: prefs.dyslexia, set: (v) => setPrefs(me.id, { dyslexia: v }) },
@@ -87,14 +77,14 @@ export default function Profile() {
           <p className="muted small">{countryByCode(me.country).name} ({countryByCode(me.country).zone})</p>
         </section>
 
-        {!me.parentId && (
+        {me.role === "student" && !hasAcceptedParentLink(me) && (
           <section className="card stack full">
-            <h2 className="card-title"><Bell size={20} className="ti" aria-hidden="true" /> Lier un parent</h2>
-            <form onSubmit={link} className="row" style={{ flexWrap: "nowrap" }}>
-              <input className="field" name="code" placeholder="Code d'invitation" required aria-label="Code d'invitation" autoCapitalize="characters" />
-              <button className="btn primary">Lier</button>
-            </form>
-            {err && <p className="error" role="alert">{err}</p>}
+            <h2 className="card-title"><Bell size={20} className="ti" aria-hidden="true" /> Invitation parentale</h2>
+            <p className="muted small">
+              {me.parentId
+                ? "Ton parent t'a préparé un accès. Demande-lui son QR code, puis accepte l'invitation pour lui partager ta progression."
+                : "Pour partager tes progrès avec un parent, demande-lui de créer ton profil et de t'envoyer une invitation QR personnelle."}
+            </p>
           </section>
         )}
       </div>

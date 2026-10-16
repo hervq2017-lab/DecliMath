@@ -12,8 +12,9 @@ const get = (): State => { let r!: State; update((s) => { r = s; return s; }); r
 // comptes
 ok(signUp({ role: "parent", name: "Parent A", email: "p@x.ci", password: "secret1", country: "CI" }) === null, "inscription parent");
 const parent = get().users.find((u) => u.email === "p@x.ci")!;
-ok(signUp({ role: "student", name: "Eleve A", email: "e@x.ci", password: "secret2", country: "CI", level: "tle", inviteCode: parent.inviteCode }) === null, "inscription élève avec code");
+ok(signUp({ role: "student", name: "Eleve A", email: "e@x.ci", password: "secret2", country: "CI", level: "tle" }) === null, "inscription autonome d'un élève");
 const eleve = get().users.find((u) => u.email === "e@x.ci")!;
+ok(!eleve.parentId, "un élève n'est pas lié par un code familial réutilisable");
 const adminId = uid();
 update((s) => ({ ...s, users: [...s.users, { id: adminId, role: "admin", name: "Admin", email: "a@x.ci", password: "adminpw", country: "CI" }] }));
 

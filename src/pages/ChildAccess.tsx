@@ -1,5 +1,5 @@
 import {
-  AlertCircle, Check, Copy, Eye, EyeOff, KeyRound, Lock, Plus, Printer, QrCode, RefreshCw, ShieldAlert,
+  Check, Copy, KeyRound, Plus, Printer, QrCode, ShieldAlert,
   ShieldCheck, Trash2, X
 } from "lucide-react";
 import { useState } from "react";
@@ -7,11 +7,11 @@ import { QrCodeView } from "../components/QrCodeView";
 import { levelById, LEVELS, LevelId, seriesAt } from "../curriculum";
 import {
   remoteCreateChildren, remoteCreateQr, remoteDeleteChild, remoteResetChild,
-  remoteResetChildPassword, remoteRevokeQr, remoteToggleSuspendChild
+  remoteRevokeQr, remoteToggleSuspendChild
 } from "../lib/authRemote";
 import { supabaseReady } from "../lib/supabase";
 import {
-  addChildren, createQrToken, regenerateLogin, removeChild, resetChildPassword,
+  addChildren, createQrToken, hasAcceptedParentLink, regenerateLogin, removeChild,
   revokeQrTokens, studentsOf, toggleSuspendChild, User, useStore
 } from "../store";
 
@@ -23,7 +23,6 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
   const [name, setName] = useState("");
   const [level, setLevel] = useState<LevelId>("3e");
   const [serie, setSerie] = useState("");
-  const [customPassword, setCustomPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,8 +36,6 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
   const [printChild, setPrintChild] = useState<User | null>(null);
   const [printToken, setPrintToken] = useState<string | null>(null);
 
-  const [pwdModalChild, setPwdModalChild] = useState<User | null>(null);
-  const [chosenPassword, setChosenPassword] = useState("");
 
   async function run(job: () => Promise<string | null>) {
     setBusy(true);
@@ -69,14 +66,13 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
     window.setTimeout(() => setCopied((k) => (k === key ? null : k)), 2000);
   };
 
-  const copyOne = (id: string, childName: string, login: string, password: string) =>
-    copyText(id, `${childName}\nConnexion : ${window.location.origin}/connexion-eleve\nIdentifiant : ${login}\nMot de passe : ${password}`);
-
   const copyAll = () =>
     copyText(
       "all",
       children
-        .map((c) => `${c.name}\nConnexion : ${window.location.origin}/connexion-eleve\nIdentifiant : ${c.email}\nMot de passe : ${c.password || "(non affiché)"}`)
+        .map((c) => hasAcceptedParentLink(c)
+          ? `${c.name}\nConnexion : ${window.location.origin}/connexion-eleve\nIdentifiant : ${c.email}`
+          : `${c.name}\nInvitation en attente : créez ou renouvelez son QR code depuis cet écran.`)
         .join("\n\n")
     );
 
@@ -130,45 +126,41 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
   const handleRevokeQr = async () => {
     if (!qrChild) return;
     if (!window.confirm(`Révoquer immédiatement le QR code de ${qrChild.name} ? L'accès par ce lien deviendra impossible.`)) return;
+    let err: string | null = null;
     if (supabaseReady) {
-      await remoteRevokeQr(qrChild.id);
+      err = await remoteRevokeQr(qrChild.id);
     } else {
       revokeQrTokens(parentId, qrChild.id);
     }
+    if (err) { setError(err); return; }
     setQrToken(null);
     setQrChild(null);
   };
 
+  const handleRevokeInvitation = async (c: User) => {
+    if (!window.confirm(`Révoquer toutes les invitations non utilisées de ${c.name} ? Il ne pourra plus les accepter.`)) return;
+    if (supabaseReady) {
+      await run(() => remoteRevokeQr(c.id));
+    } else {
+      revokeQrTokens(parentId, c.id);
+    }
+  };
+
   // Impression de la fiche élève
   const openPrintCard = async (c: User) => {
-    // Si aucun jeton n'existe, en créer un pour l'activation
+    // Créer un jeton à usage unique pour l'invitation ou la réinitialisation.
     let tok: string | null = null;
     if (supabaseReady) {
       const res = await remoteCreateQr(c.id, "activation");
+      if (res.error) { setError(res.error); return; }
       tok = res.token ?? null;
     } else {
       const res = createQrToken(parentId, c.id, "activation");
+      if (!res) { setError("Impossible de créer le QR code. Réessaie."); return; }
       tok = res?.token ?? null;
     }
     setPrintChild(c);
     setPrintToken(tok);
-  };
-
-  // Application du nouveau mot de passe (généré ou personnalisé)
-  const submitNewPassword = async () => {
-    if (!pwdModalChild) return;
-    const pwd = chosenPassword.trim() || undefined;
-    if (pwd && pwd.length < 6) {
-      setError("Le mot de passe doit comporter au moins 6 caractères.");
-      return;
-    }
-    if (supabaseReady) {
-      await run(() => remoteResetChildPassword(pwdModalChild.id, pwd));
-    } else {
-      resetChildPassword(parentId, pwdModalChild.id, pwd);
-    }
-    setPwdModalChild(null);
-    setChosenPassword("");
   };
 
   const getActivationUrl = (tok: string | null) => {
@@ -182,7 +174,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
         <KeyRound size={20} aria-hidden="true" style={{ verticalAlign: "-3px", color: "var(--primary)" }} /> Accès et connexions de mes enfants
       </h2>
       <p className="muted small">
-        Chaque enfant possède son propre espace sécurisé, son propre identifiant et son mot de passe. Vous pouvez générer un <b>QR code d'activation</b> pour lui permettre de définir son mot de passe sur son téléphone ou sa tablette, ou imprimer sa fiche de connexion.
+        Créez le profil, puis envoyez à votre enfant son <b>invitation QR personnelle</b>. Il l'accepte et choisit son mot de passe ; son activité ne vous est partagée qu'après cette acceptation. Vous pouvez révoquer une invitation non utilisée ou suspendre un accès.
       </p>
 
       {!supabaseReady && (
@@ -195,7 +187,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
         <h3 style={{ fontSize: "1rem", margin: 0 }}>Enfants enregistrés ({children.length})</h3>
         {children.length > 1 && (
           <button type="button" className="btn ghost" onClick={copyAll}>
-            <Copy size={16} aria-hidden="true" /> {copied === "all" ? "Copié !" : "Copier tous les accès"}
+            <Copy size={16} aria-hidden="true" /> {copied === "all" ? "Copié !" : "Copier les identifiants disponibles"}
           </button>
         )}
       </div>
@@ -209,7 +201,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
       <ul className="stack-sm" style={{ listStyle: "none", padding: 0, margin: 0 }}>
         {children.map((c) => {
           const isSuspended = !!c.suspended;
-          const isPending = c.mustChangePassword || !c.passwordCustomized;
+          const isPending = !hasAcceptedParentLink(c);
 
           return (
             <li
@@ -242,7 +234,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                     </span>
                   ) : isPending ? (
                     <span className="badge" style={{ background: "#fef3c7", color: "#d97706", border: "1px solid #fcd34d" }}>
-                      En attente d'activation
+                      Invitation à accepter
                     </span>
                   ) : (
                     <span className="badge" style={{ background: "#dcfce7", color: "#15803d", border: "1px solid #86efac" }}>
@@ -252,40 +244,15 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                 </span>
               </div>
 
-              {/* Coordonnées de connexion */}
-              <div className="stack-sm" style={{ padding: "6px 0", fontSize: "0.95rem" }}>
+              {/* L'identifiant n'est communiqué qu'après acceptation de l'invitation. */}
+              {!isPending && <div className="stack-sm" style={{ padding: "6px 0", fontSize: "0.95rem" }}>
                 <div>
                   Identifiant élève : <code style={{ fontSize: "1.05rem", userSelect: "all", fontWeight: 700 }}>{c.email}</code>{" "}
                   <button type="button" className="btn link" style={{ padding: "2px 6px" }} aria-label={`Copier l'identifiant de ${c.name}`} onClick={() => copyText(`${c.id}-l`, c.email)}>
                     {copied === `${c.id}-l` ? "Copié" : "Copier"}
                   </button>
                 </div>
-                <div>
-                  Mot de passe : {c.password ? (
-                    <>
-                      <code style={{ fontSize: "1.05rem", letterSpacing: ".06em", userSelect: "all", fontWeight: 700 }}>{c.password}</code>{" "}
-                      <button type="button" className="btn link" style={{ padding: "2px 6px" }} aria-label={`Copier le mot de passe de ${c.name}`} onClick={() => copyText(`${c.id}-p`, c.password)}>
-                        {copied === `${c.id}-p` ? "Copié" : "Copier"}
-                      </button>
-                    </>
-                  ) : (
-                    <span className="muted small">
-                      {isPending ? "Temporaire / non affiché sur cet appareil" : "Défini en secret par l'élève"}
-                    </span>
-                  )}
-                </div>
-                {c.password && (
-                  <button
-                    type="button"
-                    className="btn ghost"
-                    style={{ alignSelf: "flex-start" }}
-                    onClick={() => copyOne(`${c.id}-access`, c.name, c.email, c.password)}
-                  >
-                    <Copy size={16} aria-hidden="true" />
-                    {copied === `${c.id}-access` ? "Accès copiés !" : "Copier les accès"}
-                  </button>
-                )}
-              </div>
+              </div>}
 
               {/* Actions rapides */}
               <div className="row" style={{ flexWrap: "wrap", gap: 8, paddingTop: 6, borderTop: "1px dashed var(--line, #8883)" }}>
@@ -294,9 +261,9 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                   className="btn primary"
                   disabled={isSuspended || busy}
                   onClick={() => openQrModal(c, "activation")}
-                  title="Générer un QR code pour la connexion de l'enfant"
+                  title={isPending ? "Envoyer une invitation QR à l'enfant" : "Créer un QR code pour réinitialiser l'accès"}
                 >
-                  <QrCode size={16} aria-hidden="true" /> QR code
+                  <QrCode size={16} aria-hidden="true" /> {isPending ? "Inviter par QR" : "Réinitialiser par QR"}
                 </button>
 
                 <button
@@ -304,20 +271,20 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                   className="btn ghost"
                   disabled={isSuspended || busy}
                   onClick={() => openPrintCard(c)}
-                  title="Imprimer ou enregistrer la fiche d'accès élève"
+                  title={isPending ? "Imprimer ou enregistrer l'invitation QR" : "Imprimer la fiche de récupération QR"}
                 >
                   <Printer size={16} aria-hidden="true" /> Fiche élève
                 </button>
 
-                <button
+                {isPending && <button
                   type="button"
-                  className="btn ghost"
+                  className="btn link"
                   disabled={busy}
-                  onClick={() => setPwdModalChild(c)}
-                  title="Définir ou régénérer le mot de passe"
+                  style={{ color: "var(--danger, #ff6b6b)" }}
+                  onClick={() => void handleRevokeInvitation(c)}
                 >
-                  <RefreshCw size={15} aria-hidden="true" /> Mot de passe
-                </button>
+                  <ShieldAlert size={15} aria-hidden="true" /> Révoquer l'invitation
+                </button>}
 
                 <button
                   type="button"
@@ -371,7 +338,6 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
             name: name.trim(),
             level,
             serie: serie || undefined,
-            password: customPassword.trim() || undefined,
           };
           if (!kid.name) return;
           if (supabaseReady) {
@@ -380,7 +346,6 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
               if (!err) {
                 setName("");
                 setSerie("");
-                setCustomPassword("");
               }
               return err;
             });
@@ -388,11 +353,10 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
             addChildren(parentId, [kid]);
             setName("");
             setSerie("");
-            setCustomPassword("");
           }
         }}
       >
-        <b style={{ fontSize: "1rem" }}>Ajouter un nouvel enfant</b>
+        <b style={{ fontSize: "1rem" }}>Créer un profil enfant</b>
         <div className="row" style={{ flexWrap: "wrap", gap: 8 }}>
           <input
             className="field"
@@ -431,17 +395,8 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
               ))}
             </select>
           )}
-          <input
-            className="field"
-            type="text"
-            placeholder="Mot de passe temporaire (facultatif)"
-            aria-label="Mot de passe temporaire"
-            value={customPassword}
-            onChange={(e) => setCustomPassword(e.target.value)}
-            style={{ flex: "1 1 200px" }}
-          />
           <button className="btn primary" type="submit" disabled={busy}>
-            <Plus size={16} aria-hidden="true" /> Créer l'accès
+            <Plus size={16} aria-hidden="true" /> Créer le profil
           </button>
         </div>
         {error && <p className="auth-error" role="alert">{error}</p>}
@@ -490,7 +445,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
             </button>
 
             <h3 id="qr-modal-title" style={{ fontSize: "1.2rem", margin: 0 }}>
-              QR Code de connexion — {qrChild.name}
+              {hasAcceptedParentLink(qrChild) ? "Réinitialisation d'accès de" : "Invitation de"} {qrChild.name}
             </h3>
 
             {/* Sélecteur de mode de QR code */}
@@ -501,16 +456,16 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                 onClick={() => openQrModal(qrChild, "activation")}
                 style={{ flex: 1, minHeight: 36, fontSize: "0.85rem" }}
               >
-                Activation (1ère fois, 48h)
+                {hasAcceptedParentLink(qrChild) ? "Nouveau mot de passe (48h)" : "Invitation à accepter (48h)"}
               </button>
-              <button
-                type="button"
-                className={`btn ${qrPurpose === "quick_login" ? "primary" : "ghost"}`}
-                onClick={() => openQrModal(qrChild, "quick_login")}
-                style={{ flex: 1, minHeight: 36, fontSize: "0.85rem" }}
-              >
-                Connexion rapide (15 min)
-              </button>
+              {hasAcceptedParentLink(qrChild) && <button
+                  type="button"
+                  className={`btn ${qrPurpose === "quick_login" ? "primary" : "ghost"}`}
+                  onClick={() => openQrModal(qrChild, "quick_login")}
+                  style={{ flex: 1, minHeight: 36, fontSize: "0.85rem" }}
+                >
+                  Connexion rapide (15 min)
+                </button>}
             </div>
 
             <div style={{ textAlign: "center", padding: "12px 0" }}>
@@ -523,7 +478,9 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                   <QrCodeView value={getActivationUrl(qrToken)} size={220} alt={`QR Code pour ${qrChild.name}`} />
                   <p className="muted small" style={{ margin: "8px 0 0", maxWidth: 320 }}>
                     {qrPurpose === "activation"
-                      ? "L'élève scanne ce code avec la caméra de son téléphone pour choisir son mot de passe secret."
+                      ? hasAcceptedParentLink(qrChild)
+                        ? "Après avoir scanné ce QR code, l'élève choisit un nouveau mot de passe secret."
+                        : "L'élève scanne ce code, accepte l'invitation et choisit son mot de passe secret. Le suivi ne s'ouvre qu'après cette étape."
                       : "Connexion instantanée sécurisée. Valable 15 minutes, à usage unique."}
                   </p>
                   <p className="small" style={{ color: "#d97706", fontWeight: 600 }}>
@@ -536,6 +493,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
             </div>
 
             <div className="stack-sm">
+              {error && <p className="auth-error" role="alert">{error}</p>}
               <button
                 type="button"
                 className="btn ghost block"
@@ -605,7 +563,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
             }}
           >
             <div className="row between print-hide" style={{ marginBottom: 12 }}>
-              <span className="pill">Fiche de connexion élève</span>
+              <span className="pill">{hasAcceptedParentLink(printChild) ? "Fiche de récupération d'accès" : "Invitation élève"}</span>
               <div className="row" style={{ gap: 8 }}>
                 <button
                   type="button"
@@ -639,7 +597,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                   <img src="/logo-icon.png" alt="" width="48" height="32" />
                   <div>
                     <h2 style={{ fontSize: "1.3rem", margin: 0, color: "#1c1545" }}>DeclickMath</h2>
-                    <p className="small muted" style={{ margin: 0 }}>Fiche personnelle de connexion</p>
+                    <p className="small muted" style={{ margin: 0 }}>Accès personnel sécurisé</p>
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
@@ -655,7 +613,9 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                   Espace de <u>{printChild.name}</u>
                 </h3>
                 <p className="muted small" style={{ margin: "4px 0 0" }}>
-                  Garde cette fiche précieusement pour te connecter à tes cours et exercices.
+                  {hasAcceptedParentLink(printChild)
+                    ? "Scanne ce QR code pour choisir un nouveau mot de passe et ouvrir ton espace."
+                    : "Scanne ce QR code pour ouvrir ton espace et accepter l'invitation de ton parent."}
                 </p>
               </div>
 
@@ -663,22 +623,15 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                 {printToken && (
                   <div style={{ textAlign: "center" }}>
                     <QrCodeView value={getActivationUrl(printToken)} size={160} alt={`QR Code ${printChild.name}`} />
-                    <p style={{ fontSize: "0.75rem", color: "#64748b", margin: "4px 0 0" }}>Scanne avec ton téléphone</p>
+                    <p style={{ fontSize: "0.75rem", color: "#64748b", margin: "4px 0 0" }}>Scanne avec ton téléphone ou ta tablette</p>
                   </div>
                 )}
 
                 <div className="stack-sm" style={{ flex: "1 1 220px", padding: "0 10px" }}>
-                  <div style={{ background: "#f8fafc", padding: "8px 12px", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                  {hasAcceptedParentLink(printChild) && <div style={{ background: "#f8fafc", padding: "8px 12px", borderRadius: 8, border: "1px solid #e2e8f0" }}>
                     <span style={{ fontSize: "0.8rem", color: "#64748b", textTransform: "uppercase", fontWeight: 700 }}>Identifiant élève</span>
                     <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#0f172a" }}>{printChild.email}</div>
-                  </div>
-
-                  {printChild.password && (
-                    <div style={{ background: "#f8fafc", padding: "8px 12px", borderRadius: 8, border: "1px solid #e2e8f0" }}>
-                      <span style={{ fontSize: "0.8rem", color: "#64748b", textTransform: "uppercase", fontWeight: 700 }}>Mot de passe temporaire</span>
-                      <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#0f172a", letterSpacing: ".05em" }}>{printChild.password}</div>
-                    </div>
-                  )}
+                  </div>}
 
                   <div style={{ fontSize: "0.85rem", color: "#334155" }}>
                     <b>Site web :</b> https://decli-math.vercel.app
@@ -689,10 +642,14 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
               <div style={{ marginTop: 18, borderTop: "1px dashed #cbd5e1", paddingTop: 14 }}>
                 <h4 style={{ fontSize: "0.95rem", margin: "0 0 8px", color: "#1e293b" }}>Comment te connecter ?</h4>
                 <ol style={{ margin: 0, paddingLeft: 20, fontSize: "0.85rem", color: "#475569", lineHeight: 1.6 }}>
-                  <li>Ouvre l'appareil photo de ton téléphone ou de ta tablette et scanne le QR code ci-dessus.</li>
-                  <li>Ou bien ouvre ton navigateur sur <b>decli-math.vercel.app</b> et clique sur « Je suis élève ».</li>
-                  <li>Saisis ton identifiant et ton mot de passe.</li>
-                  <li>Choisis ton mot de passe secret pour protéger ton compte et commence à t'entraîner !</li>
+                  <li>Scanne le QR code avec l'appareil photo de ton téléphone ou de ta tablette.</li>
+                  {hasAcceptedParentLink(printChild)
+                    ? <li>Confirme le nouveau mot de passe. Ton mot de passe reste secret.</li>
+                    : <>
+                      <li>Vérifie le nom de ton parent, accepte l'invitation et choisis ton mot de passe personnel.</li>
+                      <li>Ton parent pourra suivre tes progrès après ton acceptation ; ton mot de passe reste secret.</li>
+                    </>}
+                  {hasAcceptedParentLink(printChild) && <li>Pour tes prochaines connexions, utilise ton identifiant affiché ci-dessus et le mot de passe que tu as choisi.</li>}
                 </ol>
               </div>
 
@@ -704,77 +661,6 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* MODALE CHANGEMENT DE MOT DE PASSE ENFANT                                   */}
-      {/* ========================================================================= */}
-      {pwdModalChild && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="pwd-title"
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(10, 15, 35, 0.75)",
-            backdropFilter: "blur(6px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 16,
-            zIndex: 9999,
-          }}
-        >
-          <div
-            className="card stack"
-            style={{
-              background: "#fff",
-              color: "#1c1545",
-              maxWidth: 420,
-              width: "100%",
-              borderRadius: 16,
-              boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
-            }}
-          >
-            <h3 id="pwd-title" style={{ fontSize: "1.15rem", margin: 0 }}>
-              Nouveau mot de passe pour {pwdModalChild.name}
-            </h3>
-            <p className="muted small">
-              Vous pouvez laisser le champ vide pour générer un mot de passe aléatoire, ou saisir un mot de passe temporaire simple (au moins 6 caractères) que vous lui transmettrez.
-            </p>
-
-            <label className="auth-label">
-              <span>Nouveau mot de passe (optionnel)</span>
-              <span className="auth-input">
-                <Lock size={20} aria-hidden="true" />
-                <input
-                  type="text"
-                  placeholder="Laisser vide pour générer"
-                  value={chosenPassword}
-                  onChange={(e) => setChosenPassword(e.target.value)}
-                />
-              </span>
-            </label>
-
-            <div className="row" style={{ justifyContent: "flex-end", gap: 10, marginTop: 10 }}>
-              <button
-                type="button"
-                className="btn ghost"
-                onClick={() => { setPwdModalChild(null); setChosenPassword(""); }}
-              >
-                Annuler
-              </button>
-              <button
-                type="button"
-                className="btn primary"
-                disabled={busy}
-                onClick={submitNewPassword}
-              >
-                {chosenPassword ? "Définir ce mot de passe" : "Générer un mot de passe"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
