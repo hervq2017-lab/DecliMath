@@ -1,4 +1,4 @@
-﻿import { useEffect, useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AdminNav, BottomNav, TopBar } from "./components/ui";
 import Admin from "./pages/Admin";
@@ -33,7 +33,7 @@ import Progress from "./pages/Progress";
 import Session from "./pages/Session";
 import Sujet, { SujetParent } from "./pages/Sujet";
 import { stopPreview } from "./adminActions";
-import { currentUser, DEFAULT_PREFS, THEMES, themeOf, useStore } from "./store";
+import { currentUser, DEFAULT_PREFS, restoreParentSession, THEMES, themeOf, useStore } from "./store";
 
 const TABS = ["/", "/exercices", "/tuteur", "/methodes", "/progres", "/profil"];
 
@@ -102,8 +102,25 @@ function AppInner() {
     "/": "Content de te revoir. On continue ?", "/exercices": "Parfait pour continuer ton apprentissage !",
     "/tuteur": "Pose une question ou envoie une capture de ton exercice : je t'aide à trouver la réponse.", "/methodes": "Dix façons d'apprendre, pour comprendre et retenir longtemps.", "/progres": "Voici un aperçu de tes progrès. Tu es sur la bonne voie !", "/profil": "Tes réglages et ton objectif du jour.",
   };
+    const hasParentReturn = typeof window !== "undefined" && !!sessionStorage.getItem("declickmath_parent_return_id");
   return (
     <>
+      {hasParentReturn && (
+        <div style={{ background: "#713cff", color: "#ffffff", padding: "8px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, zIndex: 9999, fontSize: "0.88rem", boxShadow: "0 2px 10px rgba(0,0,0,0.3)" }}>
+          <span>👀 <b>Aperçu en direct :</b> Vous testez actuellement la session de <b>{user.name}</b>. Les accès et cours fonctionnent parfaitement.</span>
+          <button
+            type="button"
+            className="btn ghost sm"
+            onClick={() => {
+              restoreParentSession();
+              window.location.href = "/";
+            }}
+            style={{ background: "#ffc63d", color: "#1c1545", border: "none", fontWeight: 700, padding: "4px 12px", cursor: "pointer" }}
+          >
+            Revenir à l'espace parent ↩
+          </button>
+        </div>
+      )}
       {TABS.includes(pathname) && <TopBar name={user.name} sub={SUBS[pathname]} profileTo="/profil" />}
       <Routes>
         <Route path="/" element={<Home />} />

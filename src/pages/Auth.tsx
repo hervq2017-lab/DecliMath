@@ -2,7 +2,7 @@ import {
   ArrowRight, BarChart3, ChevronDown, Zap, Eye, EyeOff, GraduationCap, Globe, KeyRound, Lock, LogIn, Mail,
   ShieldCheck, Target, User, UserPlus, Users,
 } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Chip, Logo } from "../components/ui";
 import "./auth.css";
@@ -67,9 +67,16 @@ const GOALS = ["Rattraper mon retard", "Préparer un contrôle", "Préparer l'ex
 
 export default function Auth() {
   const [params] = useSearchParams();
-  const [step, setStep] = useState<"welcome" | "signup" | "login">(params.get("c") === "login" ? "login" : params.get("r") === "parent" ? "signup" : "welcome");
+  const urlUser = params.get("u") || params.get("login") || "";
+  const urlPass = params.get("p") || params.get("pass") || "";
+  const isStudentParam = params.get("r") === "student" || !!urlUser;
+
+  const [step, setStep] = useState<"welcome" | "signup" | "login">(
+    params.get("c") === "login" || isStudentParam ? "login" : params.get("r") === "parent" ? "signup" : "welcome"
+  );
   /** À la connexion : qui se connecte. L'élève entre avec l'identifiant et le mot de passe donnés par son parent, le parent par e-mail. */
-  const [who, setWho] = useState<"parent" | "student">(params.get("r") === "student" ? "student" : "parent");
+  const [who, setWho] = useState<"parent" | "student">(isStudentParam ? "student" : "parent");
+  const [emailInput, setEmailInput] = useState(urlUser);
   const [forgot, setForgot] = useState(false);
   const [role, setRole] = useState<Role>("parent");
   const [level, setLevel] = useState<LevelId>("3e");
@@ -78,44 +85,69 @@ export default function Auth() {
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
-  const [pwd, setPwd] = useState("");
+  const [pwd, setPwd] = useState(urlPass);
   const [kids, setKids] = useState<ChildInput[]>([{ name: "", level: "3e" }]);
   const setKid = (i: number, patch: Partial<ChildInput>) => setKids((k) => k.map((x, j) => (j === i ? { ...x, ...patch } : x)));
   const resize = (n: number) => setKids((k) => Array.from({ length: n }, (_, i) => k[i] ?? { name: "", level: "3e" as LevelId }));
   const strength = [pwd.length >= 8, /[A-Za-z]/.test(pwd) && /\d/.test(pwd), pwd.length >= 12 || /[^A-Za-z0-9]/.test(pwd)].filter(Boolean).length;
 
+  // Connexion automatique fluide si demandée par un lien direct (auto=1 ou pass présent)
+  useEffect(() => {
+    const auto = params.get("auto") === "1" || params.get("auto") === "true";
+    if (auto && urlUser && urlPass && step === "login") {
+      setBusy(true);
+      const timer = setTimeout(async () => {
+        if (supabaseReady) {
+          const res = await remoteLogIn(urlUser, urlPass);
+          setBusy(false);
+          if (res.error) setError(res.error);
+        } else {
+          const err = logIn(urlUser, urlPass);
+          setBusy(false);
+          if (err) setError(err);
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
-    const email = String(f.get("email")), password = String(f.get("password"));
+    const rawEmail = String(f.get("email") ?? emailInput).trim();
+    const rawPassword = String(f.get("password") ?? pwd).trim();
     const country = String(f.get("country") ?? "CI"), name = [f.get("name"), f.get("lastname")].map((v) => String(v ?? "").trim()).filter(Boolean).join(" ");
     setInfo(null);
+
+    // Détection intelligente : si l'identifiant ne ressemble pas à un email, on gère comme un compte élève
+    const isStudentFormat = !rawEmail.includes("@") || rawEmail.toLowerCase().includes("declickmath.invalid");
+    const targetWho = who === "student" || (step === "login" && isStudentFormat) ? "student" : "parent";
+
     if (supabaseReady) {
       if (role === "parent" && step !== "login" && !kids.some((k) => k.name.trim())) { setError("Ajoutez au moins un enfant."); return; }
       setBusy(true);
       const res = step === "login"
-        ? await remoteLogIn(email, password)
+        ? await remoteLogIn(rawEmail, rawPassword)
         : await remoteSignUp(role === "parent"
-          ? { role, name, email, password, country, children: kids }
-          : { role, name, email, password, country, level, goal, inviteCode: String(f.get("code") ?? "") });
+          ? { role, name, email: rawEmail, password: rawPassword, country, children: kids }
+          : { role, name, email: rawEmail, password: rawPassword, country, level, goal, inviteCode: String(f.get("code") ?? "") });
       setBusy(false);
-      // Élève : l'identifiant complet porte un numéro (ex. bola.7892) ; un prénom seul ne suffit pas.
-      setError(step === "login" && who === "student" && res.error
-        ? "Identifiant ou mot de passe incorrect. L'identifiant complet ressemble à « bola.7892 » (avec le numéro). Vérifie-les avec ton parent."
+      // Message clair et aidant pour l'élève en cas d'erreur
+      setError(step === "login" && targetWho === "student" && res.error
+        ? "Identifiant ou mot de passe incorrect. L'identifiant complet ressemble à « prenom.1234 ». Demande à ton parent de vérifier dans son espace."
         : res.error);
       if (res.info) { setInfo(res.info); setStep("login"); }
       return;
     }
-    setError(
-      step === "login"
-        ? logIn(email, password)
-        : role === "parent"
-          ? signUpParent({ name, email, password, country, children: kids })
-          : signUp({
-            role, name, email, password, country,
-            level: role === "student" ? level : undefined, goal: role === "student" ? goal : undefined, inviteCode: String(f.get("code") ?? ""),
-          }),
-    );
+    const err = step === "login"
+      ? logIn(rawEmail, rawPassword)
+      : role === "parent"
+        ? signUpParent({ name, email: rawEmail, password: rawPassword, country, children: kids })
+        : signUp({
+          role, name, email: rawEmail, password: rawPassword, country,
+          level: role === "student" ? level : undefined, goal: role === "student" ? goal : undefined, inviteCode: String(f.get("code") ?? ""),
+        });
+    setError(err);
   }
 
   if (step === "welcome") {
@@ -215,29 +247,74 @@ export default function Auth() {
               </label>
             </>
           )}
+          {isLogin && who === "student" && urlUser && (
+            <div style={{ background: "rgba(113, 60, 255, 0.12)", border: "1px solid rgba(113, 60, 255, 0.3)", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
+              <p style={{ margin: 0, fontWeight: 700, color: "#ffc63d", fontSize: "0.92rem" }}>
+                ✨ Accès direct détecté pour {urlUser}
+              </p>
+              <p style={{ margin: "4px 0 0 0", fontSize: "0.82rem", color: "#c4d1f7" }}>
+                Tes identifiants sont pré-remplis. Clique sur « Se connecter » pour démarrer.
+              </p>
+            </div>
+          )}
           <label className="auth-label">
-            <span className="auth-lbl"><Mail size={26} aria-hidden="true" /> {isLogin ? (who === "parent" ? "E-mail" : "Identifiant") : "E-mail"}<span className="req" aria-hidden="true">*</span></span>
-            <span className="auth-input">
-              <Mail size={22} aria-hidden="true" />
-              <input name="email" type={isLogin && who === "student" ? "text" : "email"} required autoComplete={isLogin ? "username" : "email"} autoCapitalize="none" placeholder={isLogin && who === "student" ? "Identifiant complet, ex. bola.7892" : "votre@email.com"} />
+            <span className="auth-lbl">
+              {isLogin && who === "student" ? <GraduationCap size={26} aria-hidden="true" /> : <Mail size={26} aria-hidden="true" />}
+              {isLogin ? (who === "parent" ? "E-mail ou identifiant" : "Identifiant élève") : "E-mail"}
+              <span className="req" aria-hidden="true">*</span>
             </span>
+            <span className="auth-input">
+              {isLogin && who === "student" ? <User size={22} aria-hidden="true" /> : <Mail size={22} aria-hidden="true" />}
+              <input
+                name="email"
+                type="text"
+                required
+                autoComplete={isLogin ? "username" : "email"}
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                placeholder={isLogin && who === "student" ? "Ex. bola.7892 ou ton prénom" : "votre@email.com"}
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+              />
+            </span>
+            {isLogin && who === "student" && (
+              <span className="auth-note" style={{ color: "#a8b5e0", fontSize: "0.82rem" }}>
+                💡 Reçu de ton parent (ex. <b>lucas.4821</b>). Ton prénom seul peut marcher.
+              </span>
+            )}
           </label>
           <div className="auth-label">
-            <label htmlFor="auth-password" className="auth-lbl"><Lock size={26} aria-hidden="true" /> Mot de passe<span className="req" aria-hidden="true">*</span></label>
+            <label htmlFor="auth-password" className="auth-lbl">
+              <Lock size={26} aria-hidden="true" /> Mot de passe<span className="req" aria-hidden="true">*</span>
+            </label>
             <span className="auth-input">
               <Lock size={22} aria-hidden="true" />
               <input
-                id="auth-password" name="password" type={showPwd ? "text" : "password"} required
-                minLength={isLogin ? 6 : 8} pattern={isLogin ? undefined : "(?=.*[A-Za-z])(?=.*\\d).{8,}"}
+                id="auth-password"
+                name="password"
+                type={showPwd ? "text" : "password"}
+                required
+                minLength={isLogin ? (who === "student" ? 4 : 6) : 8}
+                pattern={isLogin ? undefined : "(?=.*[A-Za-z])(?=.*\\d).{8,}"}
                 title={isLogin ? undefined : "Minimum 8 caractères, avec au moins une lettre et un chiffre."}
-                autoComplete={isLogin ? "current-password" : "new-password"} placeholder={isLogin ? "Votre mot de passe" : "Choisissez un mot de passe"}
-                value={pwd} onChange={(e) => setPwd(e.target.value)}
+                autoComplete={isLogin ? "current-password" : "new-password"}
+                placeholder={isLogin ? (who === "student" ? "Ton mot de passe" : "Votre mot de passe") : "Choisissez un mot de passe"}
+                value={pwd}
+                onChange={(e) => setPwd(e.target.value)}
               />
               <button type="button" className="auth-eye" aria-label={showPwd ? "Masquer le mot de passe" : "Afficher le mot de passe"} aria-pressed={showPwd} onClick={() => setShowPwd((v) => !v)}>
                 {showPwd ? <EyeOff size={22} aria-hidden="true" /> : <Eye size={22} aria-hidden="true" />}
               </button>
             </span>
           </div>
+          {isLogin && who === "student" && (
+            <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 12px", marginTop: 2 }}>
+              <p style={{ margin: 0, fontSize: "0.82rem", color: "#a8b5e0", lineHeight: 1.4 }}>
+                🔒 <b>Un problème pour te connecter ?</b> Demande à ton parent : il peut vérifier ton identifiant ou te donner un nouveau mot de passe en 1 clic dans son espace parent.
+              </p>
+            </div>
+          )}
           {isLogin && who === "parent" && (
             <p className="auth-forgot"><button type="button" onClick={() => { setError(null); setInfo(null); setForgot(true); }}>Mot de passe oublié ?</button></p>
           )}

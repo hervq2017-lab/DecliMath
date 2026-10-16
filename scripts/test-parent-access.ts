@@ -1,8 +1,8 @@
-// Test de la création / régénération des accès enfants (logique du store, sans navigateur).
 const mem = new Map<string, string>();
 (globalThis as any).localStorage = { getItem: (k: string) => mem.get(k) ?? null, setItem: (k: string, v: string) => void mem.set(k, v) };
+(globalThis as any).sessionStorage = { getItem: (k: string) => mem.get("s:" + k) ?? null, setItem: (k: string, v: string) => void mem.set("s:" + k, v), removeItem: (k: string) => void mem.delete("s:" + k) };
 
-const { signUpParent, logIn, logOut, resetChildPassword, regenerateLogin, removeChild, addChildren, studentsOf, currentUser, modeFor } = await import("../src/store");
+const { signUpParent, logIn, logOut, resetChildPassword, setChildPassword, quickSwitchToChild, restoreParentSession, regenerateLogin, removeChild, addChildren, studentsOf, currentUser, modeFor } = await import("../src/store");
 const store = await import("../src/store");
 
 let fails = 0;
@@ -71,6 +71,20 @@ removeChild(parent.id, gone.id);
 ok(!st().users.some((u) => u.id === gone.id) && studentsOf(st(), parent.id).length === 3, "suppression d'un enfant par son parent");
 ok(!st().attempts.some((a) => a.studentId === gone.id), "sa progression est supprimée avec lui");
 logOut(); ok(logIn(gone.email, gone.password) !== null, "l'enfant supprimé ne peut plus se connecter");
+
+logIn("awa@test.com", "motdepasse1");
+ok(setChildPassword(parent.id, sibling.id, "soleil12") === null, "définition d'un mot de passe personnalisé par le parent");
+logOut();
+ok(logIn(sibling.email, "soleil12") === null && currentUser(st())?.id === sibling.id, "connexion élève avec le mot de passe personnalisé");
+logOut();
+ok(logIn(`  ${sibling.email}  `, `  soleil12  `) === null, "connexion élève tolérante aux espaces de début et de fin");
+logOut();
+ok(logIn(`${sibling.email}@eleves.declickmath.invalid`, "soleil12") === null, "connexion élève tolérante au domaine interne");
+logOut();
+logIn("awa@test.com", "motdepasse1");
+quickSwitchToChild(parent.id, sibling.id);
+ok(currentUser(st())?.id === sibling.id, "basculement rapide du parent vers l'espace élève");
+ok(restoreParentSession() && currentUser(st())?.id === parent.id, "retour direct à la session parent");
 
 console.log(fails ? `\n${fails} échec(s)` : "\nTous les tests passent");
 process.exit(fails ? 1 : 0);

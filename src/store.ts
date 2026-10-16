@@ -381,12 +381,90 @@ export function removeChild(parentId: string, childId: string) {
   });
 }
 
+/** Définit un mot de passe personnalisé pour un enfant (facile à retenir pour l'élève). */
+export function setChildPassword(parentId: string, childId: string, customPassword: string): string | null {
+  const pwd = customPassword.trim();
+  if (pwd.length < 4) return "Le mot de passe doit comporter au moins 4 caractères.";
+  update((s) => ({
+    ...s,
+    users: s.users.map((u) => (u.id === childId && u.parentId === parentId ? { ...u, password: pwd } : u)),
+  }));
+  return null;
+}
+
+/** Permet au parent de tester directement l'espace de son enfant en 1 clic. */
+export function quickSwitchToChild(parentId: string, childId: string) {
+  try {
+    sessionStorage.setItem("declickmath_parent_return_id", parentId);
+  } catch { /* ignore */ }
+  update((s) => ({ ...s, sessionId: childId }));
+}
+
+/** Permet de revenir à la session parent après un test. */
+export function restoreParentSession(): boolean {
+  try {
+    const parentId = sessionStorage.getItem("declickmath_parent_return_id");
+    if (parentId && state.users.some((u) => u.id === parentId && u.role === "parent")) {
+      sessionStorage.removeItem("declickmath_parent_return_id");
+      update((s) => ({ ...s, sessionId: parentId }));
+      return true;
+    }
+  } catch { /* ignore */ }
+  return false;
+}
+
 export function logIn(email: string, password: string): string | null {
-  const u = state.users.find((x) => x.email === email.trim().toLowerCase() && x.password === password);
-  if (!u) return "E-mail ou mot de passe incorrect.";
+  const rawId = email.trim().toLowerCase();
+  const cleanId = rawId.replace(/^["']|["']$/g, "").trim();
+  const strippedId = cleanId.replace(/@(eleves\.)?declickmath\.(invalid|fr|com)$/i, "");
+  const cleanPwd = password.trim();
+
+  // 1. Correspondance exacte sur l'identifiant (insensible à la casse, tolérant aux espaces de fin)
+  let u = state.users.find(
+    (x) =>
+      (x.email.toLowerCase() === cleanId || x.email.toLowerCase() === strippedId) &&
+      (x.password === password || x.password === cleanPwd)
+  );
+
+  // 2. Recherche spécifique pour les élèves : login élève sans domaine (ex. bola.7892)
+  if (!u) {
+    u = state.users.find(
+      (x) =>
+        x.role === "student" &&
+        (x.email.toLowerCase().split("@")[0] === strippedId || x.email.toLowerCase() === strippedId) &&
+        (x.password === password || x.password === cleanPwd)
+    );
+  }
+
+  // 3. Si l'élève a seulement tapé son prénom (ex: "koffi" au lieu de "koffi.1234") sans le point
+  if (!u && !strippedId.includes(".")) {
+    const matchingKids = state.users.filter(
+      (x) =>
+        x.role === "student" &&
+        (x.name.trim().toLowerCase() === strippedId || x.email.toLowerCase().startsWith(`${strippedId}.`))
+    );
+    if (matchingKids.length === 1 && (matchingKids[0].password === password || matchingKids[0].password === cleanPwd)) {
+      u = matchingKids[0];
+    }
+  }
+
+  if (!u) {
+    const knownStudent = state.users.find(
+      (x) =>
+        x.role === "student" &&
+        (x.email.toLowerCase() === cleanId ||
+          x.email.toLowerCase() === strippedId ||
+          x.email.toLowerCase().split("@")[0] === strippedId)
+    );
+    if (knownStudent) {
+      return "Mot de passe incorrect pour cet élève. Attention aux majuscules et minuscules. Ton parent peut te le redonner ou en définir un nouveau dans son espace.";
+    }
+    return "E-mail ou mot de passe incorrect.";
+  }
+
   if (u.suspended) return "Ce compte est suspendu. Contactez le support.";
   const promote = ADMIN_EMAILS.includes(u.email) && u.role !== "admin";
-  update((s) => ({ ...s, sessionId: u.id, users: s.users.map((x) => (x.id === u.id ? { ...x, lastLogin: Date.now(), ...(promote ? { role: "admin" as const } : {}) } : x)) }));
+  update((s) => ({ ...s, sessionId: u!.id, users: s.users.map((x) => (x.id === u!.id ? { ...x, lastLogin: Date.now(), ...(promote ? { role: "admin" as const } : {}) } : x)) }));
   return null;
 }
 /** Si un aperçu administrateur est en cours, on restaure d'abord l'état réel. */

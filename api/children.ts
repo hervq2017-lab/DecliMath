@@ -126,7 +126,8 @@ export default async function handler(req: Req, res: Res) {
     const childId = String(body.childId ?? "");
     const { data: child } = await admin.from("profiles").select("id").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
     if (!child) return res.status(404).json({ error: "Enfant introuvable." });
-    const password = newPassword();
+    const custom = typeof (body as any).customPassword === "string" ? (body as any).customPassword.trim() : "";
+    const password = custom.length >= 4 ? custom : newPassword();
     const { error } = await admin.auth.admin.updateUserById(child.id, { password });
     if (error) return res.status(500).json({ error: "Changement impossible." });
     return res.status(200).json({ id: child.id, password });

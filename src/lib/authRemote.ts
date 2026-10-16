@@ -80,6 +80,19 @@ subscribe(() => {
   timer = setTimeout(flush, 400);
 });
 
+const PWD_CACHE_KEY = "declickmath_stored_child_passwords";
+function getStoredPasswords(): Record<string, string> {
+  try { return JSON.parse(localStorage.getItem(PWD_CACHE_KEY) || "{}"); } catch { return {}; }
+}
+export function cacheChildPassword(childId: string, password: string) {
+  if (!childId || !password) return;
+  try {
+    const map = getStoredPasswords();
+    map[childId] = password;
+    localStorage.setItem(PWD_CACHE_KEY, JSON.stringify(map));
+  } catch { /* ignore */ }
+}
+
 // ---------- Session ----------
 /** Charge le profil connecté (et ses enfants) dans l'état local. Renvoie un message d'erreur, ou null. */
 async function hydrate(freshLogin: boolean): Promise<string | null> {
@@ -98,9 +111,17 @@ async function hydrate(freshLogin: boolean): Promise<string | null> {
     await supabase.auth.signOut();
     return "Ce compte est suspendu. Contactez le support.";
   }
+
   // Le serveur ne garde pas les mots de passe en clair : on conserve celui que le parent a vu à la création sur cet appareil.
   const known = new Map(getState().users.map((u) => [u.id, u.password]));
-  const users = [toUser(row, session.user.email ?? ""), ...((kids.data ?? []) as ProfileRow[]).map((k) => ({ ...toUser(k, ""), password: known.get(k.id) || pendingPasswords.get(k.id) || "" }))];
+  const cached = getStoredPasswords();
+  const users = [
+    toUser(row, session.user.email ?? ""),
+    ...((kids.data ?? []) as ProfileRow[]).map((k) => ({
+      ...toUser(k, ""),
+      password: known.get(k.id) || pendingPasswords.get(k.id) || cached[k.id] || "",
+    })),
+  ];
   const modeMap: Record<string, SolutionMode> = Object.fromEntries((modes.data ?? []).map((m: { student_id: string; mode: SolutionMode }) => [m.student_id, m.mode]));
 
   // Référence « connue du serveur » posée AVANT la mise à jour locale, pour que seule la différence (ex. dernière connexion) soit envoyée.
@@ -191,9 +212,11 @@ export async function cancelRecovery() {
 
 export async function remoteLogIn(identifier: string, password: string): Promise<AuthResult> {
   if (!supabase) return { error: "Serveur non configuré." };
-  const id = identifier.trim().toLowerCase();
-  const email = id.includes("@") ? id : `${id}@${CHILD_DOMAIN}`;
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const rawId = identifier.trim().toLowerCase().replace(/^["']|["']$/g, "").trim();
+  const rawPwd = password.trim();
+  const cleanId = rawId.replace(/@(eleves\.)?declickmath\.(invalid|fr|com)$/i, "");
+  const email = cleanId.includes("@") ? cleanId : `${cleanId}@${CHILD_DOMAIN}`;
+  const { error } = await supabase.auth.signInWithPassword({ email, password: rawPwd });
   if (error) return { error: fr(error.message) };
   return { error: await hydrate(true) };
 }
@@ -286,9 +309,10 @@ export async function remoteResetChild(childId: string): Promise<string | null> 
 }
 
 /** Nouveau mot de passe pour un enfant (son identifiant ne change pas) ; le parent le lit ensuite dans sa fiche. */
-export async function remoteResetChildPassword(childId: string): Promise<string | null> {
-  const res = (await callChildren({ action: "reset-password", childId })) as { error?: string; password?: string };
+export async function remoteResetChildPassword(childId: string, customPassword?: string): Promise<string | null> {
+  const res = (await callChildren({ action: "reset-password", childId, customPassword })) as { error?: string; password?: string };
   if (res.error || !res.password) return res.error ?? "Changement impossible.";
+  cacheChildPassword(childId, res.password);
   await hydrateAfter([{ id: childId, login: null, password: res.password }]);
   return null;
 }
@@ -302,7 +326,12 @@ export async function remoteDeleteChild(childId: string): Promise<string | null>
 }
 
 async function hydrateAfter(access: Access[]) {
-  for (const a of access) if (a.password) pendingPasswords.set(a.id, a.password);
+  for (const a of access) {
+    if (a.password) {
+      pendingPasswords.set(a.id, a.password);
+      cacheChildPassword(a.id, a.password);
+    }
+  }
   update((s) => ({ ...s, users: s.users.map((u) => { const a = access.find((x) => x.id === u.id); return a ? { ...u, email: a.login ?? u.email, password: a.password || u.password } : u; }) }));
   try { await hydrate(false); } finally { for (const a of access) pendingPasswords.delete(a.id); }
 }

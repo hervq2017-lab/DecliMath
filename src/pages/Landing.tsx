@@ -544,6 +544,15 @@ export default function Landing() {
               <Link className="lx-btn yellow sm font-bold" to="/">Mon espace</Link>
             ) : (
               <>
+                <Link
+                  className="lx-btn ghost-nav sm"
+                  to="/commencer?c=login&r=student"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, borderColor: "#ffc63d", color: "#ffc63d" }}
+                  title="Espace de connexion dédié aux élèves avec leurs identifiants"
+                >
+                  <GraduationCap size={16} aria-hidden="true" />
+                  <span>Accès Élève</span>
+                </Link>
                 <Link className="lx-btn ghost-nav sm" to="/commencer?c=login">
                   Se connecter
                 </Link>
@@ -591,11 +600,22 @@ export default function Landing() {
                   <span>Commencer maintenant</span>
                   <ArrowRight size={20} strokeWidth={2.5} aria-hidden="true" />
                 </Link>
+                <Link
+                  className="lx-btn ghost-nav"
+                  to="/commencer?c=login&r=student"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, borderColor: "#ffc63d", color: "#ffc63d" }}
+                >
+                  <GraduationCap size={18} />
+                  <span>Accès Élève</span>
+                </Link>
                 <a className="lx-demo-link" href="#methode">
                   <span className="lx-demo-play"><Play size={20} aria-hidden="true" /></span>
                   <span>Voir la démo</span>
                 </a>
               </div>
+              <p style={{ marginTop: 8, fontSize: "0.88rem", color: "#c4d1f7" }}>
+                🎒 Ton parent t'a donné tes accès ? <Link to="/commencer?c=login&r=student" style={{ color: "#ffc63d", fontWeight: 700, textDecoration: "underline" }}>Connecte-toi directement ici →</Link>
+              </p>
 
               <ul className="lx-hero-trust">
                 {HERO_FEATURES.map(({ Icon, label }) => (
