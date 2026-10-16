@@ -49,6 +49,11 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
     <section className="card stack" aria-labelledby="acces">
       <h2 id="acces" style={{ fontSize: "1.05rem" }}><KeyRound size={18} aria-hidden="true" style={{ verticalAlign: "-3px" }} /> Accès de connexion de mes enfants</h2>
       <p className="muted small">Chaque enfant a son propre identifiant et son propre mot de passe. Transmettez-les-lui : il les saisit sur l'écran de connexion, onglet « Élève ». Chacun garde son compte et sa progression.</p>
+      {!supabaseReady && (
+        <p role="alert" className="small" style={{ border: "1px solid #f59e0b", borderRadius: 10, padding: "8px 12px" }}>
+          <b>Mode hors ligne :</b> ces accès sont enregistrés uniquement dans ce navigateur. Votre enfant ne pourra pas se connecter depuis un autre appareil. Ouvrez la version en ligne du site (https://decli-math.vercel.app) pour créer des accès valables partout.
+        </p>
+      )}
       <h3 style={{ fontSize: "1rem", borderTop: "1px solid var(--line, #8883)", paddingTop: 10 }}>Enfants enregistrés ({children.length})</h3>
       {children.length > 1 && (
         <button type="button" className="btn ghost" onClick={copyAll}><Copy size={16} aria-hidden="true" /> {copied === "all" ? "Copié" : "Copier les accès de tous les enfants"}</button>

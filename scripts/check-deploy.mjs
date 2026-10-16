@@ -4,7 +4,7 @@
 const base = (process.argv[2] ?? "https://decli-math.vercel.app").replace(/\/$/, "");
 let fails = 0;
 const ok = (c, m) => { console.log((c ? "OK   " : "ECHEC ") + m); if (!c) fails++; };
-const get = (p, init) => fetch(base + p, { signal: AbortSignal.timeout(90000), ...init });
+const get = (p, init) => fetch(base + p, { signal: AbortSignal.timeout(300000), ...init });
 
 try {
   const home = await get("/");

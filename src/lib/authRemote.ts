@@ -53,6 +53,8 @@ function fr(message: string): string {
 const pushedProfile = new Map<string, string>(); // id -> dernières colonnes éditables envoyées ou reçues
 const pushedMode = new Map<string, SolutionMode>(); // id élève -> règle du corrigé connue du serveur
 let creatingPending = false;
+/** Mots de passe que le serveur vient de renvoyer (création, changement) : posés dans la même mise à jour que la fiche de l'enfant. */
+const pendingPasswords = new Map<string, string>();
 let timer: ReturnType<typeof setTimeout> | undefined;
 
 function flush() {
@@ -98,7 +100,7 @@ async function hydrate(freshLogin: boolean): Promise<string | null> {
   }
   // Le serveur ne garde pas les mots de passe en clair : on conserve celui que le parent a vu à la création sur cet appareil.
   const known = new Map(getState().users.map((u) => [u.id, u.password]));
-  const users = [toUser(row, session.user.email ?? ""), ...((kids.data ?? []) as ProfileRow[]).map((k) => ({ ...toUser(k, ""), password: known.get(k.id) ?? "" }))];
+  const users = [toUser(row, session.user.email ?? ""), ...((kids.data ?? []) as ProfileRow[]).map((k) => ({ ...toUser(k, ""), password: known.get(k.id) || pendingPasswords.get(k.id) || "" }))];
   const modeMap: Record<string, SolutionMode> = Object.fromEntries((modes.data ?? []).map((m: { student_id: string; mode: SolutionMode }) => [m.student_id, m.mode]));
 
   // Référence « connue du serveur » posée AVANT la mise à jour locale, pour que seule la différence (ex. dernière connexion) soit envoyée.
@@ -300,8 +302,7 @@ export async function remoteDeleteChild(childId: string): Promise<string | null>
 }
 
 async function hydrateAfter(access: Access[]) {
+  for (const a of access) if (a.password) pendingPasswords.set(a.id, a.password);
   update((s) => ({ ...s, users: s.users.map((u) => { const a = access.find((x) => x.id === u.id); return a ? { ...u, email: a.login ?? u.email, password: a.password || u.password } : u; }) }));
-  await hydrate(false);
-  // Le serveur ne garde pas les mots de passe : on conserve ceux qu'il vient de renvoyer pour que le parent puisse les lire.
-  update((s) => ({ ...s, users: s.users.map((u) => { const a = access.find((x) => x.id === u.id); return a?.password ? { ...u, password: a.password } : u; }) }));
+  try { await hydrate(false); } finally { for (const a of access) pendingPasswords.delete(a.id); }
 }
