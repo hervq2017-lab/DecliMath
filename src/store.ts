@@ -27,6 +27,8 @@ export interface User {
   createdAt?: number;
   lastLogin?: number; // début de la session en cours (ms)
   notifSeen?: number; // notifications vues jusqu'à cette date (ms)
+  mustChangePassword?: boolean; // première connexion : personnaliser son mot de passe
+  passwordCustomized?: boolean; // mot de passe déjà personnalisé par l'élève
 }
 
 export type ThemeId = "nuit" | "ocean" | "clair" | "soleil";
@@ -168,6 +170,18 @@ export interface AuditEntry {
   target: string;
 }
 
+export interface QrToken {
+  id: string;
+  studentId: string;
+  token: string;
+  purpose: "activation" | "quick_login";
+  expiresAt: number;
+  usedAt?: number;
+  revokedAt?: number;
+  createdAt: number;
+  createdBy?: string;
+}
+
 export interface State {
   users: User[];
   sessionId: string | null;
@@ -186,12 +200,13 @@ export interface State {
   goals: Record<string, string>;
   payments: Payment[];
   audit: AuditEntry[];
+  qrTokens?: QrToken[];
   /** Aperçu administrateur : copie de l'état réel, restaurée à la sortie (rien n'est enregistré pendant l'aperçu). */
   previewBackup?: string;
 }
 
 const KEY = "reussite-terminale-v2";
-const empty: State = { users: [], sessionId: null, attempts: [], checks: [], exams: [], papers: [], evidence: [], memory: {}, bilans: [], validated: {}, solutionMode: {}, goals: {}, payments: [], audit: [] };
+const empty: State = { users: [], sessionId: null, attempts: [], checks: [], exams: [], papers: [], evidence: [], memory: {}, bilans: [], validated: {}, solutionMode: {}, goals: {}, payments: [], audit: [], qrTokens: [] };
 
 function load(): State {
   try {
@@ -301,7 +316,7 @@ export function signUp(input: {
 
 // ---------- Comptes enfants créés par le parent ----------
 
-export interface ChildInput { name: string; level: LevelId; serie?: string }
+export interface ChildInput { name: string; level: LevelId; serie?: string; password?: string }
 
 const PWD_CHARS = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans caractères ambigus (0/O, 1/l/I)
 export function newPassword(): string {
@@ -315,15 +330,17 @@ function newLogin(name: string, taken: Set<string>): string {
   return login;
 }
 
-/** Crée les comptes élèves (identifiant + mot de passe générés) rattachés au parent. */
+/** Crée les comptes élèves (identifiant + mot de passe générés ou personnalisés) rattachés au parent. */
 function buildChildren(parent: User, kids: ChildInput[], existing: User[]): User[] {
   const taken = new Set(existing.map((u) => u.email));
   return kids.map((k) => {
     const login = newLogin(k.name, taken);
     taken.add(login);
+    const pwd = typeof k.password === "string" && k.password.length >= 6 ? k.password : newPassword();
     return {
-      id: uid(), role: "student" as const, name: k.name.trim(), email: login, password: newPassword(), country: parent.country,
+      id: uid(), role: "student" as const, name: k.name.trim(), email: login, password: pwd, country: parent.country,
       level: k.level, serie: k.serie || undefined, parentId: parent.id, createdAt: Date.now(),
+      mustChangePassword: true, passwordCustomized: false,
     };
   });
 }
@@ -351,9 +368,126 @@ export function addChildren(parentId: string, kids: ChildInput[]) {
   });
 }
 
-/** Nouveau mot de passe pour un enfant (mode local). */
-export function resetChildPassword(parentId: string, childId: string) {
-  update((s) => ({ ...s, users: s.users.map((u) => (u.id === childId && u.parentId === parentId ? { ...u, password: newPassword() } : u)) }));
+/** Nouveau mot de passe pour un enfant (mode local : généré ou choisi par le parent). */
+export function resetChildPassword(parentId: string, childId: string, customPassword?: string) {
+  const pwd = typeof customPassword === "string" && customPassword.length >= 6 ? customPassword : newPassword();
+  update((s) => ({
+    ...s,
+    users: s.users.map((u) => (u.id === childId && u.parentId === parentId ? { ...u, password: pwd, mustChangePassword: true } : u)),
+  }));
+}
+
+/** Suspend ou réactive le compte d'un enfant par son parent. */
+export function toggleSuspendChild(parentId: string, childId: string, suspended?: boolean) {
+  update((s) => {
+    const child = s.users.find((u) => u.id === childId && u.parentId === parentId);
+    if (!child) return s;
+    const val = typeof suspended === "boolean" ? suspended : !child.suspended;
+    const now = Date.now();
+    return {
+      ...s,
+      users: s.users.map((u) => (u.id === childId ? { ...u, suspended: val } : u)),
+      qrTokens: (s.qrTokens ?? []).map((t) => (t.studentId === childId && val ? { ...t, revokedAt: now } : t)),
+    };
+  });
+}
+
+/** Personnalisation du mot de passe par l'élève (première connexion ou mise à jour). */
+export function changeStudentPassword(studentId: string, newPasswordStr: string): string | null {
+  if (newPasswordStr.length < 6) return "Le mot de passe doit comporter au moins 6 caractères.";
+  update((s) => ({
+    ...s,
+    users: s.users.map((u) => (u.id === studentId ? { ...u, password: newPasswordStr, mustChangePassword: false, passwordCustomized: true } : u)),
+  }));
+  return null;
+}
+
+/** Génère un jeton QR pour un enfant (activation 48h ou connexion rapide 15 min). */
+export function createQrToken(parentId: string, studentId: string, purpose: "activation" | "quick_login" = "activation"): { token: string; expiresAt: number } | null {
+  const parent = state.users.find((u) => u.id === parentId);
+  const child = state.users.find((u) => u.id === studentId && u.parentId === parentId);
+  if (!parent || !child || child.suspended) return null;
+
+  const token = uid().replace(/-/g, "") + uid().replace(/-/g, "");
+  const durationMs = purpose === "quick_login" ? 15 * 60_000 : 48 * 3600_000;
+  const expiresAt = Date.now() + durationMs;
+  const now = Date.now();
+
+  const newToken: QrToken = {
+    id: uid(),
+    studentId,
+    token,
+    purpose,
+    expiresAt,
+    createdAt: now,
+    createdBy: parentId,
+  };
+
+  update((s) => ({
+    ...s,
+    qrTokens: [
+      ...(s.qrTokens ?? []).map((t) => (t.studentId === studentId && t.purpose === purpose && !t.usedAt && !t.revokedAt ? { ...t, revokedAt: now } : t)),
+      newToken,
+    ],
+  }));
+
+  return { token, expiresAt };
+}
+
+/** Révoque tous les jetons QR actifs d'un enfant. */
+export function revokeQrTokens(parentId: string, studentId: string): void {
+  const now = Date.now();
+  update((s) => {
+    const child = s.users.find((u) => u.id === studentId && u.parentId === parentId);
+    if (!child) return s;
+    return {
+      ...s,
+      qrTokens: (s.qrTokens ?? []).map((t) => (t.studentId === studentId && !t.usedAt && !t.revokedAt ? { ...t, revokedAt: now } : t)),
+    };
+  });
+}
+
+/** Vérifie un jeton QR sans le consommer. */
+export function verifyQrToken(rawToken: string): { valid: boolean; error?: string; purpose?: "activation" | "quick_login"; student?: User } {
+  const t = (state.qrTokens ?? []).find((x) => x.token === rawToken.trim());
+  if (!t) return { valid: false, error: "Ce QR code est introuvable ou invalide." };
+  if (t.revokedAt) return { valid: false, error: "Ce QR code a été révoqué par le parent." };
+  if (t.usedAt) return { valid: false, error: "Ce QR code a déjà été utilisé." };
+  if (t.expiresAt < Date.now()) return { valid: false, error: "Ce QR code a expiré. Demande un nouveau code à ton parent." };
+  const student = state.users.find((u) => u.id === t.studentId);
+  if (!student) return { valid: false, error: "Compte élève introuvable." };
+  if (student.suspended) return { valid: false, error: "Ce compte élève est actuellement suspendu." };
+  return { valid: true, purpose: t.purpose, student };
+}
+
+/** Valide et consomme un jeton QR (usage unique). */
+export function consumeQrToken(rawToken: string, newPasswordStr?: string): { success: boolean; error?: string; student?: User } {
+  const check = verifyQrToken(rawToken);
+  if (!check.valid || !check.student) return { success: false, error: check.error };
+  const student = check.student;
+  const now = Date.now();
+
+  if (check.purpose === "activation") {
+    if (!newPasswordStr || newPasswordStr.trim().length < 6) {
+      return { success: false, error: "Le mot de passe doit comporter au moins 6 caractères." };
+    }
+    update((s) => ({
+      ...s,
+      qrTokens: (s.qrTokens ?? []).map((x) => (x.token === rawToken.trim() ? { ...x, usedAt: now } : x)),
+      users: s.users.map((u) => (u.id === student.id ? { ...u, password: newPasswordStr.trim(), mustChangePassword: false, passwordCustomized: true, lastLogin: now } : u)),
+      sessionId: student.id,
+    }));
+    return { success: true, student: state.users.find((u) => u.id === student.id) };
+  }
+
+  // quick_login
+  update((s) => ({
+    ...s,
+    qrTokens: (s.qrTokens ?? []).map((x) => (x.token === rawToken.trim() ? { ...x, usedAt: now } : x)),
+    users: s.users.map((u) => (u.id === student.id ? { ...u, lastLogin: now } : u)),
+    sessionId: student.id,
+  }));
+  return { success: true, student: state.users.find((u) => u.id === student.id) };
 }
 
 /** Nouvel identifiant + nouveau mot de passe (si l'identifiant a fuité). */

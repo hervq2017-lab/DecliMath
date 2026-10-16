@@ -65,17 +65,16 @@ function ForgotPassword({ onBack }: { onBack: () => void }) {
 
 const GOALS = ["Rattraper mon retard", "Préparer un contrôle", "Préparer l'examen", "Prendre de l'avance"];
 
-export default function Auth() {
+export default function Auth({ defaultWho }: { defaultWho?: "parent" | "student" } = {}) {
   const [params] = useSearchParams();
   const urlUser = params.get("u") || params.get("login") || "";
-  const urlPass = params.get("p") || params.get("pass") || "";
   const isStudentParam = params.get("r") === "student" || !!urlUser;
 
   const [step, setStep] = useState<"welcome" | "signup" | "login">(
-    params.get("c") === "login" || isStudentParam ? "login" : params.get("r") === "parent" ? "signup" : "welcome"
+    defaultWho || params.get("c") === "login" || isStudentParam ? "login" : params.get("r") === "parent" ? "signup" : "welcome"
   );
   /** À la connexion : qui se connecte. L'élève entre avec l'identifiant et le mot de passe donnés par son parent, le parent par e-mail. */
-  const [who, setWho] = useState<"parent" | "student">(isStudentParam ? "student" : "parent");
+  const [who, setWho] = useState<"parent" | "student">(defaultWho ?? (isStudentParam ? "student" : "parent"));
   const [emailInput, setEmailInput] = useState(urlUser);
   const [forgot, setForgot] = useState(false);
   const [role, setRole] = useState<Role>("parent");
@@ -85,30 +84,23 @@ export default function Auth() {
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
-  const [pwd, setPwd] = useState(urlPass);
+  const [pwd, setPwd] = useState("");
   const [kids, setKids] = useState<ChildInput[]>([{ name: "", level: "3e" }]);
   const setKid = (i: number, patch: Partial<ChildInput>) => setKids((k) => k.map((x, j) => (j === i ? { ...x, ...patch } : x)));
   const resize = (n: number) => setKids((k) => Array.from({ length: n }, (_, i) => k[i] ?? { name: "", level: "3e" as LevelId }));
   const strength = [pwd.length >= 8, /[A-Za-z]/.test(pwd) && /\d/.test(pwd), pwd.length >= 12 || /[^A-Za-z0-9]/.test(pwd)].filter(Boolean).length;
 
-  // Connexion automatique fluide si demandée par un lien direct (auto=1 ou pass présent)
+  // Les anciens liens de connexion contenaient le mot de passe dans l'URL.
   useEffect(() => {
-    const auto = params.get("auto") === "1" || params.get("auto") === "true";
-    if (auto && urlUser && urlPass && step === "login") {
-      setBusy(true);
-      const timer = setTimeout(async () => {
-        if (supabaseReady) {
-          const res = await remoteLogIn(urlUser, urlPass);
-          setBusy(false);
-          if (res.error) setError(res.error);
-        } else {
-          const err = logIn(urlUser, urlPass);
-          setBusy(false);
-          if (err) setError(err);
-        }
-      }, 300);
-      return () => clearTimeout(timer);
-    }
+    const legacyCredentialLink = params.has("pass") || (
+      params.has("auto") && params.has("u") && params.has("p")
+    );
+    if (!legacyCredentialLink) return;
+    const url = new URL(window.location.href);
+    url.searchParams.delete("pass");
+    if (params.has("auto") && params.has("u")) url.searchParams.delete("p");
+    url.searchParams.delete("auto");
+    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
   }, []);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
@@ -133,7 +125,7 @@ export default function Auth() {
           : { role, name, email: rawEmail, password: rawPassword, country, level, goal, inviteCode: String(f.get("code") ?? "") });
       setBusy(false);
       // Message clair et aidant pour l'élève en cas d'erreur
-      setError(step === "login" && targetWho === "student" && res.error
+      setError(step === "login" && targetWho === "student" && res.error === "E-mail ou mot de passe incorrect."
         ? "Identifiant ou mot de passe incorrect. L'identifiant complet ressemble à « prenom.1234 ». Demande à ton parent de vérifier dans son espace."
         : res.error);
       if (res.info) { setInfo(res.info); setStep("login"); }
@@ -250,10 +242,10 @@ export default function Auth() {
           {isLogin && who === "student" && urlUser && (
             <div style={{ background: "rgba(113, 60, 255, 0.12)", border: "1px solid rgba(113, 60, 255, 0.3)", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
               <p style={{ margin: 0, fontWeight: 700, color: "#ffc63d", fontSize: "0.92rem" }}>
-                ✨ Accès direct détecté pour {urlUser}
+                ✨ Identifiant prérempli : {urlUser}
               </p>
               <p style={{ margin: "4px 0 0 0", fontSize: "0.82rem", color: "#c4d1f7" }}>
-                Tes identifiants sont pré-remplis. Clique sur « Se connecter » pour démarrer.
+                Saisis ton mot de passe pour te connecter.
               </p>
             </div>
           )}

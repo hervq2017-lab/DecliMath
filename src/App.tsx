@@ -3,6 +3,8 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AdminNav, BottomNav, TopBar } from "./components/ui";
 import Admin from "./pages/Admin";
 import Auth from "./pages/Auth";
+import ChildLogin from "./pages/ChildLogin";
+import StudentActivation from "./pages/StudentActivation";
 import ResetPassword from "./pages/ResetPassword";
 import { recoveryActive, subscribeRecovery } from "./lib/authRemote";
 import Landing from "./pages/Landing";
@@ -57,7 +59,19 @@ function AppInner() {
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
 
   if (recovering) return <ResetPassword />; // lien « mot de passe oublié » : on choisit le nouveau mot de passe avant tout
-  if (!user) return <Routes><Route path="/" element={<Landing />} /><Route path="*" element={<Auth />} /></Routes>;
+  if (pathname === "/activation" || pathname === "/connexion-qr") return <StudentActivation />;
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/activation" element={<StudentActivation />} />
+        <Route path="/connexion-qr" element={<StudentActivation />} />
+        <Route path="/connexion-eleve" element={<ChildLogin />} />
+        <Route path="/connexion-parent" element={<Auth defaultWho="parent" />} />
+        <Route path="*" element={<Auth />} />
+      </Routes>
+    );
+  }
   if (pathname === "/accueil") return <Landing />; // la page d'accueil reste visitable une fois connecté (logo DeclickMath)
   if (user.role === "admin") {
     return (

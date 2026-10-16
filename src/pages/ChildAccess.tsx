@@ -1,52 +1,45 @@
 import {
-  Check,
-  Copy,
-  Edit3,
-  ExternalLink,
-  Eye,
-  EyeOff,
-  KeyRound,
-  MessageCircle,
-  Play,
-  Plus,
-  QrCode,
-  RefreshCw,
-  Sparkles,
-  Trash2,
-  X,
+  AlertCircle, Check, Copy, Eye, EyeOff, KeyRound, Lock, Plus, Printer, QrCode, RefreshCw, ShieldAlert,
+  ShieldCheck, Trash2, X
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import QRCode from "qrcode";
+import { useState } from "react";
+import { QrCodeView } from "../components/QrCodeView";
 import { levelById, LEVELS, LevelId, seriesAt } from "../curriculum";
-import { remoteCreateChildren, remoteDeleteChild, remoteResetChild, remoteResetChildPassword } from "../lib/authRemote";
+import {
+  remoteCreateChildren, remoteCreateQr, remoteDeleteChild, remoteResetChild,
+  remoteResetChildPassword, remoteRevokeQr, remoteToggleSuspendChild
+} from "../lib/authRemote";
 import { supabaseReady } from "../lib/supabase";
 import {
-  addChildren,
-  quickSwitchToChild,
-  regenerateLogin,
-  removeChild,
-  resetChildPassword,
-  setChildPassword,
-  studentsOf,
-  useStore,
+  addChildren, createQrToken, regenerateLogin, removeChild, resetChildPassword,
+  revokeQrTokens, studentsOf, toggleSuspendChild, User, useStore
 } from "../store";
 
-/** Accès des enfants : chaque enfant a son propre identifiant et son propre mot de passe, que le parent lui transmet. */
 export default function ChildAccess({ parentId }: { parentId: string }) {
   const state = useStore();
   const children = studentsOf(state, parentId);
+
   const [copied, setCopied] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [level, setLevel] = useState<LevelId>("3e");
   const [serie, setSerie] = useState("");
+  const [customPassword, setCustomPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showPwd, setShowPwd] = useState<Record<string, boolean>>({});
-  const [customPwdChild, setCustomPwdChild] = useState<string | null>(null);
-  const [customPwdValue, setCustomPwdValue] = useState("");
-  const [qrModalChild, setQrModalChild] = useState<{ id: string; name: string; url: string; qrDataUrl: string } | null>(null);
 
-  /** Sur le serveur, les accès se créent côté serveur ; en mode local, directement dans le navigateur. */
+  // Modales
+  const [qrChild, setQrChild] = useState<User | null>(null);
+  const [qrToken, setQrToken] = useState<string | null>(null);
+  const [qrExpiresAt, setQrExpiresAt] = useState<number | null>(null);
+  const [qrPurpose, setQrPurpose] = useState<"activation" | "quick_login">("activation");
+  const [qrLoading, setQrLoading] = useState(false);
+
+  const [printChild, setPrintChild] = useState<User | null>(null);
+  const [printToken, setPrintToken] = useState<string | null>(null);
+
+  const [pwdModalChild, setPwdModalChild] = useState<User | null>(null);
+  const [chosenPassword, setChosenPassword] = useState("");
+
   async function run(job: () => Promise<string | null>) {
     setBusy(true);
     setError(null);
@@ -55,7 +48,6 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
     setBusy(false);
   }
 
-  /** Copie dans le presse-papiers */
   const copyText = async (key: string, text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -66,55 +58,27 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
       ta.style.opacity = "0";
       document.body.appendChild(ta);
       ta.select();
-      try { document.execCommand("copy"); } catch { /* ignoré */ }
+      try {
+        document.execCommand("copy");
+      } catch {
+        /* ignoré */
+      }
       ta.remove();
     }
     setCopied(key);
-    window.setTimeout(() => setCopied((k) => (k === key ? null : k)), 2500);
+    window.setTimeout(() => setCopied((k) => (k === key ? null : k)), 2000);
   };
 
-  const getDirectLoginUrl = (login: string, pass: string) => {
-    const origin = window.location.origin;
-    return `${origin}/commencer?c=login&r=student&u=${encodeURIComponent(login)}&p=${encodeURIComponent(pass)}&auto=1`;
-  };
+  const copyOne = (id: string, childName: string, login: string, password: string) =>
+    copyText(id, `${childName}\nConnexion : ${window.location.origin}/connexion-eleve\nIdentifiant : ${login}\nMot de passe : ${password}`);
 
-  const shareViaWhatsApp = (childName: string, login: string, pass: string) => {
-    const link = getDirectLoginUrl(login, pass);
-    const msg = `Bonjour ${childName} ! 🎓\nVoici tes accès pour faire tes maths et t'entraîner sur DeclickMath :\n\n👉 Lien de connexion directe (1 clic) :\n${link}\n\n👤 Identifiant : ${login}\n🔑 Mot de passe : ${pass || "(à demander au parent)"}\n\nBonne séance ! ✨`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
-  };
-
-  const openQrCodeModal = async (id: string, childName: string, login: string, pass: string) => {
-    const url = getDirectLoginUrl(login, pass);
-    try {
-      const qrDataUrl = await QRCode.toDataURL(url, {
-        width: 280,
-        margin: 2,
-        color: { dark: "#1c1545", light: "#ffffff" },
-      });
-      setQrModalChild({ id, name: childName, url, qrDataUrl });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleSetCustomPassword = async (childId: string) => {
-    const trimmed = customPwdValue.trim();
-    if (trimmed.length < 4) {
-      setError("Le mot de passe doit comporter au moins 4 caractères.");
-      return;
-    }
-    if (supabaseReady) {
-      await run(async () => {
-        return await remoteResetChildPassword(childId, trimmed);
-      });
-    } else {
-      const err = setChildPassword(parentId, childId, trimmed);
-      if (err) setError(err);
-    }
-    setCustomPwdChild(null);
-    setCustomPwdValue("");
-  };
+  const copyAll = () =>
+    copyText(
+      "all",
+      children
+        .map((c) => `${c.name}\nConnexion : ${window.location.origin}/connexion-eleve\nIdentifiant : ${c.email}\nMot de passe : ${c.password || "(non affiché)"}`)
+        .join("\n\n")
+    );
 
   const removeAccess = (id: string, childName: string) => {
     if (!window.confirm(`Supprimer l'accès de ${childName} ? Son compte et toute sa progression seront effacés définitivement.`)) return;
@@ -122,339 +86,301 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
     else removeChild(parentId, id);
   };
 
-  const handleGenerateNewPassword = (id: string, childName: string) => {
-    if (!window.confirm(`Générer un nouveau mot de passe pour ${childName} ? L'ancien cessera de fonctionner.`)) return;
-    setCopied(null);
-    if (supabaseReady) void run(() => remoteResetChildPassword(id));
-    else resetChildPassword(parentId, id);
+  const handleToggleSuspend = async (c: User) => {
+    const actionLabel = c.suspended ? "Réactiver" : "Suspendre";
+    if (!window.confirm(`${actionLabel} l'accès de ${c.name} ? ${c.suspended ? "Il pourra de nouveau se connecter." : "Il ne pourra plus se connecter jusqu'à réactivation."}`)) return;
+    if (supabaseReady) {
+      void run(() => remoteToggleSuspendChild(c.id, !c.suspended));
+    } else {
+      toggleSuspendChild(parentId, c.id, !c.suspended);
+    }
+  };
+
+  // Ouverture de la modale QR Code
+  const openQrModal = async (c: User, purpose: "activation" | "quick_login" = "activation") => {
+    setQrChild(c);
+    setQrPurpose(purpose);
+    setQrLoading(true);
+    setError(null);
+
+    if (supabaseReady) {
+      const res = await remoteCreateQr(c.id, purpose);
+      setQrLoading(false);
+      if (res.error || !res.token) {
+        setError(res.error ?? "Impossible de générer le QR code.");
+        setQrChild(null);
+      } else {
+        setQrToken(res.token);
+        setQrExpiresAt(res.expiresAt ?? Date.now() + 48 * 3600_000);
+      }
+    } else {
+      const res = createQrToken(parentId, c.id, purpose);
+      setQrLoading(false);
+      if (!res) {
+        setError("Impossible de générer le QR code.");
+        setQrChild(null);
+      } else {
+        setQrToken(res.token);
+        setQrExpiresAt(res.expiresAt);
+      }
+    }
+  };
+
+  // Révocation du QR Code actif
+  const handleRevokeQr = async () => {
+    if (!qrChild) return;
+    if (!window.confirm(`Révoquer immédiatement le QR code de ${qrChild.name} ? L'accès par ce lien deviendra impossible.`)) return;
+    if (supabaseReady) {
+      await remoteRevokeQr(qrChild.id);
+    } else {
+      revokeQrTokens(parentId, qrChild.id);
+    }
+    setQrToken(null);
+    setQrChild(null);
+  };
+
+  // Impression de la fiche élève
+  const openPrintCard = async (c: User) => {
+    // Si aucun jeton n'existe, en créer un pour l'activation
+    let tok: string | null = null;
+    if (supabaseReady) {
+      const res = await remoteCreateQr(c.id, "activation");
+      tok = res.token ?? null;
+    } else {
+      const res = createQrToken(parentId, c.id, "activation");
+      tok = res?.token ?? null;
+    }
+    setPrintChild(c);
+    setPrintToken(tok);
+  };
+
+  // Application du nouveau mot de passe (généré ou personnalisé)
+  const submitNewPassword = async () => {
+    if (!pwdModalChild) return;
+    const pwd = chosenPassword.trim() || undefined;
+    if (pwd && pwd.length < 6) {
+      setError("Le mot de passe doit comporter au moins 6 caractères.");
+      return;
+    }
+    if (supabaseReady) {
+      await run(() => remoteResetChildPassword(pwdModalChild.id, pwd));
+    } else {
+      resetChildPassword(parentId, pwdModalChild.id, pwd);
+    }
+    setPwdModalChild(null);
+    setChosenPassword("");
+  };
+
+  const getActivationUrl = (tok: string | null) => {
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://decli-math.vercel.app";
+    return `${origin}/activation?token=${encodeURIComponent(tok ?? "")}`;
   };
 
   return (
-    <section className="card stack" aria-labelledby="acces" style={{ position: "relative" }}>
-      <div className="row between" style={{ alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
-        <div>
-          <h2 id="acces" style={{ fontSize: "1.15rem", display: "flex", alignItems: "center", gap: 8, margin: "0 0 4px 0" }}>
-            <KeyRound size={20} aria-hidden="true" style={{ color: "#713cff" }} />
-            Accès de connexion de mes enfants
-          </h2>
-          <p className="muted small" style={{ margin: 0, maxWidth: 640 }}>
-            Chaque enfant a son propre identifiant et mot de passe. Transmettez-les-lui par <b>WhatsApp</b>, via le <b>Lien direct 1-clic</b> ou en lui faisant scanner le <b>QR Code</b>.
-          </p>
-        </div>
-
-        <div className="pill" style={{ background: "rgba(113, 60, 255, 0.1)", color: "#713cff", fontWeight: 700, fontSize: "0.85rem" }}>
-          {children.length} enfant{children.length > 1 ? "s" : ""}
-        </div>
-      </div>
+    <section className="card stack" aria-labelledby="acces">
+      <h2 id="acces" style={{ fontSize: "1.1rem" }}>
+        <KeyRound size={20} aria-hidden="true" style={{ verticalAlign: "-3px", color: "var(--primary)" }} /> Accès et connexions de mes enfants
+      </h2>
+      <p className="muted small">
+        Chaque enfant possède son propre espace sécurisé, son propre identifiant et son mot de passe. Vous pouvez générer un <b>QR code d'activation</b> pour lui permettre de définir son mot de passe sur son téléphone ou sa tablette, ou imprimer sa fiche de connexion.
+      </p>
 
       {!supabaseReady && (
-        <div role="alert" className="small" style={{ background: "rgba(245, 158, 11, 0.08)", border: "1px solid #f59e0b", borderRadius: 10, padding: "10px 14px", color: "#b45309" }}>
-          <b>Mode local actif :</b> les comptes sont enregistrés dans ce navigateur. Vous pouvez transmettre les accès à votre enfant sur cet appareil ou utiliser le bouton <b>« Tester l'espace élève »</b> pour vérifier le fonctionnement.
-        </div>
+        <p role="alert" className="small" style={{ border: "1px solid #f59e0b", borderRadius: 10, padding: "8px 12px", background: "rgba(245, 158, 11, 0.08)" }}>
+          <b>Mode local :</b> ces comptes sont enregistrés dans ce navigateur. Pour connecter votre enfant sur un autre appareil, déployez sur votre domaine en ligne.
+        </p>
       )}
+
+      <div className="row between" style={{ borderTop: "1px solid var(--line, #8883)", paddingTop: 12 }}>
+        <h3 style={{ fontSize: "1rem", margin: 0 }}>Enfants enregistrés ({children.length})</h3>
+        {children.length > 1 && (
+          <button type="button" className="btn ghost" onClick={copyAll}>
+            <Copy size={16} aria-hidden="true" /> {copied === "all" ? "Copié !" : "Copier tous les accès"}
+          </button>
+        )}
+      </div>
 
       {children.length === 0 && (
-        <div style={{ textAlign: "center", padding: "24px 16px", background: "rgba(255,255,255,0.03)", borderRadius: 12, border: "1px dashed var(--line, #8883)" }}>
-          <p className="muted" style={{ margin: "0 0 12px 0" }}>Aucun enfant n'est enregistré pour l'instant.</p>
-          <p className="small">Renseignez le prénom et la classe ci-dessous pour créer le premier accès en 1 clic.</p>
-        </div>
+        <p className="muted small" style={{ padding: "12px 0" }}>
+          Aucun enfant pour l'instant. Utilisez le formulaire ci-dessous pour ajouter votre premier enfant.
+        </p>
       )}
 
-      <div className="stack" style={{ gap: 16 }}>
+      <ul className="stack-sm" style={{ listStyle: "none", padding: 0, margin: 0 }}>
         {children.map((c) => {
-          const directUrl = getDirectLoginUrl(c.email, c.password || "");
-          const isPwdVisible = !!showPwd[c.id];
-          const isEditingCustomPwd = customPwdChild === c.id;
+          const isSuspended = !!c.suspended;
+          const isPending = c.mustChangePassword || !c.passwordCustomized;
 
           return (
-            <div
+            <li
               key={c.id}
+              className="stack-sm"
               style={{
-                background: "rgba(255, 255, 255, 0.04)",
-                border: "1px solid var(--line, rgba(255,255,255,0.12))",
-                borderRadius: 14,
-                padding: "16px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 12,
+                padding: "14px 16px",
+                borderRadius: 12,
+                border: "1px solid var(--line, #8883)",
+                background: isSuspended ? "rgba(239, 68, 68, 0.04)" : "var(--card-bg, #ffffff)",
+                transition: "border-color 0.2s ease",
               }}
             >
               <div className="row between" style={{ flexWrap: "wrap", gap: 8 }}>
-                <div className="row" style={{ alignItems: "center", gap: 10 }}>
-                  <span
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: "50%",
-                      background: "linear-gradient(135deg, #713cff, #35b6ff)",
-                      color: "#fff",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: 800,
-                      fontSize: "1.1rem",
-                    }}
-                  >
+                <span className="row" style={{ alignItems: "center", gap: 10 }}>
+                  <span className="avatar" style={{ width: 34, height: 34, fontSize: "1rem" }}>
                     {c.name[0]?.toUpperCase()}
                   </span>
-                  <div>
-                    <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 700 }}>{c.name}</h3>
-                    <span className="muted small">
-                      {levelById(c.level ?? "tle").label}
-                      {c.serie ? ` • Série ${c.serie}` : ""}
+                  <b>{c.name}</b>
+                  <span className="muted small">
+                    • {levelById(c.level ?? "tle").label}{c.serie ? ` ${c.serie}` : ""}
+                  </span>
+                </span>
+
+                {/* Badge de statut */}
+                <span className="row" style={{ gap: 6, alignItems: "center" }}>
+                  {isSuspended ? (
+                    <span className="badge" style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #f87171" }}>
+                      <ShieldAlert size={13} style={{ verticalAlign: "-2px" }} /> Suspendu
                     </span>
-                  </div>
-                </div>
-
-                <div className="row" style={{ gap: 6 }}>
-                  <button
-                    type="button"
-                    className="btn primary sm"
-                    onClick={() => quickSwitchToChild(parentId, c.id)}
-                    title="Basculer instantanément sur le profil de cet élève pour tester"
-                    style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "0.86rem" }}
-                  >
-                    <Play size={14} /> Tester l'espace élève
-                  </button>
-                  <button
-                    type="button"
-                    className="btn ghost sm"
-                    onClick={() => shareViaWhatsApp(c.name, c.email, c.password)}
-                    title="Envoyer les accès pré-rédigés par WhatsApp"
-                    style={{ color: "#25D366", borderColor: "#25D366", display: "inline-flex", alignItems: "center", gap: 6 }}
-                  >
-                    <MessageCircle size={15} /> WhatsApp
-                  </button>
-                  <button
-                    type="button"
-                    className="btn ghost sm"
-                    onClick={() => openQrCodeModal(c.id, c.name, c.email, c.password)}
-                    title="Afficher le QR code pour connexion instantanée sur smartphone ou tablette"
-                    style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
-                  >
-                    <QrCode size={15} /> QR Code
-                  </button>
-                </div>
+                  ) : isPending ? (
+                    <span className="badge" style={{ background: "#fef3c7", color: "#d97706", border: "1px solid #fcd34d" }}>
+                      En attente d'activation
+                    </span>
+                  ) : (
+                    <span className="badge" style={{ background: "#dcfce7", color: "#15803d", border: "1px solid #86efac" }}>
+                      <Check size={13} style={{ verticalAlign: "-2px" }} /> Actif
+                    </span>
+                  )}
+                </span>
               </div>
 
-              {/* Bloc Identifiants */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                  gap: 12,
-                  background: "rgba(0, 0, 0, 0.2)",
-                  borderRadius: 10,
-                  padding: "12px 14px",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                }}
-              >
-                {/* Identifiant */}
+              {/* Coordonnées de connexion */}
+              <div className="stack-sm" style={{ padding: "6px 0", fontSize: "0.95rem" }}>
                 <div>
-                  <span className="muted small" style={{ display: "block", marginBottom: 4 }}>
-                    Identifiant élève :
-                  </span>
-                  <div className="row" style={{ alignItems: "center", gap: 8 }}>
-                    <code
-                      style={{
-                        fontSize: "1.1rem",
-                        fontWeight: 700,
-                        color: "#35b6ff",
-                        background: "rgba(53, 182, 255, 0.1)",
-                        padding: "4px 8px",
-                        borderRadius: 6,
-                        userSelect: "all",
-                      }}
-                    >
-                      {c.email}
-                    </code>
-                    <button
-                      type="button"
-                      className="btn ghost sm"
-                      onClick={() => copyText(`${c.id}-login`, c.email)}
-                      aria-label="Copier l'identifiant"
-                    >
-                      {copied === `${c.id}-login` ? <Check size={14} style={{ color: "#2e9e5b" }} /> : <Copy size={14} />}
-                      <span style={{ fontSize: "0.8rem" }}>{copied === `${c.id}-login` ? "Copié" : "Copier"}</span>
-                    </button>
-                  </div>
+                  Identifiant élève : <code style={{ fontSize: "1.05rem", userSelect: "all", fontWeight: 700 }}>{c.email}</code>{" "}
+                  <button type="button" className="btn link" style={{ padding: "2px 6px" }} aria-label={`Copier l'identifiant de ${c.name}`} onClick={() => copyText(`${c.id}-l`, c.email)}>
+                    {copied === `${c.id}-l` ? "Copié" : "Copier"}
+                  </button>
                 </div>
-
-                {/* Mot de passe */}
                 <div>
-                  <span className="muted small" style={{ display: "block", marginBottom: 4 }}>
-                    Mot de passe élève :
-                  </span>
-                  <div className="row" style={{ alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                    {c.password ? (
-                      <code
-                        style={{
-                          fontSize: "1.1rem",
-                          fontWeight: 700,
-                          letterSpacing: isPwdVisible ? ".05em" : ".2em",
-                          color: "#ffc63d",
-                          background: "rgba(255, 198, 61, 0.1)",
-                          padding: "4px 8px",
-                          borderRadius: 6,
-                          userSelect: "all",
-                        }}
-                      >
-                        {isPwdVisible ? c.password : "••••••••"}
-                      </code>
-                    ) : (
-                      <span className="muted small">Non renseigné sur cet appareil</span>
-                    )}
-
-                    {c.password && (
-                      <button
-                        type="button"
-                        className="btn ghost sm"
-                        onClick={() => setShowPwd((prev) => ({ ...prev, [c.id]: !prev[c.id] }))}
-                        title={isPwdVisible ? "Masquer" : "Afficher"}
-                      >
-                        {isPwdVisible ? <EyeOff size={14} /> : <Eye size={14} />}
+                  Mot de passe : {c.password ? (
+                    <>
+                      <code style={{ fontSize: "1.05rem", letterSpacing: ".06em", userSelect: "all", fontWeight: 700 }}>{c.password}</code>{" "}
+                      <button type="button" className="btn link" style={{ padding: "2px 6px" }} aria-label={`Copier le mot de passe de ${c.name}`} onClick={() => copyText(`${c.id}-p`, c.password)}>
+                        {copied === `${c.id}-p` ? "Copié" : "Copier"}
                       </button>
-                    )}
-
-                    {c.password && (
-                      <button
-                        type="button"
-                        className="btn ghost sm"
-                        onClick={() => copyText(`${c.id}-pass`, c.password)}
-                        aria-label="Copier le mot de passe"
-                      >
-                        {copied === `${c.id}-pass` ? <Check size={14} style={{ color: "#2e9e5b" }} /> : <Copy size={14} />}
-                        <span style={{ fontSize: "0.8rem" }}>{copied === `${c.id}-pass` ? "Copié" : "Copier"}</span>
-                      </button>
-                    )}
-
-                    <button
-                      type="button"
-                      className="btn link sm"
-                      onClick={() => {
-                        setCustomPwdChild(isEditingCustomPwd ? null : c.id);
-                        setCustomPwdValue("");
-                      }}
-                      style={{ fontSize: "0.82rem", padding: "2px 6px" }}
-                    >
-                      <Edit3 size={13} style={{ marginRight: 3 }} />
-                      {isEditingCustomPwd ? "Annuler" : "Modifier"}
-                    </button>
-                  </div>
+                    </>
+                  ) : (
+                    <span className="muted small">
+                      {isPending ? "Temporaire / non affiché sur cet appareil" : "Défini en secret par l'élève"}
+                    </span>
+                  )}
                 </div>
+                {c.password && (
+                  <button
+                    type="button"
+                    className="btn ghost"
+                    style={{ alignSelf: "flex-start" }}
+                    onClick={() => copyOne(`${c.id}-access`, c.name, c.email, c.password)}
+                  >
+                    <Copy size={16} aria-hidden="true" />
+                    {copied === `${c.id}-access` ? "Accès copiés !" : "Copier les accès"}
+                  </button>
+                )}
               </div>
 
-              {/* Formulaire de modification personnalisée du mot de passe */}
-              {isEditingCustomPwd && (
-                <div
-                  style={{
-                    background: "rgba(113, 60, 255, 0.08)",
-                    border: "1px solid rgba(113, 60, 255, 0.25)",
-                    borderRadius: 10,
-                    padding: "12px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 8,
-                  }}
+              {/* Actions rapides */}
+              <div className="row" style={{ flexWrap: "wrap", gap: 8, paddingTop: 6, borderTop: "1px dashed var(--line, #8883)" }}>
+                <button
+                  type="button"
+                  className="btn primary"
+                  disabled={isSuspended || busy}
+                  onClick={() => openQrModal(c, "activation")}
+                  title="Générer un QR code pour la connexion de l'enfant"
                 >
-                  <b style={{ fontSize: "0.92rem", color: "#c4d1f7" }}>
-                    Définir un mot de passe facile à retenir pour {c.name}
-                  </b>
-                  <p className="small muted" style={{ margin: 0 }}>
-                    Exemple : un mot simple (ex: <code>soleil</code>, <code>maths12</code>) ou un code à 4 chiffres (ex: <code>1234</code>).
-                  </p>
-                  <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
-                    <input
-                      type="text"
-                      className="field"
-                      style={{ maxWidth: 220, fontSize: "0.95rem" }}
-                      placeholder="Nouveau mot de passe"
-                      value={customPwdValue}
-                      onChange={(e) => setCustomPwdValue(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      className="btn primary sm"
-                      disabled={busy || customPwdValue.trim().length < 4}
-                      onClick={() => handleSetCustomPassword(c.id)}
-                    >
-                      Enregistrer
-                    </button>
-                    <button
-                      type="button"
-                      className="btn ghost sm"
-                      disabled={busy}
-                      onClick={() => handleGenerateNewPassword(c.id, c.name)}
-                    >
-                      <RefreshCw size={13} style={{ marginRight: 4 }} />
-                      Générer au hasard
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Actions de partage et gestion */}
-              <div className="row" style={{ justifyContent: "space-between", flexWrap: "wrap", gap: 8, paddingTop: 4 }}>
-                <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
-                  <button
-                    type="button"
-                    className="btn ghost sm"
-                    onClick={() => copyText(`${c.id}-link`, directUrl)}
-                    title="Copie le lien direct qui connecte l'élève automatiquement"
-                  >
-                    {copied === `${c.id}-link` ? <Check size={14} style={{ color: "#2e9e5b" }} /> : <ExternalLink size={14} />}
-                    {copied === `${c.id}-link` ? "Lien direct copié !" : "Copier le lien direct (1 clic)"}
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn link sm"
-                    disabled={busy}
-                    onClick={() => {
-                      if (supabaseReady) void run(() => remoteResetChild(c.id));
-                      else regenerateLogin(parentId, c.id);
-                    }}
-                    style={{ fontSize: "0.82rem" }}
-                  >
-                    Nouvel identifiant
-                  </button>
-                </div>
+                  <QrCode size={16} aria-hidden="true" /> QR code
+                </button>
 
                 <button
                   type="button"
-                  className="btn link sm"
+                  className="btn ghost"
+                  disabled={isSuspended || busy}
+                  onClick={() => openPrintCard(c)}
+                  title="Imprimer ou enregistrer la fiche d'accès élève"
+                >
+                  <Printer size={16} aria-hidden="true" /> Fiche élève
+                </button>
+
+                <button
+                  type="button"
+                  className="btn ghost"
                   disabled={busy}
-                  style={{ color: "var(--danger, #ff6b6b)", fontSize: "0.82rem" }}
+                  onClick={() => setPwdModalChild(c)}
+                  title="Définir ou régénérer le mot de passe"
+                >
+                  <RefreshCw size={15} aria-hidden="true" /> Mot de passe
+                </button>
+
+                <button
+                  type="button"
+                  className="btn ghost"
+                  disabled={busy}
+                  onClick={() => {
+                    if (supabaseReady) void run(() => remoteResetChild(c.id));
+                    else regenerateLogin(parentId, c.id);
+                  }}
+                  title="Changer l'identifiant si besoin"
+                >
+                  Nouvel identifiant
+                </button>
+
+                <button
+                  type="button"
+                  className="btn ghost"
+                  style={{ color: isSuspended ? "var(--green, #2e9e5b)" : "var(--amber, #d97706)" }}
+                  disabled={busy}
+                  onClick={() => handleToggleSuspend(c)}
+                >
+                  {isSuspended ? (
+                    <><ShieldCheck size={15} aria-hidden="true" /> Réactiver</>
+                  ) : (
+                    <><ShieldAlert size={15} aria-hidden="true" /> Suspendre</>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  className="btn link"
+                  disabled={busy}
+                  style={{ color: "var(--danger, #ff6b6b)", marginLeft: "auto" }}
                   onClick={() => removeAccess(c.id, c.name)}
                 >
-                  <Trash2 size={14} style={{ verticalAlign: "-2px", marginRight: 4 }} />
-                  Supprimer
+                  <Trash2 size={15} aria-hidden="true" style={{ verticalAlign: "-2px" }} /> Supprimer
                 </button>
               </div>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
 
-      {/* Formulaire d'ajout d'un nouvel enfant */}
+      {/* Formulaire d'ajout d'un enfant */}
       <form
         className="stack-sm"
-        style={{
-          marginTop: 12,
-          padding: "16px",
-          background: "rgba(255,255,255,0.03)",
-          borderRadius: 12,
-          border: "1px dashed var(--line, rgba(255,255,255,0.15))",
-        }}
+        style={{ paddingTop: 14, borderTop: "1px solid var(--line, #8883)" }}
         onSubmit={(e) => {
           e.preventDefault();
-          const kid = { name, level, serie: serie || undefined };
+          const kid = {
+            name: name.trim(),
+            level,
+            serie: serie || undefined,
+            password: customPassword.trim() || undefined,
+          };
+          if (!kid.name) return;
           if (supabaseReady) {
             void run(async () => {
               const err = await remoteCreateChildren([kid]);
               if (!err) {
                 setName("");
                 setSerie("");
+                setCustomPassword("");
               }
               return err;
             });
@@ -462,21 +388,20 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
             addChildren(parentId, [kid]);
             setName("");
             setSerie("");
+            setCustomPassword("");
           }
         }}
       >
-        <b style={{ fontSize: "0.98rem", display: "flex", alignItems: "center", gap: 6 }}>
-          <Plus size={16} style={{ color: "#713cff" }} /> Ajouter un autre enfant
-        </b>
+        <b style={{ fontSize: "1rem" }}>Ajouter un nouvel enfant</b>
         <div className="row" style={{ flexWrap: "wrap", gap: 8 }}>
           <input
             className="field"
             required
-            placeholder="Prénom de l'enfant"
+            placeholder="Prénom ou nom de l'enfant"
             aria-label="Prénom"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{ minWidth: 160 }}
+            style={{ flex: "1 1 180px" }}
           />
           <select
             className="field"
@@ -486,118 +411,365 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
               setLevel(e.target.value as LevelId);
               setSerie("");
             }}
+            style={{ flex: "1 1 130px" }}
           >
             {LEVELS.map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.label}
-              </option>
+              <option key={l.id} value={l.id}>{l.label}</option>
             ))}
           </select>
           {seriesAt(level).length > 0 && (
-            <select className="field" aria-label="Série" value={serie} onChange={(e) => setSerie(e.target.value)}>
+            <select
+              className="field"
+              aria-label="Série"
+              value={serie}
+              onChange={(e) => setSerie(e.target.value)}
+              style={{ flex: "1 1 120px" }}
+            >
               <option value="">Toutes les séries</option>
               {seriesAt(level).map((x) => (
-                <option key={x} value={x}>
-                  Série {x}
-                </option>
+                <option key={x} value={x}>Série {x}</option>
               ))}
             </select>
           )}
+          <input
+            className="field"
+            type="text"
+            placeholder="Mot de passe temporaire (facultatif)"
+            aria-label="Mot de passe temporaire"
+            value={customPassword}
+            onChange={(e) => setCustomPassword(e.target.value)}
+            style={{ flex: "1 1 200px" }}
+          />
           <button className="btn primary" type="submit" disabled={busy}>
             <Plus size={16} aria-hidden="true" /> Créer l'accès
           </button>
         </div>
-        {error && <p className="auth-error" role="alert" style={{ marginTop: 8 }}>{error}</p>}
+        {error && <p className="auth-error" role="alert">{error}</p>}
       </form>
 
-      {/* Modal QR Code de connexion directe */}
-      {qrModalChild && (
+      {/* ========================================================================= */}
+      {/* MODALE QR CODE DE CONNEXION                                                */}
+      {/* ========================================================================= */}
+      {qrChild && (
         <div
           role="dialog"
           aria-modal="true"
-          aria-labelledby="qr-title"
+          aria-labelledby="qr-modal-title"
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(10, 6, 32, 0.8)",
-            backdropFilter: "blur(4px)",
+            background: "rgba(10, 15, 35, 0.75)",
+            backdropFilter: "blur(6px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: 9999,
             padding: 16,
+            zIndex: 9999,
           }}
-          onClick={() => setQrModalChild(null)}
         >
           <div
             className="card stack"
             style={{
-              maxWidth: 400,
+              background: "#fff",
+              color: "#1c1545",
+              maxWidth: 440,
               width: "100%",
-              background: "#1c1545",
-              border: "1px solid rgba(255,255,255,0.2)",
-              borderRadius: 20,
-              padding: 24,
-              textAlign: "center",
-              boxShadow: "0 20px 40px rgba(0,0,0,0.5)",
-              color: "#fff",
+              borderRadius: 16,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
+              position: "relative",
             }}
-            onClick={(e) => e.stopPropagation()}
           >
-            <div className="row between" style={{ alignItems: "center" }}>
-              <h3 id="qr-title" style={{ margin: 0, fontSize: "1.15rem", display: "flex", alignItems: "center", gap: 8 }}>
-                <QrCode size={20} style={{ color: "#ffc63d" }} />
-                Connexion élève : {qrModalChild.name}
-              </h3>
+            <button
+              type="button"
+              className="btn ghost"
+              onClick={() => { setQrChild(null); setQrToken(null); }}
+              aria-label="Fermer"
+              style={{ position: "absolute", top: 12, right: 12, padding: 6, minHeight: "auto" }}
+            >
+              <X size={20} />
+            </button>
+
+            <h3 id="qr-modal-title" style={{ fontSize: "1.2rem", margin: 0 }}>
+              QR Code de connexion — {qrChild.name}
+            </h3>
+
+            {/* Sélecteur de mode de QR code */}
+            <div className="chips" role="group" aria-label="Type de QR code" style={{ margin: "4px 0" }}>
               <button
                 type="button"
-                className="btn ghost sm"
-                onClick={() => setQrModalChild(null)}
-                aria-label="Fermer"
-                style={{ padding: 4 }}
+                className={`btn ${qrPurpose === "activation" ? "primary" : "ghost"}`}
+                onClick={() => openQrModal(qrChild, "activation")}
+                style={{ flex: 1, minHeight: 36, fontSize: "0.85rem" }}
               >
-                <X size={18} />
+                Activation (1ère fois, 48h)
+              </button>
+              <button
+                type="button"
+                className={`btn ${qrPurpose === "quick_login" ? "primary" : "ghost"}`}
+                onClick={() => openQrModal(qrChild, "quick_login")}
+                style={{ flex: 1, minHeight: 36, fontSize: "0.85rem" }}
+              >
+                Connexion rapide (15 min)
               </button>
             </div>
 
-            <p className="small muted" style={{ margin: "4px 0 16px 0" }}>
-              Votre enfant peut scanner ce QR Code avec l'appareil photo de son téléphone ou de sa tablette pour se connecter directement.
-            </p>
-
-            <div
-              style={{
-                background: "#ffffff",
-                padding: 16,
-                borderRadius: 16,
-                display: "inline-block",
-                margin: "0 auto",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-              }}
-            >
-              <img
-                src={qrModalChild.qrDataUrl}
-                alt={`QR code de connexion pour ${qrModalChild.name}`}
-                width={240}
-                height={240}
-                style={{ display: "block" }}
-              />
+            <div style={{ textAlign: "center", padding: "12px 0" }}>
+              {qrLoading ? (
+                <div style={{ height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <p className="muted small">Génération du QR code sécurisé...</p>
+                </div>
+              ) : qrToken ? (
+                <div className="stack" style={{ alignItems: "center" }}>
+                  <QrCodeView value={getActivationUrl(qrToken)} size={220} alt={`QR Code pour ${qrChild.name}`} />
+                  <p className="muted small" style={{ margin: "8px 0 0", maxWidth: 320 }}>
+                    {qrPurpose === "activation"
+                      ? "L'élève scanne ce code avec la caméra de son téléphone pour choisir son mot de passe secret."
+                      : "Connexion instantanée sécurisée. Valable 15 minutes, à usage unique."}
+                  </p>
+                  <p className="small" style={{ color: "#d97706", fontWeight: 600 }}>
+                    Expire le {qrExpiresAt ? new Date(qrExpiresAt).toLocaleString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "dans 48h"}
+                  </p>
+                </div>
+              ) : (
+                <p className="auth-error">Impossible d'afficher le QR code.</p>
+              )}
             </div>
 
-            <p style={{ fontSize: "0.85rem", color: "#ffc63d", fontWeight: 700, margin: "14px 0 0 0" }}>
-              ✨ Connexion automatique en 1 seconde sans taper de mot de passe !
+            <div className="stack-sm">
+              <button
+                type="button"
+                className="btn ghost block"
+                onClick={() => copyText("qr-link", getActivationUrl(qrToken))}
+                disabled={!qrToken}
+              >
+                <Copy size={16} /> {copied === "qr-link" ? "Lien copié !" : "Copier le lien d'activation"}
+              </button>
+
+              <button
+                type="button"
+                className="btn primary block"
+                onClick={() => {
+                  setPrintChild(qrChild);
+                  setPrintToken(qrToken);
+                }}
+              >
+                <Printer size={16} /> Imprimer la fiche élève avec QR code
+              </button>
+
+              <button
+                type="button"
+                className="btn link block"
+                style={{ color: "var(--danger, #ff6b6b)" }}
+                onClick={handleRevokeQr}
+              >
+                <ShieldAlert size={16} /> Révoquer ce QR code maintenant
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODALE FICHE ÉLÈVE IMPRIMABLE                                              */}
+      {/* ========================================================================= */}
+      {printChild && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="print-title"
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(10, 15, 35, 0.8)",
+            backdropFilter: "blur(6px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 16,
+            zIndex: 9999,
+          }}
+        >
+          <div
+            className="stack"
+            style={{
+              background: "#fff",
+              color: "#1c1545",
+              maxWidth: 580,
+              width: "100%",
+              maxHeight: "90vh",
+              overflowY: "auto",
+              borderRadius: 16,
+              padding: 24,
+              boxShadow: "0 25px 50px rgba(0,0,0,0.3)",
+              position: "relative",
+            }}
+          >
+            <div className="row between print-hide" style={{ marginBottom: 12 }}>
+              <span className="pill">Fiche de connexion élève</span>
+              <div className="row" style={{ gap: 8 }}>
+                <button
+                  type="button"
+                  className="btn primary"
+                  onClick={() => window.print()}
+                >
+                  <Printer size={16} /> Imprimer
+                </button>
+                <button
+                  type="button"
+                  className="btn ghost"
+                  onClick={() => { setPrintChild(null); setPrintToken(null); }}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+            </div>
+
+            {/* Document imprimable */}
+            <div
+              id="printable-card"
+              style={{
+                border: "2px solid #1c1545",
+                borderRadius: 12,
+                padding: "24px 20px",
+                background: "#fafbff",
+              }}
+            >
+              <div className="row between" style={{ alignItems: "center", borderBottom: "2px solid #35b6ff", paddingBottom: 14 }}>
+                <div className="row" style={{ alignItems: "center", gap: 10 }}>
+                  <img src="/logo-icon.png" alt="" width="48" height="32" />
+                  <div>
+                    <h2 style={{ fontSize: "1.3rem", margin: 0, color: "#1c1545" }}>DeclickMath</h2>
+                    <p className="small muted" style={{ margin: 0 }}>Fiche personnelle de connexion</p>
+                  </div>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <span className="badge" style={{ fontSize: "0.85rem", background: "#35b6ff", color: "#fff" }}>
+                    {levelById(printChild.level ?? "tle").label}
+                    {printChild.serie ? ` Série ${printChild.serie}` : ""}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ padding: "18px 0", textAlign: "center" }}>
+                <h3 style={{ fontSize: "1.4rem", margin: 0, color: "#1c1545" }}>
+                  Espace de <u>{printChild.name}</u>
+                </h3>
+                <p className="muted small" style={{ margin: "4px 0 0" }}>
+                  Garde cette fiche précieusement pour te connecter à tes cours et exercices.
+                </p>
+              </div>
+
+              <div className="row" style={{ flexWrap: "wrap", gap: 20, alignItems: "center", justifyContent: "center", padding: "12px 0", background: "#fff", borderRadius: 12, border: "1px solid #e2e8f0" }}>
+                {printToken && (
+                  <div style={{ textAlign: "center" }}>
+                    <QrCodeView value={getActivationUrl(printToken)} size={160} alt={`QR Code ${printChild.name}`} />
+                    <p style={{ fontSize: "0.75rem", color: "#64748b", margin: "4px 0 0" }}>Scanne avec ton téléphone</p>
+                  </div>
+                )}
+
+                <div className="stack-sm" style={{ flex: "1 1 220px", padding: "0 10px" }}>
+                  <div style={{ background: "#f8fafc", padding: "8px 12px", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                    <span style={{ fontSize: "0.8rem", color: "#64748b", textTransform: "uppercase", fontWeight: 700 }}>Identifiant élève</span>
+                    <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#0f172a" }}>{printChild.email}</div>
+                  </div>
+
+                  {printChild.password && (
+                    <div style={{ background: "#f8fafc", padding: "8px 12px", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                      <span style={{ fontSize: "0.8rem", color: "#64748b", textTransform: "uppercase", fontWeight: 700 }}>Mot de passe temporaire</span>
+                      <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#0f172a", letterSpacing: ".05em" }}>{printChild.password}</div>
+                    </div>
+                  )}
+
+                  <div style={{ fontSize: "0.85rem", color: "#334155" }}>
+                    <b>Site web :</b> https://decli-math.vercel.app
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 18, borderTop: "1px dashed #cbd5e1", paddingTop: 14 }}>
+                <h4 style={{ fontSize: "0.95rem", margin: "0 0 8px", color: "#1e293b" }}>Comment te connecter ?</h4>
+                <ol style={{ margin: 0, paddingLeft: 20, fontSize: "0.85rem", color: "#475569", lineHeight: 1.6 }}>
+                  <li>Ouvre l'appareil photo de ton téléphone ou de ta tablette et scanne le QR code ci-dessus.</li>
+                  <li>Ou bien ouvre ton navigateur sur <b>decli-math.vercel.app</b> et clique sur « Je suis élève ».</li>
+                  <li>Saisis ton identifiant et ton mot de passe.</li>
+                  <li>Choisis ton mot de passe secret pour protéger ton compte et commence à t'entraîner !</li>
+                </ol>
+              </div>
+
+              <p style={{ margin: "14px 0 0", fontSize: "0.75rem", color: "#94a3b8", textAlign: "center" }}>
+                Document confidentiel • DeclickMath — Comprendre, s'entraîner, réussir
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODALE CHANGEMENT DE MOT DE PASSE ENFANT                                   */}
+      {/* ========================================================================= */}
+      {pwdModalChild && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="pwd-title"
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(10, 15, 35, 0.75)",
+            backdropFilter: "blur(6px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 16,
+            zIndex: 9999,
+          }}
+        >
+          <div
+            className="card stack"
+            style={{
+              background: "#fff",
+              color: "#1c1545",
+              maxWidth: 420,
+              width: "100%",
+              borderRadius: 16,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
+            }}
+          >
+            <h3 id="pwd-title" style={{ fontSize: "1.15rem", margin: 0 }}>
+              Nouveau mot de passe pour {pwdModalChild.name}
+            </h3>
+            <p className="muted small">
+              Vous pouvez laisser le champ vide pour générer un mot de passe aléatoire, ou saisir un mot de passe temporaire simple (au moins 6 caractères) que vous lui transmettrez.
             </p>
 
-            <div className="row" style={{ gap: 8, marginTop: 16, justifyContent: "center" }}>
+            <label className="auth-label">
+              <span>Nouveau mot de passe (optionnel)</span>
+              <span className="auth-input">
+                <Lock size={20} aria-hidden="true" />
+                <input
+                  type="text"
+                  placeholder="Laisser vide pour générer"
+                  value={chosenPassword}
+                  onChange={(e) => setChosenPassword(e.target.value)}
+                />
+              </span>
+            </label>
+
+            <div className="row" style={{ justifyContent: "flex-end", gap: 10, marginTop: 10 }}>
               <button
                 type="button"
                 className="btn ghost"
-                onClick={() => copyText("qr-link", qrModalChild.url)}
+                onClick={() => { setPwdModalChild(null); setChosenPassword(""); }}
               >
-                {copied === "qr-link" ? <Check size={16} /> : <Copy size={16} />}
-                {copied === "qr-link" ? "Lien copié !" : "Copier le lien direct"}
+                Annuler
               </button>
-              <button type="button" className="btn primary" onClick={() => setQrModalChild(null)}>
-                Fermer
+              <button
+                type="button"
+                className="btn primary"
+                disabled={busy}
+                onClick={submitNewPassword}
+              >
+                {chosenPassword ? "Définir ce mot de passe" : "Générer un mot de passe"}
               </button>
             </div>
           </div>

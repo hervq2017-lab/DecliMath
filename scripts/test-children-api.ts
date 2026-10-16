@@ -106,6 +106,10 @@ const rp = await call({ action: "reset-password", childId: b0.id }, T);
 ok(rp.status === 200 && rp.json.password && rp.json.password !== b0.password && users.get(b0.id)!.password === rp.json.password, "nouveau mot de passe : appliqué et renvoyé au parent");
 ok(users.get(b1.id)!.password === b1.password, "le mot de passe des autres enfants ne change pas");
 ok(users.get(b0.id)!.email === `${b0.login}@eleves.declickmath.invalid`, "l'identifiant ne change pas avec le mot de passe");
+const customPassword = await call({ action: "reset-password", childId: kids[2].id, customPassword: "custom123" }, T);
+ok(customPassword.status === 200 && customPassword.json.password === "custom123" && users.get(kids[2].id)!.password === "custom123", "l'ancien champ customPassword reste compatible");
+const password = await call({ action: "reset-password", childId: kids[2].id, password: "custom456" }, T);
+ok(password.status === 200 && password.json.password === "custom456" && users.get(kids[2].id)!.password === "custom456", "le champ password est accepté");
 
 const rl = await call({ action: "reset-login", childId: b0.id }, T);
 ok(rl.status === 200 && rl.json.login !== b0.login && users.get(b0.id)!.password === rp.json.password, "nouvel identifiant : changé, mot de passe conservé");

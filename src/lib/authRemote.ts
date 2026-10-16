@@ -13,6 +13,7 @@ interface ProfileRow {
   id: string; role: Role; name: string; login: string | null; country: string; level: string | null; serie: string | null;
   invite_code: string | null; parent_id: string | null; goal: string | null; placed: boolean; prefs: Partial<Prefs> | null;
   suspended: boolean; paid_until: string | null; notif_seen: string | null; last_login: string | null; created_at: string;
+  must_change_password?: boolean; password_customized?: boolean;
 }
 
 const ms = (t: string | null) => (t ? Date.parse(t) : undefined);
@@ -25,6 +26,7 @@ function toUser(r: ProfileRow, email: string): User {
     parentId: r.parent_id ?? undefined, goal: r.goal ?? undefined, placed: r.placed,
     prefs: r.prefs && Object.keys(r.prefs).length ? { ...DEFAULT_PREFS, ...r.prefs } : undefined,
     suspended: r.suspended || undefined, paidUntil: ms(r.paid_until), createdAt: ms(r.created_at), lastLogin: ms(r.last_login), notifSeen: ms(r.notif_seen),
+    mustChangePassword: r.must_change_password, passwordCustomized: r.password_customized,
   };
 }
 
@@ -310,7 +312,7 @@ export async function remoteResetChild(childId: string): Promise<string | null> 
 
 /** Nouveau mot de passe pour un enfant (son identifiant ne change pas) ; le parent le lit ensuite dans sa fiche. */
 export async function remoteResetChildPassword(childId: string, customPassword?: string): Promise<string | null> {
-  const res = (await callChildren({ action: "reset-password", childId, customPassword })) as { error?: string; password?: string };
+  const res = (await callChildren({ action: "reset-password", childId, password: customPassword })) as { error?: string; password?: string };
   if (res.error || !res.password) return res.error ?? "Changement impossible.";
   cacheChildPassword(childId, res.password);
   await hydrateAfter([{ id: childId, login: null, password: res.password }]);
@@ -322,6 +324,93 @@ export async function remoteDeleteChild(childId: string): Promise<string | null>
   const res = (await callChildren({ action: "delete", childId })) as { error?: string; id?: string };
   if (!res.id) return res.error ?? "Suppression impossible.";
   removeChild(getState().sessionId ?? "", childId);
+  return null;
+}
+
+/** Suspend ou réactive le compte d'un enfant par son parent. */
+export async function remoteToggleSuspendChild(childId: string, suspended?: boolean): Promise<string | null> {
+  const res = (await callChildren({ action: "toggle-suspend", childId, suspended })) as { error?: string; id?: string; suspended?: boolean };
+  if (res.error) return res.error;
+  update((s) => ({
+    ...s,
+    users: s.users.map((u) => (u.id === childId ? { ...u, suspended: res.suspended } : u)),
+  }));
+  return null;
+}
+
+/** Génère un QR code d'activation ou de connexion rapide pour un enfant. */
+export async function remoteCreateQr(childId: string, purpose: "activation" | "quick_login" = "activation"): Promise<{ error: string | null; token?: string; expiresAt?: number }> {
+  const res = (await callChildren({ action: "create-qr", childId, purpose })) as { error?: string; token?: string; expiresAt?: number };
+  if (res.error || !res.token) return { error: res.error ?? "Impossible de générer le QR code." };
+  return { error: null, token: res.token, expiresAt: res.expiresAt };
+}
+
+/** Révoque tous les QR codes actifs d'un enfant. */
+export async function remoteRevokeQr(childId: string): Promise<string | null> {
+  const res = (await callChildren({ action: "revoke-qr", childId })) as { error?: string; ok?: boolean };
+  return res.error ?? null;
+}
+
+/** Vérifie un jeton QR scanné (public). */
+export async function remoteVerifyQr(token: string): Promise<{
+  error: string | null;
+  valid?: boolean;
+  purpose?: "activation" | "quick_login";
+  student?: { id: string; name: string; level: string; serie?: string; login: string };
+}> {
+  try {
+    const r = await fetch("/api/children", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "verify-qr", token }),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.valid) return { error: j.error ?? "QR code invalide ou expiré." };
+    return { error: null, valid: true, purpose: j.purpose, student: j.student };
+  } catch {
+    return { error: "Pas de connexion au serveur. Vérifie ta connexion Internet." };
+  }
+}
+
+/** Consomme un jeton QR (activation avec mot de passe personnalisé ou connexion rapide). */
+export async function remoteConsumeQr(token: string, newPassword?: string): Promise<{ error: string | null; login?: string; purpose?: string; actionLink?: string; hashedToken?: string }> {
+  try {
+    const r = await fetch("/api/children", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "consume-qr", token, newPassword }),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) return { error: j.error ?? "Validation du QR code impossible." };
+    return { error: null, login: j.login, purpose: j.purpose, actionLink: j.actionLink, hashedToken: j.hashedToken };
+  } catch {
+    return { error: "Pas de connexion au serveur." };
+  }
+}
+
+/** Ouvre la session de l'élève avec le jeton à usage unique renvoyé par la connexion rapide (aucun mot de passe n'est nécessaire). */
+export async function remoteOpenQuickSession(hashedToken: string): Promise<string | null> {
+  if (!supabase) return "Serveur non configuré.";
+  if (!hashedToken) return "Connexion rapide indisponible. Utilise ton identifiant et ton mot de passe.";
+  const { error } = await supabase.auth.verifyOtp({ token_hash: hashedToken, type: "magiclink" });
+  if (error) return "Ce QR code ne peut plus ouvrir de session. Demande-en un nouveau à ton parent.";
+  return hydrate(true);
+}
+
+/** Personnalise le mot de passe de l'élève connecté. */
+export async function remoteChangeStudentPassword(newPassword: string): Promise<string | null> {
+  if (!supabase) return "Serveur non configuré.";
+  if (newPassword.length < 6) return "Le mot de passe doit comporter au moins 6 caractères.";
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) return fr(error.message);
+  const uid = (await supabase.auth.getSession()).data.session?.user.id;
+  if (uid) {
+    await supabase.from("profiles").update({ must_change_password: false, password_customized: true }).eq("id", uid);
+    update((s) => ({
+      ...s,
+      users: s.users.map((u) => (u.id === uid ? { ...u, mustChangePassword: false, passwordCustomized: true } : u)),
+    }));
+  }
   return null;
 }
 

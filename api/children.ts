@@ -1,8 +1,9 @@
-// Fonction serveur (Vercel) : le parent crée et gère les accès de ses enfants. La clé SUPABASE_SERVICE_ROLE_KEY reste ICI, jamais dans l'application.
-// L'appelant est identifié par son jeton de session Supabase ; il ne peut agir que sur ses propres enfants.
-// Variables : SUPABASE_SERVICE_ROLE_KEY (obligatoire), VITE_SUPABASE_URL (ou SUPABASE_URL).
+// Fonction serveur (Vercel) : le parent crée et gère les accès de ses enfants, génère des QR codes d'activation/connexion
+// et administre le statut de ses comptes élèves. La clé SUPABASE_SERVICE_ROLE_KEY reste ICI, jamais dans l'application.
+// L'appelant parent est identifié par son jeton de session Supabase ; il ne peut agir que sur ses propres enfants.
+// Les actions publiques (verify-qr, consume-qr) vérifient la validité cryptographique du jeton QR à usage unique.
 import { createClient } from "@supabase/supabase-js";
-import { randomInt } from "node:crypto";
+import { createHash, randomBytes, randomInt } from "node:crypto";
 
 interface Req { method?: string; body?: unknown; headers: Record<string, string | string[] | undefined> }
 interface Res { status(code: number): Res; json(body: unknown): void; setHeader(k: string, v: string): void }
@@ -16,21 +17,49 @@ const newLogin = (name: string) => {
   const base = name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 12) || "eleve";
   return `${base}.${randomInt(1000, 10000)}`;
 };
+const hashToken = (token: string) => createHash("sha256").update(token).digest("hex");
+const generateToken = () => randomBytes(32).toString("hex");
 
-interface Kid { name?: unknown; level?: unknown; serie?: unknown }
-interface Body { action?: string; children?: Kid[]; childId?: string }
+/** Limite par adresse des actions publiques liées au QR code (au mieux, par instance) : 30 appels par minute. */
+const qrHits = new Map<string, number[]>();
+export function qrRateLimited(ip: string, now = Date.now()): boolean {
+  const recent = (qrHits.get(ip) ?? []).filter((t) => now - t < 60_000);
+  recent.push(now);
+  qrHits.set(ip, recent);
+  return recent.length > 30;
+}
 
-type Admin = ReturnType<typeof createClient>;
+interface Kid { name?: unknown; level?: unknown; serie?: unknown; password?: unknown }
+interface Body {
+  action?: string;
+  children?: Kid[];
+  childId?: string;
+  password?: string;
+  customPassword?: string;
+  purpose?: "activation" | "quick_login";
+  token?: string;
+  newPassword?: string;
+  suspended?: boolean;
+}
+
+type Admin = ReturnType<typeof createClient<any>>;
 interface Created { id: string; name: string; login: string; password: string }
 
-/** Crée les comptes enfants d'un parent : chacun reçoit son propre identifiant et son propre mot de passe ; renvoie null si Supabase échoue pour une raison autre qu'un identifiant déjà pris. */
+/** Prend le jeton en une seule opération : si deux appels arrivent ensemble, un seul réussit (usage unique garanti par la base). */
+async function claimToken(admin: Admin, id: string): Promise<boolean> {
+  const now = new Date().toISOString();
+  const { data } = await admin.from("student_qr_tokens").update({ used_at: now }).eq("id", id).is("used_at", null).is("revoked_at", null).gt("expires_at", now).select("id");
+  return !!data?.length;
+}
+
+/** Crée les comptes enfants d'un parent : chacun reçoit son propre identifiant et son propre mot de passe. */
 async function createKids(admin: Admin, parent: { id: string; country: string }, kids: Kid[]): Promise<Created[] | null> {
   const created: Created[] = [];
   for (const k of kids) {
     const name = String(k.name).trim().slice(0, 80);
     const level = /^[a-z0-9]{1,5}$/.test(String(k.level)) ? String(k.level) : "3e";
     const serie = typeof k.serie === "string" ? k.serie.slice(0, 4) : "";
-    const password = newPassword();
+    const password = typeof k.password === "string" && k.password.length >= 6 ? k.password : newPassword();
     for (let attempt = 0; attempt < 5; attempt++) {
       const login = newLogin(name);
       const { data, error } = await admin.auth.admin.createUser({
@@ -43,7 +72,10 @@ async function createKids(admin: Admin, parent: { id: string; country: string },
         continue;
       }
       // Le profil de l'élève est créé ici (le déclencheur de la base ne gère que les parents : GoTrue n'enregistre app_metadata qu'après coup).
-      const { error: pe } = await admin.from("profiles").insert({ id: data.user.id, role: "student", name, login, country: parent.country, level, serie: serie || null, parent_id: parent.id });
+      const { error: pe } = await admin.from("profiles").insert({
+        id: data.user.id, role: "student", name, login, country: parent.country, level, serie: serie || null, parent_id: parent.id,
+        must_change_password: true, password_customized: false,
+      });
       const { error: se } = pe ? { error: pe } : await admin.from("solution_modes").insert({ student_id: data.user.id, mode: "deferred" });
       if (pe || se) {
         await admin.auth.admin.deleteUser(data.user.id); // on ne laisse pas de compte sans profil
@@ -66,13 +98,16 @@ export default async function handler(req: Req, res: Res) {
     return res.status(503).json({ error: `Serveur non configuré (${missing} manquante).` });
   }
 
-  // Inscription d'un parent : ses enfants doivent pouvoir se connecter tout de suite, sans attendre la confirmation de l'e-mail du parent.
-  // Pas de jeton ici (le parent n'a pas encore de session) : l'identifiant du compte, que seul l'inscrit connaît, suffit ; les enfants
-  // viennent des métadonnées enregistrées à l'inscription, jamais de la requête, et l'opération ne marche qu'une fois, juste après l'inscription.
-  const early = (typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body ?? {}) as Body & { userId?: string };
-  if (early.action === "provision") {
-    const admin = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-    const { data: u } = await admin.auth.admin.getUserById(String(early.userId ?? ""));
+  const admin = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  const rawBody = (typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body ?? {}) as Body & { userId?: string };
+
+  // =========================================================================
+  // ACTIONS PUBLIQUES (Ne requièrent pas de session parent : vérification et utilisation du jeton QR)
+  // =========================================================================
+
+  // 1. Inscription rapide lors de l'enregistrement du parent
+  if (rawBody.action === "provision") {
+    const { data: u } = await admin.auth.admin.getUserById(String(rawBody.userId ?? ""));
     const user = u?.user;
     const pending = user?.user_metadata?.pending_children as Kid[] | undefined;
     if (!user || user.user_metadata?.role !== "parent" || !pending?.length || Date.now() - Date.parse(user.created_at) > 30 * 60_000) return res.status(403).json({ error: "Création refusée." });
@@ -85,18 +120,140 @@ export default async function handler(req: Req, res: Res) {
     return res.status(200).json({ created });
   }
 
+  if (rawBody.action === "verify-qr" || rawBody.action === "consume-qr") {
+    const fwd = req.headers["x-forwarded-for"];
+    const ip = (Array.isArray(fwd) ? fwd[0] : fwd)?.split(",")[0].trim() || "?";
+    if (qrRateLimited(ip)) return res.status(429).json({ error: "Trop d'essais. Réessaie dans une minute." });
+  }
+
+  // 2. Vérification d'un QR code (l'élève a scanné le QR code avec son téléphone/tablette)
+  if (rawBody.action === "verify-qr") {
+    const rawToken = String(rawBody.token ?? "").trim();
+    if (!rawToken) return res.status(400).json({ error: "Jeton QR manquant." });
+    const tokenHash = hashToken(rawToken);
+
+    const { data: row, error: tokenErr } = await admin
+      .from("student_qr_tokens")
+      .select("id, student_id, purpose, expires_at, used_at, revoked_at")
+      .eq("token_hash", tokenHash)
+      .single();
+
+    if (tokenErr || !row) return res.status(404).json({ error: "Ce QR code est introuvable ou invalide." });
+    if (row.revoked_at) return res.status(410).json({ error: "Ce QR code a été révoqué par le parent." });
+    if (row.used_at) return res.status(410).json({ error: "Ce QR code a déjà été utilisé." });
+    if (Date.parse(row.expires_at) < Date.now()) return res.status(410).json({ error: "Ce QR code a expiré. Demande un nouveau code à ton parent." });
+
+    const { data: student, error: studentErr } = await admin
+      .from("profiles")
+      .select("id, name, login, level, serie, country, suspended, must_change_password, password_customized")
+      .eq("id", row.student_id)
+      .single();
+
+    if (studentErr || !student) return res.status(404).json({ error: "Compte élève introuvable." });
+    if (student.suspended) return res.status(403).json({ error: "Ce compte élève est actuellement suspendu." });
+
+    return res.status(200).json({
+      valid: true,
+      purpose: row.purpose,
+      student: {
+        id: student.id,
+        name: student.name,
+        login: student.login,
+        level: student.level,
+        serie: student.serie,
+        country: student.country,
+        mustChangePassword: student.must_change_password,
+        passwordCustomized: student.password_customized,
+      },
+    });
+  }
+
+  // 3. Consommation d'un QR code (activation avec choix du mot de passe ou connexion rapide sécurisée)
+  if (rawBody.action === "consume-qr") {
+    const rawToken = String(rawBody.token ?? "").trim();
+    if (!rawToken) return res.status(400).json({ error: "Jeton QR manquant." });
+    const tokenHash = hashToken(rawToken);
+
+    const { data: row, error: tokenErr } = await admin
+      .from("student_qr_tokens")
+      .select("id, student_id, purpose, expires_at, used_at, revoked_at")
+      .eq("token_hash", tokenHash)
+      .single();
+
+    if (tokenErr || !row) return res.status(404).json({ error: "Ce QR code est introuvable ou invalide." });
+    if (row.revoked_at) return res.status(410).json({ error: "Ce QR code a été révoqué par le parent." });
+    if (row.used_at) return res.status(410).json({ error: "Ce QR code a déjà été utilisé." });
+    if (Date.parse(row.expires_at) < Date.now()) return res.status(410).json({ error: "Ce QR code a expiré." });
+
+    const { data: student } = await admin
+      .from("profiles")
+      .select("id, name, login, country, level, serie, suspended")
+      .eq("id", row.student_id)
+      .single();
+
+    if (!student) return res.status(404).json({ error: "Compte élève introuvable." });
+    if (student.suspended) return res.status(403).json({ error: "Ce compte élève est suspendu." });
+
+    if (row.purpose === "activation") {
+      const newPassword = String(rawBody.newPassword ?? "").trim();
+      if (newPassword.length < 6) return res.status(400).json({ error: "Le mot de passe doit comporter au moins 6 caractères." });
+
+      // Invalider le jeton immédiatement (usage unique, atomique)
+      if (!(await claimToken(admin, row.id))) return res.status(410).json({ error: "Ce QR code a déjà été utilisé." });
+
+      // Appliquer le mot de passe personnalisé de l'élève
+      const { error: pwdErr } = await admin.auth.admin.updateUserById(student.id, { password: newPassword });
+      if (pwdErr) {
+        await admin.from("student_qr_tokens").update({ used_at: null }).eq("id", row.id);
+        return res.status(500).json({ error: "Erreur lors de la mise à jour du mot de passe." });
+      }
+
+      await admin.from("profiles").update({ must_change_password: false, password_customized: true }).eq("id", student.id);
+      return res.status(200).json({
+        ok: true,
+        purpose: "activation",
+        login: student.login,
+      });
+    }
+
+    if (row.purpose === "quick_login") {
+      if (!(await claimToken(admin, row.id))) return res.status(410).json({ error: "Ce QR code a déjà été utilisé." });
+      const email = `${student.login}@${CHILD_DOMAIN}`;
+      const { data: linkData, error: linkErr } = await admin.auth.admin.generateLink({
+        type: "magiclink",
+        email,
+      });
+      if (linkErr || !linkData) {
+        return res.status(500).json({ error: "Impossible d'ouvrir la session rapide." });
+      }
+      return res.status(200).json({
+        ok: true,
+        purpose: "quick_login",
+        login: student.login,
+        actionLink: linkData.properties?.action_link,
+        hashedToken: linkData.properties?.hashed_token,
+      });
+    }
+
+    return res.status(400).json({ error: "Action QR inconnue." });
+  }
+
+  // =========================================================================
+  // ACTIONS PARENT (Vérification du Bearer token Supabase)
+  // =========================================================================
+
   const auth = String(req.headers.authorization ?? "");
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
   if (!token) return res.status(401).json({ error: "Connexion requise." });
 
-  const admin = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data: who, error: whoErr } = await admin.auth.getUser(token);
   if (whoErr || !who.user) return res.status(401).json({ error: "Session invalide. Reconnecte-toi." });
   const { data: parent } = await admin.from("profiles").select("id, role, country, suspended").eq("id", who.user.id).single();
   if (!parent || parent.role !== "parent" || parent.suspended) return res.status(403).json({ error: "Réservé aux parents." });
 
-  const body = (typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body ?? {}) as Body;
+  const body = rawBody;
 
+  // Créer un ou plusieurs enfants
   if (body.action === "create") {
     const kids = (body.children ?? []).filter((k) => typeof k.name === "string" && k.name.trim());
     if (!kids.length) return res.status(400).json({ error: "Aucun enfant à créer." });
@@ -107,6 +264,64 @@ export default async function handler(req: Req, res: Res) {
     return res.status(200).json({ created });
   }
 
+  // Générer un nouveau QR code (activation ou connexion rapide)
+  if (body.action === "create-qr") {
+    const childId = String(body.childId ?? "");
+    const purpose = body.purpose === "quick_login" ? "quick_login" : "activation";
+    const { data: child } = await admin.from("profiles").select("id, name, login, suspended").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
+    if (!child) return res.status(404).json({ error: "Enfant introuvable." });
+    if (child.suspended) return res.status(400).json({ error: "Le compte de cet enfant est suspendu. Réactivez-le d'abord." });
+
+    // Révoquer les anciens jetons non consommés pour cette même fin
+    await admin.from("student_qr_tokens").update({ revoked_at: new Date().toISOString() }).eq("student_id", child.id).eq("purpose", purpose).is("used_at", null).is("revoked_at", null);
+
+    const rawToken = generateToken();
+    const tokenHash = hashToken(rawToken);
+    // Activation valable 48 heures (2880 min) ; connexion rapide valable 15 minutes
+    const durationMinutes = purpose === "quick_login" ? 15 : 2880;
+    const expiresAt = new Date(Date.now() + durationMinutes * 60_000).toISOString();
+
+    const { error: insErr } = await admin.from("student_qr_tokens").insert({
+      student_id: child.id,
+      token_hash: tokenHash,
+      purpose,
+      expires_at: expiresAt,
+      created_by: parent.id,
+    });
+    if (insErr) return res.status(500).json({ error: "Impossible de créer le jeton QR." });
+
+    return res.status(200).json({
+      childId: child.id,
+      token: rawToken,
+      purpose,
+      expiresAt: Date.parse(expiresAt),
+    });
+  }
+
+  // Révoquer immédiatement tous les QR codes d'un enfant
+  if (body.action === "revoke-qr") {
+    const childId = String(body.childId ?? "");
+    const { data: child } = await admin.from("profiles").select("id").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
+    if (!child) return res.status(404).json({ error: "Enfant introuvable." });
+    await admin.from("student_qr_tokens").update({ revoked_at: new Date().toISOString() }).eq("student_id", child.id).is("used_at", null).is("revoked_at", null);
+    return res.status(200).json({ ok: true });
+  }
+
+  // Suspendre ou réactiver le compte d'un enfant
+  if (body.action === "toggle-suspend") {
+    const childId = String(body.childId ?? "");
+    const { data: child } = await admin.from("profiles").select("id, suspended").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
+    if (!child) return res.status(404).json({ error: "Enfant introuvable." });
+    const suspended = typeof body.suspended === "boolean" ? body.suspended : !child.suspended;
+    const { error: upErr } = await admin.from("profiles").update({ suspended }).eq("id", child.id);
+    if (upErr) return res.status(500).json({ error: "Changement de statut impossible." });
+    if (suspended) {
+      await admin.from("student_qr_tokens").update({ revoked_at: new Date().toISOString() }).eq("student_id", child.id).is("used_at", null).is("revoked_at", null);
+    }
+    return res.status(200).json({ id: child.id, suspended });
+  }
+
+  // Régénérer l'identifiant d'un enfant
   if (body.action === "reset-login") {
     const childId = String(body.childId ?? "");
     const { data: child } = await admin.from("profiles").select("id, name").eq("id", childId).eq("parent_id", parent.id).single();
@@ -121,19 +336,21 @@ export default async function handler(req: Req, res: Res) {
     return res.status(500).json({ error: "Changement impossible." });
   }
 
-  // Nouveau mot de passe pour un enfant (identifiant inchangé) ; le parent le lit à l'écran et le transmet.
+  // Nouveau mot de passe (généré ou choisi par le parent)
   if (body.action === "reset-password") {
     const childId = String(body.childId ?? "");
     const { data: child } = await admin.from("profiles").select("id").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
     if (!child) return res.status(404).json({ error: "Enfant introuvable." });
-    const custom = typeof (body as any).customPassword === "string" ? (body as any).customPassword.trim() : "";
-    const password = custom.length >= 4 ? custom : newPassword();
+    const requestedPassword = typeof body.password === "string" ? body.password : body.customPassword;
+    const customPassword = typeof requestedPassword === "string" ? requestedPassword.trim() : "";
+    const password = customPassword.length >= 6 ? customPassword : newPassword();
     const { error } = await admin.auth.admin.updateUserById(child.id, { password });
     if (error) return res.status(500).json({ error: "Changement impossible." });
+    await admin.from("profiles").update({ must_change_password: true }).eq("id", child.id);
     return res.status(200).json({ id: child.id, password });
   }
 
-  // Supprime l'accès d'un enfant : son compte, son profil et sa progression disparaissent (suppression en cascade). Irréversible.
+  // Supprime l'accès d'un enfant : compte, profil et progression disparaissent en cascade
   if (body.action === "delete") {
     const childId = String(body.childId ?? "");
     const { data: child } = await admin.from("profiles").select("id").eq("id", childId).eq("parent_id", parent.id).eq("role", "student").single();
