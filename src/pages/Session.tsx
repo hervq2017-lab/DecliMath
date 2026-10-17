@@ -175,6 +175,11 @@ function SessionInner() {
           <ExerciseActions
             title={`${tpl.skill ?? tNotion.title} — série de ${tasks.length} exercices`}
             url={`/serie/${encodeURIComponent(id)}?t=${encodeURIComponent(tpl.id)}&drill=1&n=${tasks.length}${assignmentId ? `&assignment=${encodeURIComponent(assignmentId)}` : ""}`}
+            pdfContent={tasks.map((task, index) => {
+              const exercise = taskOf(task);
+              const context = exercise.tpl.contexts.find((item) => item.id === task.ctx)?.label;
+              return `${index + 1}. ${context ? `${context} — ` : ""}${exercise.inst.statement}\n\nRéponse :\n____________________________________________________________\n____________________________________________________________\n____________________________________________________________`;
+            }).join("\n\n")}
           />
           <p className="lead">{good} bonne{good > 1 ? "s" : ""} réponse{good > 1 ? "s" : ""} • +{pts} pts d'effort</p>
           <section className="card stack" style={{ background: "#fff", borderColor: "#fff", textAlign: "left" }}>
@@ -196,7 +201,14 @@ function SessionInner() {
               </div>
             )}
             <div className="deck"><span className="icon-tile sm"><Lightbulb size={22} aria-hidden="true" /></span><p>Déclic te dit : « {msg} »</p></div>
-            <button className="btn primary block" onClick={() => nav(0)}>{sk ? (sk.mastered ? `${SKILL_ROUND} exercices de plus pour consolider` : `Refaire ${SKILL_ROUND} nouveaux exercices`) : "Continuer ma série"}</button>
+            <Link
+              className="btn primary block"
+              to={drillId
+                ? `/serie/${encodeURIComponent(id)}?t=${encodeURIComponent(drillId)}&drill=1&n=${tasks.length}&s=${Date.now()}`
+                : `/serie/${encodeURIComponent(id)}?s=${Date.now()}`}
+            >
+              <RotateCw size={18} aria-hidden="true" /> {sk ? "Refaire une série d'exercices similaires" : "Générer une nouvelle série"}
+            </Link>
             <Link className="btn link" to={back}>{sk ? "Retour aux compétences" : "Revoir mes erreurs sans pression"}</Link>
           </section>
         </main>

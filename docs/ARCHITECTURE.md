@@ -19,7 +19,7 @@
 - **Épreuves** : composition de niveau, ou examen blanc de fin de cycle (CM2 / 3e / Tle, nom selon le pays). Chrono, sans aide, notée /20, corrigé par notion à la fin.
 - **Corrigé** : Autoriser / Différer / Bloquer par le parent ; consultation avant tentative tracée.
 - **Devoirs assignés** : un parent lié peut consulter le catalogue de son enfant et lui donner une série de 10 exercices sur une compétence. La table `exercise_assignments`, créée par la migration `20261017100000_exercise_assignments.sql`, est protégée par RLS ; l'élève voit ses devoirs sur l'accueil et leur achèvement est enregistré à la fin de la série.
-- **Partage des exercices** : les séances, contrôles, problèmes, épreuves, jeux, cartes, étapes, simulations et dossiers de philosophie proposent un lien WhatsApp et une impression enregistrable en PDF depuis le navigateur.
+- **Partage des exercices** : les séances, contrôles, problèmes, épreuves, jeux, cartes, étapes, simulations et dossiers de philosophie proposent un lien WhatsApp et un téléchargement PDF direct. Les séries terminées peuvent être régénérées avec de nouveaux nombres, en gardant la même compétence.
 
 ## Ajouter du contenu
 
