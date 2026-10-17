@@ -44,6 +44,7 @@ interface Body {
 
 type Admin = ReturnType<typeof createClient<any>>;
 interface Created { id: string; name: string; login: string }
+interface CreationResult { created: Created[]; error?: string }
 
 /** Prend le jeton en une seule opération : si deux appels arrivent ensemble, un seul réussit (usage unique garanti par la base). */
 async function claimToken(admin: Admin, id: string): Promise<boolean> {
@@ -53,7 +54,7 @@ async function claimToken(admin: Admin, id: string): Promise<boolean> {
 }
 
 /** Crée les comptes en attente : le mot de passe définitif appartient à l'élève, lors de l'acceptation. */
-async function createKids(admin: Admin, parent: { id: string; country: string }, kids: Kid[]): Promise<Created[] | null> {
+async function createKids(admin: Admin, parent: { id: string; country: string }, kids: Kid[]): Promise<CreationResult> {
   const created: Created[] = [];
   for (const k of kids) {
     const name = String(k.name).trim().slice(0, 80);
@@ -68,7 +69,13 @@ async function createKids(admin: Admin, parent: { id: string; country: string },
         user_metadata: { role: "student", name, country: parent.country, level, serie },
       });
       if (error || !data.user) {
-        if (!/already|registered|exists/i.test(error?.message ?? "")) return created.length ? created : null;
+        if (!/already|registered|exists/i.test(error?.message ?? "")) {
+          console.error("Échec de création du compte élève dans Supabase Auth :", error);
+          const message = /database error (creating|saving) new user/i.test(error?.message ?? "")
+            ? "La base Supabase bloque la création des comptes élèves. Applique la migration 20261017010000_parent_child_profile_trigger.sql, puis réessaie."
+            : "Le serveur n'a pas pu créer le compte élève. Consulte les journaux du serveur pour le détail.";
+          return { created, error: message };
+        }
         continue;
       }
       // Le profil de l'élève est créé ici (le déclencheur de la base ne gère que les parents : GoTrue n'enregistre app_metadata qu'après coup).
@@ -78,15 +85,26 @@ async function createKids(admin: Admin, parent: { id: string; country: string },
       });
       const { error: se } = pe ? { error: pe } : await admin.from("solution_modes").insert({ student_id: data.user.id, mode: "deferred" });
       if (pe || se) {
-        await admin.auth.admin.deleteUser(data.user.id); // on ne laisse pas de compte sans profil
-        if (pe?.code === "23505") continue; // identifiant déjà pris : on en tire un autre
-        return created.length ? created : null;
+        const { error: cleanupError } = await admin.auth.admin.deleteUser(data.user.id);
+        if (cleanupError) console.error("Échec du nettoyage du compte élève incomplet :", cleanupError);
+        console.error("Échec de création du profil ou du mode de correction de l'élève :", pe ?? se);
+        if (pe?.code === "23505" && /profiles_login_key|login/i.test(pe.message ?? "")) continue;
+        if (pe?.code === "23505" && /profiles_pkey/i.test(pe.message ?? "")) {
+          return {
+            created,
+            error: "La base Supabase crée encore le profil élève avec un ancien déclencheur. Applique la migration 20261017010000_parent_child_profile_trigger.sql, puis réessaie.",
+          };
+        }
+        return { created, error: "La base Supabase n'a pas pu enregistrer le profil élève. Vérifie que les migrations du projet sont à jour." };
       }
       created.push({ id: data.user.id, name, login });
       break;
     }
   }
-  return created;
+  if (created.length < kids.length) {
+    return { created, error: "Impossible de générer un identifiant disponible pour chaque élève. Réessaie." };
+  }
+  return { created };
 }
 
 export default async function handler(req: Req, res: Res) {
@@ -114,10 +132,10 @@ export default async function handler(req: Req, res: Res) {
     const kids = pending.filter((k) => typeof k.name === "string" && k.name.trim()).slice(0, MAX_CHILDREN);
     const { data: parent } = await admin.from("profiles").select("id, country, name").eq("id", user.id).single();
     if (!parent) return res.status(404).json({ error: "Profil du parent introuvable." });
-    const created = await createKids(admin, parent, kids);
-    if (!created?.length) return res.status(500).json({ error: "Création impossible." });
+    const result = await createKids(admin, parent, kids);
+    if (!result.created.length) return res.status(500).json({ error: result.error ?? "Création impossible." });
     await admin.auth.admin.updateUserById(user.id, { user_metadata: { ...user.user_metadata, pending_children: [] } });
-    return res.status(200).json({ created });
+    return res.status(200).json({ created: result.created, error: result.error });
   }
 
   if (rawBody.action === "verify-qr" || rawBody.action === "consume-qr") {
@@ -269,9 +287,9 @@ export default async function handler(req: Req, res: Res) {
     if (!kids.length) return res.status(400).json({ error: "Aucun enfant à créer." });
     const { count } = await admin.from("profiles").select("id", { count: "exact", head: true }).eq("parent_id", parent.id);
     if ((count ?? 0) + kids.length > MAX_CHILDREN) return res.status(400).json({ error: `Maximum ${MAX_CHILDREN} enfants par compte.` });
-    const created = await createKids(admin, parent, kids);
-    if (created === null) return res.status(500).json({ error: "Création impossible." });
-    return res.status(200).json({ created });
+    const result = await createKids(admin, parent, kids);
+    if (!result.created.length) return res.status(500).json({ error: result.error ?? "Création impossible." });
+    return res.status(200).json({ created: result.created, error: result.error });
   }
 
   // Générer un nouveau QR code (activation ou connexion rapide)

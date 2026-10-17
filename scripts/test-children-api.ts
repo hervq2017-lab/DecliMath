@@ -7,6 +7,7 @@ type P = Record<string, any>;
 const users = new Map<string, U>();
 let profiles: P[] = [];
 const solutionModes: P[] = [];
+let nextAuthCreateError: string | null = null;
 let seq = 0;
 const newId = () => `00000000-0000-4000-8000-${String(++seq).padStart(12, "0")}`;
 
@@ -36,6 +37,11 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
     if (adm) {
       const id = adm[1];
       if (req.method === "POST") {
+        if (nextAuthCreateError) {
+          const message = nextAuthCreateError;
+          nextAuthCreateError = null;
+          return send(res, 500, { message });
+        }
         if ([...users.values()].some((x) => x.email === body.email)) return send(res, 422, { msg: "A user with this email address has already been registered" });
         return send(res, 200, fmt(addUser(body.email, body.password, body.user_metadata, body.app_metadata)));
       }
@@ -104,6 +110,9 @@ ok(kids.every((k) => profiles.find((p) => p.id === k.id)?.login === k.login && p
 ok(kids.every((k) => solutionModes.some((m) => m.student_id === k.id && m.mode === "deferred")), "corrigé « différé » par défaut pour chaque élève");
 
 const [b0, b1] = kids;
+nextAuthCreateError = "Database error saving new user";
+const triggerFailure = await call({ action: "create", children: [{ name: "Lina", level: "3e" }] }, T);
+ok(triggerFailure.status === 500 && triggerFailure.json.error.includes("20261017010000_parent_child_profile_trigger.sql"), "déclencheur Supabase obsolète : diagnostic de migration explicite");
 const b1InitialPassword = users.get(b1.id)!.password;
 const rp = await call({ action: "reset-password", childId: b0.id }, T);
 ok(rp.status === 200 && rp.json.password && rp.json.password !== initialPasswords[0] && users.get(b0.id)!.password === rp.json.password, "nouveau mot de passe de récupération : appliqué");
