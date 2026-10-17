@@ -2,6 +2,8 @@ import { Check, CheckCircle2, History, MessageCircle, ShieldAlert, Sparkles, Tar
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ChildAccess from "./ChildAccess";
+import { SubscriptionPlans } from "../components/SubscriptionPlans";
+import { subscriptionPlan } from "../lib/subscriptionPlans";
 import { Chip, ParentChildNav, ProgressBar, StreakChip, TopBar } from "../components/ui";
 import { countryByCode, levelById, notionsOf, SUBJECT_LABEL, subjectsAt } from "../curriculum";
 import { hasContent } from "../engine";
@@ -52,6 +54,16 @@ export default function ParentHome() {
         </header>
 
         <ChildAccess parentId={me.id} />
+
+        <section className="card stack" aria-labelledby="subscription-title">
+          <div className="stack-sm">
+            <h2 id="subscription-title" style={{ fontSize: "1.15rem", margin: 0 }}>Mon abonnement</h2>
+            {me.paidUntil && me.paidUntil > Date.now()
+              ? <p className="muted small">Offre {subscriptionPlan(me.subscriptionPlan).name} active jusqu'au {new Date(me.paidUntil).toLocaleDateString("fr-FR")}.</p>
+              : <p className="muted small">Choisissez une offre. L'accès payant ne sera activé qu'après confirmation du paiement par SasPay.</p>}
+          </div>
+          <SubscriptionPlans countryCode={me.country} />
+        </section>
 
         {children.length === 0 && (
           <section className="card stack">

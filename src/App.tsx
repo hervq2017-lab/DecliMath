@@ -36,6 +36,7 @@ import Progress from "./pages/Progress";
 import Session from "./pages/Session";
 import Sujet, { SujetParent } from "./pages/Sujet";
 import Philosophie from "./pages/Philosophie";
+import PaymentReturn from "./pages/PaymentReturn";
 import { stopPreview } from "./adminActions";
 import { currentUser, DEFAULT_PREFS, restoreParentSession, THEMES, themeOf, useStore } from "./store";
 
@@ -62,6 +63,7 @@ function AppInner() {
 
   if (recovering) return <ResetPassword />; // lien « mot de passe oublié » : on choisit le nouveau mot de passe avant tout
   if (pathname === "/activation" || pathname === "/connexion-qr") return <StudentActivation />;
+  if (pathname === "/paiement/retour") return <PaymentReturn />;
   if (!user) {
     return (
       <Routes>

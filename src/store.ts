@@ -25,6 +25,7 @@ export interface User {
   prefs?: Prefs;
   suspended?: boolean; // compte suspendu par un administrateur
   paidUntil?: number; // abonnement actif jusqu'à cette date (ms)
+  subscriptionPlan?: "essential" | "family" | "family_plus";
   createdAt?: number;
   lastLogin?: number; // début de la session en cours (ms)
   notifSeen?: number; // notifications vues jusqu'à cette date (ms)

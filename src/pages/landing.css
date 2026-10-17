@@ -1228,6 +1228,65 @@
   box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6), 0 0 50px rgba(109, 76, 255, 0.2);
 }
 
+.lx-offer-outer { grid-template-columns: minmax(0, 1fr); max-width: 1440px; }
+.lx-offer-card-main { display: block; padding: clamp(22px, 4vw, 42px); }
+.lx-offer-card-content { gap: 14px; }
+
+.dm-plans { width: 100%; margin-top: 8px; }
+.dm-plans-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.dm-plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 24px 20px 20px;
+  border: 1px solid rgba(145, 160, 220, .25);
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(14, 24, 61, .98), rgba(19, 31, 76, .96));
+  box-shadow: 0 16px 36px rgba(0, 0, 0, .2);
+}
+.dm-plan-popular { border-color: rgba(53, 182, 255, .8); box-shadow: 0 0 0 1px rgba(53, 182, 255, .26), 0 18px 42px rgba(40, 111, 220, .18); }
+.dm-plan-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin: -9px 0 -4px;
+  padding: 5px 10px;
+  border: 1px solid rgba(53, 182, 255, .5);
+  border-radius: 99px;
+  background: rgba(53, 182, 255, .12);
+  color: #9bdcff;
+  font-size: .75rem;
+  font-weight: 800;
+}
+.dm-plan-head h3 { margin: 0; font-size: 1.22rem; color: #fff; }
+.dm-plan-head p { display: flex; align-items: center; gap: 7px; margin: 6px 0 0; color: #c1cceb; font-size: .88rem; }
+.dm-plan-price { margin: 0; color: #fff; font-size: clamp(1.65rem, 2.4vw, 2rem); font-weight: 900; letter-spacing: -.04em; }
+.dm-plan-price span { font-size: .94rem; font-weight: 700; letter-spacing: 0; }
+.dm-plan-price small { color: #b6c0dc; font-size: .82rem; font-weight: 500; }
+.dm-plan-card ul { display: grid; gap: 11px; margin: 0; padding: 14px 0; border-top: 1px solid rgba(255, 255, 255, .1); list-style: none; flex: 1; }
+.dm-plan-card li { display: flex; align-items: flex-start; gap: 9px; color: #e2e9fb; font-size: .86rem; line-height: 1.45; }
+.dm-plan-card li svg { flex: none; margin-top: 2px; color: #55e2c0; }
+.dm-plan-button { display: flex; width: 100%; min-height: 46px; justify-content: center; align-items: center; gap: 8px; text-decoration: none; }
+.dm-plan-button:disabled { cursor: wait; opacity: .7; }
+.dm-plan-spinner { animation: dm-spin .9s linear infinite; }
+.dm-plan-note { margin: 14px 0 0; color: #c1cceb; font-size: .82rem; line-height: 1.5; }
+@keyframes dm-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 1050px) {
+  .dm-plans-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dm-plan-card:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 620px) {
+  .lx-offer-outer { gap: 18px; }
+  .lx-offer-card-main { padding: 20px 14px; border-radius: 24px; }
+  .dm-plans-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .dm-plan-card:last-child { grid-column: auto; }
+  .dm-plan-card { padding: 20px 16px 16px; }
+}
+
 @media (min-width: 680px) {
   .lx-offer-card-main {
     grid-template-columns: 1.25fr 0.75fr;

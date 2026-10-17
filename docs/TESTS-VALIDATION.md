@@ -15,6 +15,8 @@ Le build Vite émet les avertissements déjà constatés : usage de `eval` dans 
 - `scripts/test-children-api.ts` : un appel sans session demandant l’action historique `provision` reçoit désormais `401`.
 - `scripts/test-progress-sync.ts` : une ligne locale conservée pendant la fusion n’est pas incluse parmi les identifiants effectivement récupérés du serveur ; seules les lignes serveur peuvent être marquées connues.
 - `scripts/test-exercise-assignments.ts` : création locale d'un devoir, refus d'achèvement par un autre élève et achèvement idempotent de la série.
+- `scripts/test-subscription-plans.ts` : montants, plafonds d'enfants, offre populaire et valeurs de repli des trois abonnements.
+- `scripts/test-children-api.ts` : la création de profils enfants est limitée par le plafond de l'offre active du parent, contrôlé côté serveur.
 
 ## Non exécutés intentionnellement
 
@@ -22,6 +24,7 @@ Le build Vite émet les avertissements déjà constatés : usage de `eval` dans 
 - `npm run e2e:browser` : aucun parcours avec projet Supabase de test et comptes dédiés n’a été configuré.
 - SQL réel, migrations, RLS et opérations Auth : évalués sur les migrations versionnées et par des faux serveurs de test, pas sur une base distante.
 - La migration `20261017100000_exercise_assignments.sql` doit être appliquée au projet Supabase avant d'utiliser les devoirs assignés en ligne ; elle n'a pas été exécutée sur une base distante.
+- La migration `20261017110000_saspay_subscriptions.sql` doit être appliquée avant le paiement en ligne. Les variables serveur `SASPAY_API_KEY` et `APP_URL` doivent être configurées sur Vercel ; le test réel de checkout nécessite un compte SasPay et une clé `sk_test_...`.
 - Tests fournisseur OCR/tuteur et paiement : aucun secret ni service de test n’a été utilisé.
 
 ## Suite de validation avant mise en ligne

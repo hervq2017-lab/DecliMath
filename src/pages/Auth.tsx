@@ -3,13 +3,14 @@ import {
   ShieldCheck, Target, User, UserPlus, Users,
 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Chip, Logo } from "../components/ui";
 import "./auth.css";
 import { COUNTRIES, LEVELS, LevelId, seriesAt } from "../curriculum";
 import { ChildInput, logIn, Role, signUp, signUpParent } from "../store";
 import { remoteForgotPassword, remoteLogIn, remoteSignUp } from "../lib/authRemote";
 import { supabaseReady } from "../lib/supabase";
+import { isSubscriptionPlanId, SUBSCRIPTION_PLANS } from "../lib/subscriptionPlans";
 
 /** Toque de diplômé (illustration de l'en-tête). */
 function GradCap() {
@@ -66,7 +67,13 @@ function ForgotPassword({ onBack }: { onBack: () => void }) {
 const GOALS = ["Rattraper mon retard", "Préparer un contrôle", "Préparer l'examen", "Prendre de l'avance"];
 
 export default function Auth({ defaultWho }: { defaultWho?: "parent" | "student" } = {}) {
+  const navigate = useNavigate();
   const [params] = useSearchParams();
+  const requestedPlanId = params.get("plan");
+  const requestedPlan = isSubscriptionPlanId(requestedPlanId)
+    ? SUBSCRIPTION_PLANS[requestedPlanId]
+    : null;
+  const requestedNext = params.get("next");
   const urlUser = params.get("u") || params.get("login") || "";
   const isStudentParam = params.get("r") === "student" || !!urlUser;
 
@@ -87,7 +94,6 @@ export default function Auth({ defaultWho }: { defaultWho?: "parent" | "student"
   const [pwd, setPwd] = useState("");
   const [kids, setKids] = useState<ChildInput[]>([{ name: "", level: "3e" }]);
   const setKid = (i: number, patch: Partial<ChildInput>) => setKids((k) => k.map((x, j) => (j === i ? { ...x, ...patch } : x)));
-  const resize = (n: number) => setKids((k) => Array.from({ length: n }, (_, i) => k[i] ?? { name: "", level: "3e" as LevelId }));
   const strength = [pwd.length >= 8, /[A-Za-z]/.test(pwd) && /\d/.test(pwd), pwd.length >= 12 || /[^A-Za-z0-9]/.test(pwd)].filter(Boolean).length;
 
   // Les anciens liens de connexion contenaient le mot de passe dans l'URL.
@@ -128,6 +134,9 @@ export default function Auth({ defaultWho }: { defaultWho?: "parent" | "student"
       setError(step === "login" && targetWho === "student" && res.error === "E-mail ou mot de passe incorrect."
         ? "Identifiant ou mot de passe incorrect. L'identifiant complet ressemble à « prenom.1234 ». Demande à ton parent de vérifier dans son espace."
         : res.error);
+      if (!res.error && step === "login" && requestedNext?.startsWith("/") && !requestedNext.startsWith("//")) {
+        navigate(requestedNext, { replace: true });
+      }
       if (res.info) { setInfo(res.info); setStep("login"); }
       return;
     }
@@ -197,6 +206,12 @@ export default function Auth({ defaultWho }: { defaultWho?: "parent" | "student"
           </div>
           <GradCap />
         </header>
+        {!isLogin && isParent && requestedPlan && (
+          <p className="auth-note" role="status">
+            Offre choisie : <b>{requestedPlan.name} — {new Intl.NumberFormat("fr-FR").format(requestedPlan.amount)} FCFA / mois</b>.
+            Après création et confirmation de votre compte, connectez-vous pour régler par SasPay depuis votre espace parent.
+          </p>
+        )}
 
         {isLogin && (
           <div className="auth-who" role="tablist" aria-label="Je me connecte en tant que">
@@ -321,17 +336,8 @@ export default function Auth({ defaultWho }: { defaultWho?: "parent" | "student"
           )}
           {!isLogin && isParent && (
             <fieldset className="auth-label" style={{ border: 0, padding: 0, margin: 0 }}>
-              <legend><b>Vos enfants</b> — un accès est créé pour chacun</legend>
-              <label className="auth-label">
-                Nombre d'enfants
-                <span className="auth-input">
-                  <Users size={22} aria-hidden="true" />
-                  <select value={kids.length} onChange={(e) => resize(Number(e.target.value))}>
-                    {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}
-                  </select>
-                  <ChevronDown className="chev" size={20} aria-hidden="true" />
-                </span>
-              </label>
+              <legend><b>Premier enfant</b></legend>
+              <p className="auth-note">Un profil enfant est inclus pour commencer. Vous pourrez en ajouter d'autres après avoir choisi l'offre adaptée dans votre espace parent.</p>
               {kids.map((k, i) => (
                 <div key={i} className="auth-label" style={{ borderTop: "1px solid #ffffff22", paddingTop: 10 }}>
                   <span>Enfant {i + 1}</span>

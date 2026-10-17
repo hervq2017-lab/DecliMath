@@ -8,7 +8,7 @@
     "lint": "tsc --noEmit",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "tsx scripts/test-parent-access.ts && tsx scripts/test-children-api.ts && tsx scripts/test-progress-sync.ts && tsx scripts/test-parent-child-qr.ts && tsx scripts/test-philosophie.ts && tsx scripts/test-exercise-assignments.ts",
+    "test": "tsx scripts/test-parent-access.ts && tsx scripts/test-children-api.ts && tsx scripts/test-progress-sync.ts && tsx scripts/test-parent-child-qr.ts && tsx scripts/test-philosophie.ts && tsx scripts/test-exercise-assignments.ts && tsx scripts/test-subscription-plans.ts",
     "verify": "tsc --noEmit && npm test && vite build",
     "check:deploy": "node scripts/check-deploy.mjs",
     "e2e:prod": "node scripts/e2e-prod.mjs",

@@ -7,6 +7,7 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { currentUser, useStore } from "../store";
 import { COUNTRIES, Country, countryByCode } from "../curriculum";
+import { SubscriptionPlans } from "../components/SubscriptionPlans";
 import "./landing.css";
 
 /* ---------- Photos Réelles ---------- */
@@ -182,14 +183,6 @@ const STEPS = [
   },
 ];
 
-const OFFER_BULLETS = [
-  "Maths et Anglais du CI à la Terminale",
-  "Physique-Chimie de la 4ème à la Terminale",
-  "Suivi personnalisé et tableau de bord parent",
-  "Accès sur tous les appareils",
-  "Support technique et pédagogique",
-];
-
 const faqFor = (c: Country) => [
   {
     q: "Mon enfant peut-il commencer même s'il a beaucoup de lacunes ?",
@@ -205,9 +198,7 @@ const faqFor = (c: Country) => [
   },
   {
     q: "Quels sont les moyens de paiement ?",
-    a: c.mobileMoney.length
-      ? `Le paiement par mobile money est prévu au lancement en ${c.name} (${c.mobileMoney.join(", ")}), en F CFA (${c.zone}). Les offres et les tarifs définitifs seront annoncés avant l'ouverture des abonnements.`
-      : `Le paiement par mobile money sera proposé au lancement en ${c.name}, en F CFA (${c.zone}). Les opérateurs et les tarifs définitifs seront annoncés avant l'ouverture des abonnements.`,
+    a: `Les abonnements mensuels Essentiel, Famille et Famille Plus sont payables en ${c.zone} via la page sécurisée SasPay. L'abonnement est activé uniquement après confirmation du paiement.`,
   },
   {
     q: "Est-ce que le contenu est adapté au programme de mon pays ?",
@@ -217,7 +208,6 @@ const faqFor = (c: Country) => [
 
 /* ---------- Pays (zones XOF / XAF) ---------- */
 const COUNTRY_KEY = "declickmath-country";
-const PRICE: Record<Country["zone"], number> = { XOF: 2500, XAF: 2500 }; // 1 XOF = 1 XAF : parité, prix indicatifs
 const TZ_COUNTRY: Record<string, string> = {
   "Africa/Abidjan": "CI", "Africa/Dakar": "SN", "Africa/Bamako": "ML", "Africa/Ouagadougou": "BF", "Africa/Porto-Novo": "BJ",
   "Africa/Lome": "TG", "Africa/Niamey": "NE", "Africa/Bissau": "GW", "Africa/Douala": "CM", "Africa/Libreville": "GA",
@@ -238,8 +228,6 @@ function initialCountry(): string {
 
 /** « le BEPC » / « l'examen de fin de collège » */
 const withArticle = (exam: string) => (/^Examen/.test(exam) ? `l'${exam.charAt(0).toLowerCase()}${exam.slice(1)}` : `le ${exam}`);
-const fmtPrice = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-
 function CountryPicker({ value, onChange }: { value: string; onChange: (code: string) => void }) {
   return (
     <label className="lx-country">
@@ -393,53 +381,6 @@ function DoodleRays({ className = "" }: { className?: string }) {
         <path d="M17 22 L17 6" stroke="#ffc933" strokeWidth="3.2" strokeLinecap="round" />
         <path d="M30 22 L20 14" stroke="#ffc933" strokeWidth="3" strokeLinecap="round" />
       </svg>
-    </div>
-  );
-}
-
-/* ---------- Phone Mockup Offre ---------- */
-function PhoneOffer() {
-  const rows = [
-    { label: "Calcul", pct: 85, color: "#ffc933" },
-    { label: "Fractions", pct: 60, color: "#10b981" },
-    { label: "Géométrie", pct: 45, color: "#6366f1" },
-    { label: "Problèmes", pct: 30, color: "#ec4899" },
-  ];
-
-  return (
-    <div className="lx-offer-phone-container" aria-hidden="true">
-      <div className="lx-phone-shell sm">
-        <div className="lx-phone-notch sm" />
-        <div className="lx-phone-inner">
-          <div className="lx-phone-header">
-            <div className="lx-phone-logo sm">
-              <img src="/logo-icon.png" alt="" width="20" height="13" />
-              <span>DeclickMath</span>
-            </div>
-          </div>
-
-          <div className="lx-pcard sm">
-            <div className="lx-pcard-top">
-              <small>Mon parcours</small>
-            </div>
-            <div className="lx-offer-progress-list">
-              {rows.map((r) => (
-                <div key={r.label} className="lx-op-row">
-                  <span className="lx-op-label">{r.label}</span>
-                  <div className="lx-op-bar">
-                    <span style={{ width: `${r.pct}%`, background: r.color }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="lx-offer-devices-badge">
-        <MonitorSmartphone size={16} strokeWidth={2.5} />
-        <span>Disponible sur téléphone, tablette et ordinateur</span>
-      </div>
     </div>
   );
 }
@@ -954,71 +895,19 @@ export default function Landing() {
         {/* ========================================================
             7. SECTION : OFFRE DE LANCEMENT (3D)
         ======================================================== */}
-        <section className="lx-section lx-offer" aria-labelledby="h-offer">
+        <section id="tarifs" className="lx-section lx-offer" aria-labelledby="h-offer">
           <div className="lx-wrap lx-offer-outer">
-            {/* Côté Gauche : Photo de l'élève & Doodle */}
-            <div className="lx-offer-left-box">
-              <Photo
-                src={PHOTOS.girl}
-                alt="Une élève concentrée prend des notes devant son ordinateur"
-                w={560}
-                h={420}
-                className="lx-girl-photo-box"
-              >
-                <GraduationCap size={80} />
-              </Photo>
-
-              <div className="lx-offer-doodle-container" aria-hidden="true">
-                <DoodleRays className="rays-doodle-left" />
-                <p className="lx-offer-handwritten">
-                  Un pas aujourd'hui,<br />une grande différence<br />demain !
-                </p>
-                <DoodleRays className="rays-doodle-right" />
-              </div>
-            </div>
-
-            {/* Côté Droit : Carte d'Offre avec Contenu & Smartphone */}
+            {/* Côté Droit : offres mensuelles */}
             <div className="lx-offer-card-main">
               <div className="lx-offer-card-content">
                 <span className="lx-offer-pill-badge">OFFRE DE LANCEMENT</span>
                 <h2 id="h-offer" className="lx-offer-title">
-                  Accès complet <span className="lx-grad-text">DeclickMath</span>
+                  Une formule <span className="lx-grad-text">pour chaque famille</span>
                 </h2>
                 <p className="lx-soft lx-offer-subtitle">
-                  Tout ce dont votre enfant a besoin pour progresser sereinement.
+                  Des abonnements mensuels transparents, selon le nombre d'enfants à accompagner.
                 </p>
-
-                <div className="lx-price-line">
-                  <span className="lx-price-start">À partir de</span>
-                  <b className="lx-price-figure">{fmtPrice(PRICE[country.zone])} F CFA</b>
-                  <span className="lx-price-cycle">/ mois ({country.zone})</span>
-                </div>
-                <small className="lx-soft lx-price-disclaimer">
-                  (prix indicatif, à valider après les tests)
-                </small>
-
-                <ul className="lx-offer-checklist">
-                  {[...OFFER_BULLETS, country.mobileMoney.length ? `Paiement mobile money : ${country.mobileMoney.join(", ")}` : "Paiement mobile money (opérateurs à annoncer)"].map((item) => (
-                    <li key={item}>
-                      <span className="lx-check-badge">
-                        <Check size={13} strokeWidth={3.5} />
-                      </span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="lx-offer-btn-wrap">
-                  <Link className="lx-btn yellow font-bold" to={signupUrl}>
-                    <span>Commencer maintenant</span>
-                    <ArrowRight size={18} strokeWidth={2.5} />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Smartphone à droite dans la carte */}
-              <div className="lx-offer-card-phone">
-                <PhoneOffer />
+                <SubscriptionPlans countryCode={country.code} />
               </div>
             </div>
           </div>

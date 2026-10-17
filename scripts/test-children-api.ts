@@ -91,6 +91,10 @@ async function call(body: unknown, token?: string): Promise<{ status: number; js
 
 const awa = addUser("awa@test.com", "x", { role: "parent", name: "Awa", country: "CI" });
 const moussa = addUser("m@test.com", "x", { role: "parent", name: "Moussa", country: "SN" });
+Object.assign(profiles.find((p) => p.id === awa.id)!, {
+  subscription_plan: "family_plus",
+  paid_until: new Date(Date.now() + 30 * 86400_000).toISOString(),
+});
 const kid = addUser("kid@test.com", "x", { role: "student", name: "Eleve" }, {}, true);
 const T = tokenOf(awa);
 
@@ -139,7 +143,7 @@ ok(users.has(b0.id) && users.has(kids[2].id), "les autres enfants restent");
 ok((await call({ action: "delete", childId: b1.id }, T)).status === 404, "supprimer deux fois : introuvable");
 
 const many = await call({ action: "create", children: Array.from({ length: 20 }, (_, i) => ({ name: `E${i}`, level: "6e" })) }, T);
-ok(many.status === 400, "plafond de 20 enfants par parent respecté");
+ok(many.status === 403, "plafond d'enfants de l'offre du parent appliqué côté serveur");
 ok((await call({ action: "inconnue" }, T)).status === 400, "action inconnue refusée");
 
 server.close();

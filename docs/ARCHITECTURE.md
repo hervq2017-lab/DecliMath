@@ -20,6 +20,9 @@
 - **Corrigé** : Autoriser / Différer / Bloquer par le parent ; consultation avant tentative tracée.
 - **Devoirs assignés** : un parent lié peut consulter le catalogue de son enfant et lui donner une série de 10 exercices sur une compétence. La table `exercise_assignments`, créée par la migration `20261017100000_exercise_assignments.sql`, est protégée par RLS ; l'élève voit ses devoirs sur l'accueil et leur achèvement est enregistré à la fin de la série.
 - **Partage des exercices** : les séances, contrôles, problèmes, épreuves, jeux, cartes, étapes, simulations et dossiers de philosophie proposent un lien WhatsApp et un téléchargement PDF direct. Les séries terminées peuvent être régénérées avec de nouveaux nombres, en gardant la même compétence.
+- **Abonnements SasPay** : les offres mensuelles Essentiel (10 000 FCFA / 1 enfant), Famille (15 000 / 2) et Famille Plus (20 000 / 4) sont définies dans `src/lib/subscriptionPlans.ts`. `api/payments.ts` crée le checkout hébergé et vérifie son statut côté serveur auprès de SasPay avant que la fonction SQL sécurisée prolonge l'abonnement. `api/children.ts` applique le plafond de l'offre active ; sans abonnement, un seul enfant est autorisé. Migration : `20261017110000_saspay_subscriptions.sql`.
+
+Pour activer les paiements en ligne, appliquer cette migration Supabase et configurer `SASPAY_API_KEY` (clé test puis production) et `APP_URL` comme variables serveur Vercel, en plus des variables Supabase serveur existantes. La clé SasPay ne doit jamais être préfixée par `VITE_`. La confirmation de retour vérifie l'état distant ; la redirection du navigateur seule n'active jamais l'offre.
 
 ## Ajouter du contenu
 

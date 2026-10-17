@@ -10,6 +10,7 @@ import {
   remoteRevokeQr, remoteToggleSuspendChild
 } from "../lib/authRemote";
 import { supabaseReady } from "../lib/supabase";
+import { subscriptionPlan } from "../lib/subscriptionPlans";
 import {
   addChildren, createQrToken, hasAcceptedParentLink, regenerateLogin, removeChild,
   revokeQrTokens, studentsOf, toggleSuspendChild, User, useStore
@@ -18,6 +19,10 @@ import {
 export default function ChildAccess({ parentId }: { parentId: string }) {
   const state = useStore();
   const children = studentsOf(state, parentId);
+  const parent = state.users.find((user) => user.id === parentId);
+  const plan = subscriptionPlan(parent?.subscriptionPlan);
+  const childLimit = parent?.paidUntil && parent.paidUntil > Date.now() ? plan.maxChildren : 1;
+  const canAddChild = children.length < childLimit;
 
   const [copied, setCopied] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -184,7 +189,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
       )}
 
       <div className="row between" style={{ borderTop: "1px solid var(--line, #8883)", paddingTop: 12 }}>
-        <h3 style={{ fontSize: "1rem", margin: 0 }}>Enfants enregistrés ({children.length})</h3>
+        <h3 style={{ fontSize: "1rem", margin: 0 }}>Enfants enregistrés ({children.length}/{childLimit})</h3>
         {children.length > 1 && (
           <button type="button" className="btn ghost" onClick={copyAll}>
             <Copy size={16} aria-hidden="true" /> {copied === "all" ? "Copié !" : "Copier les identifiants disponibles"}
@@ -328,6 +333,10 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
         style={{ paddingTop: 14, borderTop: "1px solid var(--line, #8883)" }}
         onSubmit={(e) => {
           e.preventDefault();
+          if (!canAddChild) {
+            setError(`Votre offre permet jusqu'à ${childLimit} enfant${childLimit > 1 ? "s" : ""}. Consultez la section « Mon abonnement » pour choisir une autre offre.`);
+            return;
+          }
           const kid = {
             name: name.trim(),
             level,
@@ -389,10 +398,11 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
               ))}
             </select>
           )}
-          <button className="btn primary" type="submit" disabled={busy}>
+          <button className="btn primary" type="submit" disabled={busy || !canAddChild}>
             <Plus size={16} aria-hidden="true" /> Créer le profil
           </button>
         </div>
+        {!canAddChild && <p className="muted small" role="status">La limite de votre offre est atteinte. Vous pouvez changer d'offre dans « Mon abonnement ».</p>}
         {error && <p className="auth-error" role="alert">{error}</p>}
       </form>
 

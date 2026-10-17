@@ -4,13 +4,13 @@
 // Les actions publiques (verify-qr, consume-qr) vérifient la validité cryptographique du jeton QR à usage unique.
 import { createClient } from "@supabase/supabase-js";
 import { createHash, randomBytes, randomInt } from "node:crypto";
+import { isSubscriptionPlanId, SUBSCRIPTION_PLANS } from "../src/lib/subscriptionPlans";
 
 interface Req { method?: string; body?: unknown; headers: Record<string, string | string[] | undefined> }
 interface Res { status(code: number): Res; json(body: unknown): void; setHeader(k: string, v: string): void }
 
 const CHILD_DOMAIN = "eleves.declickmath.invalid"; // identique à src/lib/authRemote.ts
 const PWD_CHARS = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans caractères ambigus
-const MAX_CHILDREN = 20;
 
 const newPassword = () => Array.from({ length: 8 }, () => PWD_CHARS[randomInt(PWD_CHARS.length)]).join("");
 const newLogin = (name: string) => {
@@ -266,7 +266,7 @@ export default async function handler(req: Req, res: Res) {
 
   const { data: who, error: whoErr } = await admin.auth.getUser(token);
   if (whoErr || !who.user) return res.status(401).json({ error: "Session invalide. Reconnecte-toi." });
-  const { data: parent } = await admin.from("profiles").select("id, role, country, suspended").eq("id", who.user.id).single();
+  const { data: parent } = await admin.from("profiles").select("id, role, country, suspended, paid_until, subscription_plan").eq("id", who.user.id).single();
   if (!parent || parent.role !== "parent" || parent.suspended) return res.status(403).json({ error: "Réservé aux parents." });
 
   const body = rawBody;
@@ -275,8 +275,16 @@ export default async function handler(req: Req, res: Res) {
   if (body.action === "create") {
     const kids = (body.children ?? []).filter((k) => typeof k.name === "string" && k.name.trim());
     if (!kids.length) return res.status(400).json({ error: "Aucun enfant à créer." });
-    const { count } = await admin.from("profiles").select("id", { count: "exact", head: true }).eq("parent_id", parent.id);
-    if ((count ?? 0) + kids.length > MAX_CHILDREN) return res.status(400).json({ error: `Maximum ${MAX_CHILDREN} enfants par compte.` });
+    const { count, error: countError } = await admin.from("profiles").select("id", { count: "exact", head: true }).eq("parent_id", parent.id);
+    if (countError) return res.status(500).json({ error: "Impossible de vérifier le nombre d'enfants du compte." });
+    const hasActivePlan = parent.paid_until && Date.parse(parent.paid_until) > Date.now();
+    const planId = hasActivePlan && isSubscriptionPlanId(parent.subscription_plan)
+      ? parent.subscription_plan
+      : "essential";
+    const maxChildren = SUBSCRIPTION_PLANS[planId].maxChildren;
+    if ((count ?? 0) + kids.length > maxChildren) {
+      return res.status(403).json({ error: `Votre offre ${SUBSCRIPTION_PLANS[planId].name} permet jusqu'à ${maxChildren} enfant${maxChildren > 1 ? "s" : ""}. Choisissez une offre adaptée pour ajouter d'autres enfants.` });
+    }
     const result = await createKids(admin, parent, kids);
     if (!result.created.length) return res.status(500).json({ error: result.error ?? "Création impossible." });
     return res.status(200).json({ created: result.created, error: result.error });

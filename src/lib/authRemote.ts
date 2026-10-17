@@ -12,7 +12,8 @@ export const CHILD_DOMAIN = "eleves.declickmath.invalid";
 interface ProfileRow {
   id: string; role: Role; name: string; login: string | null; country: string; level: string | null; serie: string | null;
   invite_code: string | null; parent_id: string | null; goal: string | null; placed: boolean; prefs: Partial<Prefs> | null;
-  suspended: boolean; paid_until: string | null; notif_seen: string | null; last_login: string | null; created_at: string;
+  suspended: boolean; paid_until: string | null; subscription_plan?: User["subscriptionPlan"] | null;
+  notif_seen: string | null; last_login: string | null; created_at: string;
   must_change_password?: boolean; password_customized?: boolean; parent_linked_at?: string | null;
 }
 
@@ -25,7 +26,8 @@ function toUser(r: ProfileRow, email: string): User {
     level: (r.level ?? undefined) as LevelId | undefined, serie: r.serie ?? undefined, inviteCode: r.invite_code ?? undefined,
     parentId: r.parent_id ?? undefined, parentLinkedAt: ms(r.parent_linked_at ?? null), goal: r.goal ?? undefined, placed: r.placed,
     prefs: r.prefs && Object.keys(r.prefs).length ? { ...DEFAULT_PREFS, ...r.prefs } : undefined,
-    suspended: r.suspended || undefined, paidUntil: ms(r.paid_until), createdAt: ms(r.created_at), lastLogin: ms(r.last_login), notifSeen: ms(r.notif_seen),
+    suspended: r.suspended || undefined, paidUntil: ms(r.paid_until), subscriptionPlan: r.subscription_plan ?? undefined,
+    createdAt: ms(r.created_at), lastLogin: ms(r.last_login), notifSeen: ms(r.notif_seen),
     mustChangePassword: r.must_change_password, passwordCustomized: r.password_customized,
   };
 }
