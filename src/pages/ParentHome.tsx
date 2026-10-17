@@ -5,6 +5,7 @@ import ChildAccess from "./ChildAccess";
 import { Chip, ParentChildNav, ProgressBar, StreakChip, TopBar } from "../components/ui";
 import { countryByCode, levelById, notionsOf, SUBJECT_LABEL, subjectsAt } from "../curriculum";
 import { hasContent } from "../engine";
+import { pullProgress } from "../lib/progressSync";
 import { attemptsOf, minutesSpent, pointsOf, relativeDay, streak, weekDays } from "../lib/stats";
 import { currentUser, hasAcceptedParentLink, logOut, MASTERY_LABEL, masteryFor, SolutionMode, studentsOf, update, useStore } from "../store";
 
@@ -20,8 +21,17 @@ export default function ParentHome() {
   const me = currentUser(state)!;
   const children = studentsOf(state, me.id);
   const [sel, setSel] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const child = children.find((c) => c.id === sel) ?? children[0];
   const weekStart = new Date(Date.now() - ((new Date().getDay() + 6) % 7) * DAY).toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
+  const refresh = async () => {
+    setRefreshing(true);
+    try {
+      await pullProgress();
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   return (
     <>
@@ -57,7 +67,12 @@ export default function ParentHome() {
               <h2 id="mes-enfants" style={{ fontSize: "1.2rem", margin: 0 }}>
                 {children.length > 1 ? "Mes enfants" : "Mon enfant"} ({children.length})
               </h2>
-              <span className="muted small">Les progrès se synchronisent automatiquement (environ toutes les 15 secondes).</span>
+              <div className="row" style={{ gap: 8 }}>
+                <span className="muted small">Synchronisation automatique (environ toutes les 15 secondes).</span>
+                <button type="button" className="btn ghost small-btn" disabled={refreshing} onClick={() => void refresh()}>
+                  {refreshing ? "Actualisation…" : "Actualiser"}
+                </button>
+              </div>
             </div>
             <div className="kids">
               {children.map((c) => (

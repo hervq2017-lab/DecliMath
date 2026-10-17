@@ -230,17 +230,21 @@ export default async function handler(req: Req, res: Res) {
         return res.status(500).json({ error: "Erreur lors de la mise à jour du mot de passe." });
       }
 
-      const { error: profileErr } = await admin.from("profiles").update({
+      const { data: acceptedProfile, error: profileErr } = await admin.from("profiles").update({
         must_change_password: false,
         password_customized: true,
         parent_linked_at: student.parent_linked_at ?? new Date().toISOString(),
         placed: true,
-      }).eq("id", student.id);
-      if (profileErr) return res.status(500).json({ error: "Mot de passe enregistré, mais l'invitation n'a pas pu être validée. Demande à ton parent de créer un nouveau QR code." });
+      }).eq("id", student.id).select("id, parent_linked_at").maybeSingle();
+      if (profileErr || !acceptedProfile?.parent_linked_at) {
+        console.error("Échec de l'enregistrement de l'acceptation parent-enfant :", profileErr ?? "Profil élève non mis à jour.");
+        return res.status(500).json({ error: "Le mot de passe est enregistré, mais l'acceptation n'a pas été confirmée par la base. Demande à ton parent de vérifier le compte avant de renvoyer une invitation." });
+      }
       return res.status(200).json({
         ok: true,
         purpose: "activation",
         login: student.login,
+        acceptedAt: acceptedProfile.parent_linked_at,
       });
     }
 

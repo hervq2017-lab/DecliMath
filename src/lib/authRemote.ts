@@ -363,7 +363,7 @@ export async function remoteVerifyQr(token: string): Promise<{
 }
 
 /** Consomme un jeton QR (activation avec mot de passe personnalisé ou connexion rapide). */
-export async function remoteConsumeQr(token: string, newPassword?: string): Promise<{ error: string | null; login?: string; purpose?: string; actionLink?: string; hashedToken?: string }> {
+export async function remoteConsumeQr(token: string, newPassword?: string): Promise<{ error: string | null; login?: string; purpose?: string; actionLink?: string; hashedToken?: string; acceptedAt?: string }> {
   try {
     const r = await fetch("/api/children", {
       method: "POST",
@@ -372,7 +372,7 @@ export async function remoteConsumeQr(token: string, newPassword?: string): Prom
     });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || !j.ok) return { error: j.error ?? "Validation du QR code impossible." };
-    return { error: null, login: j.login, purpose: j.purpose, actionLink: j.actionLink, hashedToken: j.hashedToken };
+    return { error: null, login: j.login, purpose: j.purpose, actionLink: j.actionLink, hashedToken: j.hashedToken, acceptedAt: j.acceptedAt };
   } catch {
     return { error: "Pas de connexion au serveur." };
   }

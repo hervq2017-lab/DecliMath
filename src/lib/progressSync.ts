@@ -290,4 +290,5 @@ export function startProgressSync() {
     if (s.users.find((u) => u.id === s.sessionId)?.role === "parent") void pullProgress();
   }, 15_000);
   document.addEventListener("visibilitychange", tick);
+  window.addEventListener("focus", tick);
 }

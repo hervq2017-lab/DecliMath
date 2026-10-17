@@ -246,7 +246,11 @@ const fakeServer = createServer((req: IncomingMessage, res: ServerResponse) => {
       }
       if (req.method === "PATCH") {
         rows.forEach((p) => Object.assign(p, body));
-        return sendJson(res, 204, {});
+        if (!String(req.headers.prefer).includes("return=representation")) return sendJson(res, 204, {});
+        if (String(req.headers.accept).includes("vnd.pgrst.object")) {
+          return rows.length === 1 ? sendJson(res, 200, rows[0]) : sendJson(res, 406, { code: "PGRST116" });
+        }
+        return sendJson(res, 200, rows);
       }
       if (String(req.headers.accept).includes("vnd.pgrst.object")) {
         return rows.length === 1 ? sendJson(res, 200, rows[0]) : sendJson(res, 406, { code: "PGRST116" });
@@ -313,7 +317,7 @@ ok(apiVerify.status === 200 && apiVerify.json.valid === true && apiVerify.json.s
 
 // 3. Action consume-qr publique avec mot de passe
 const apiConsume = await callApi({ action: "consume-qr", token: rawApiToken, newPassword: "MonSecretServer12" });
-ok(apiConsume.status === 200 && apiConsume.json.ok === true && apiConsume.json.login === "enfant.5555", "Serveur API : consume-qr consomme le jeton et applique le mot de passe");
+ok(apiConsume.status === 200 && apiConsume.json.ok === true && apiConsume.json.login === "enfant.5555" && apiConsume.json.acceptedAt, "Serveur API : consume-qr confirme que l'acceptation est enregistrée");
 ok(serverUsers.get(childUser.id)!.password === "MonSecretServer12", "Serveur API : mot de passe mis à jour dans Auth");
 ok(!!serverProfiles.find((p) => p.id === childUser.id)!.parent_linked_at, "Serveur API : l'acceptation active le partage parent-enfant");
 ok(serverProfiles.find((p) => p.id === childUser.id)!.placed === true, "Serveur API : l'élève arrive directement à son tableau de bord après activation");
