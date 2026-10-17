@@ -154,6 +154,15 @@ button { cursor: pointer; }
 .answer-field { display: flex; align-items: center; gap: 12px; min-height: 72px; padding: 0 16px; border-radius: 28px; border: 3px solid var(--primary); background: var(--card); }
 .answer-label { color: var(--muted); font-weight: 700; flex: none; max-width: 40%; }
 .answer-hint { margin: 0; text-align: center; color: var(--muted); font-size: .85rem; }
+.answer-calculator { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.answer-calculator-toggle { min-height: 42px; }
+.answer-keypad { width: min(100%, 340px); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); }
+.answer-key { min-height: 48px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--ink); font: 700 1.2rem var(--font-mono); cursor: pointer; touch-action: manipulation; }
+.answer-key:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.answer-key:focus-visible, .answer-calculator-toggle:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.answer-key:disabled { opacity: .5; cursor: not-allowed; }
+.answer-key-action { color: var(--primary-ink); background: var(--primary-soft); }
+.answer-key-clear { grid-column: span 3; font: 700 .95rem var(--font-body); }
 @media (max-width: 420px) { .answer-field { flex-direction: column; align-items: stretch; gap: 2px; padding: 10px 14px 6px; } .answer-label { max-width: none; font-size: .85rem; } .answer-input { font-size: 1.6rem; min-height: 48px; } }
 .answer-input { flex: 1; min-width: 0; border: 0; outline: none; background: none; font: 700 1.9rem var(--font-mono); text-align: center; color: var(--ink); }
 .choices { display: flex; flex-direction: column; gap: 10px; }

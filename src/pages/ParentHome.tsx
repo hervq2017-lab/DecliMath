@@ -57,7 +57,7 @@ export default function ParentHome() {
               <h2 id="mes-enfants" style={{ fontSize: "1.2rem", margin: 0 }}>
                 {children.length > 1 ? "Mes enfants" : "Mon enfant"} ({children.length})
               </h2>
-              <span className="muted small">Sélectionnez un enfant pour afficher son rapport détaillé</span>
+              <span className="muted small">Les progrès se synchronisent automatiquement (environ toutes les 15 secondes).</span>
             </div>
             <div className="kids">
               {children.map((c) => (

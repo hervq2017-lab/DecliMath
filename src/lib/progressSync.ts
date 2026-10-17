@@ -195,7 +195,7 @@ async function fetchAll(table: string, studentIds: string[], order: string): Pro
 }
 
 /** Charge la progression de l'élève connecté, ou celle des enfants du parent. À appeler après le chargement des profils. */
-export async function pullProgress(): Promise<void> {
+async function pullProgressNow(): Promise<void> {
   if (!supabase) return;
   let s = getState();
   let me = s.users.find((u) => u.id === s.sessionId);
@@ -249,6 +249,14 @@ export async function pullProgress(): Promise<void> {
   });
 }
 
+let pulling: Promise<void> | null = null;
+export function pullProgress(): Promise<void> {
+  if (!supabase) return Promise.resolve();
+  if (pulling) return pulling;
+  pulling = pullProgressNow().finally(() => { pulling = null; });
+  return pulling;
+}
+
 /** Oublie le suivi (déconnexion, changement de compte). */
 export function resetProgressTracking() {
   for (const k of Object.keys(known)) delete known[k];
@@ -276,5 +284,10 @@ export function startProgressSync() {
     if (s.users.find((u) => u.id === s.sessionId)?.role === "parent") void pullProgress();
   };
   setInterval(tick, 60_000);
+  setInterval(() => {
+    if (document.visibilityState !== "visible") return;
+    const s = getState();
+    if (s.users.find((u) => u.id === s.sessionId)?.role === "parent") void pullProgress();
+  }, 15_000);
   document.addEventListener("visibilitychange", tick);
 }
