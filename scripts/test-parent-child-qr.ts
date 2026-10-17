@@ -192,6 +192,7 @@ function addServerUser(email: string, password: string, meta: any, app: any = {}
     serie: meta.serie ?? null,
     parent_id: app.parent_id ?? null,
     parent_linked_at: null,
+    placed: false,
     login: app.login ?? null,
     suspended: false,
     must_change_password: true,
@@ -315,6 +316,7 @@ const apiConsume = await callApi({ action: "consume-qr", token: rawApiToken, new
 ok(apiConsume.status === 200 && apiConsume.json.ok === true && apiConsume.json.login === "enfant.5555", "Serveur API : consume-qr consomme le jeton et applique le mot de passe");
 ok(serverUsers.get(childUser.id)!.password === "MonSecretServer12", "Serveur API : mot de passe mis à jour dans Auth");
 ok(!!serverProfiles.find((p) => p.id === childUser.id)!.parent_linked_at, "Serveur API : l'acceptation active le partage parent-enfant");
+ok(serverProfiles.find((p) => p.id === childUser.id)!.placed === true, "Serveur API : l'élève arrive directement à son tableau de bord après activation");
 const acceptedQuickQr = await callApi({ action: "create-qr", childId: childUser.id, purpose: "quick_login" }, parentToken);
 ok(acceptedQuickQr.status === 200 && acceptedQuickQr.json.token, "Serveur API : le QR de connexion est disponible après acceptation");
 

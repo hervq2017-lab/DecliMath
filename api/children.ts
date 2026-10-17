@@ -234,6 +234,7 @@ export default async function handler(req: Req, res: Res) {
         must_change_password: false,
         password_customized: true,
         parent_linked_at: student.parent_linked_at ?? new Date().toISOString(),
+        placed: true,
       }).eq("id", student.id);
       if (profileErr) return res.status(500).json({ error: "Mot de passe enregistré, mais l'invitation n'a pas pu être validée. Demande à ton parent de créer un nouveau QR code." });
       return res.status(200).json({

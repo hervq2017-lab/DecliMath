@@ -15,6 +15,7 @@ import Home from "./pages/Home";
 import NotionPage from "./pages/NotionPage";
 import ParentChild from "./pages/ParentChild";
 import ParentHome from "./pages/ParentHome";
+import OnboardStudent from "./pages/OnboardStudent";
 import Placement from "./pages/Placement";
 import Probleme from "./pages/Probleme";
 import Methodes from "./pages/Methodes";
@@ -138,6 +139,7 @@ function AppInner() {
       {TABS.includes(pathname) && <TopBar name={user.name} sub={SUBS[pathname]} profileTo="/profil" />}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/onboard" element={<OnboardStudent />} />
         <Route path="/exercices" element={<Catalogue />} />
         <Route path="/progres" element={<Progress />} />
         <Route path="/methodes" element={<Methodes />} />
