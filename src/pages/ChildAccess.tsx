@@ -416,9 +416,10 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
             background: "rgba(10, 15, 35, 0.75)",
             backdropFilter: "blur(6px)",
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "center",
-            padding: 16,
+            padding: "max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom))",
+            overflowY: "auto",
             zIndex: 9999,
           }}
         >
@@ -427,11 +428,16 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
             style={{
               background: "#fff",
               color: "#1c1545",
-              maxWidth: 440,
+              maxWidth: 400,
               width: "100%",
+              maxHeight: "calc(100dvh - 16px)",
+              overflowY: "auto",
+              padding: 16,
+              gap: 10,
               borderRadius: 16,
               boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
               position: "relative",
+              margin: "auto",
             }}
           >
             <button
@@ -468,15 +474,15 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
                 </button>}
             </div>
 
-            <div style={{ textAlign: "center", padding: "12px 0" }}>
+            <div style={{ textAlign: "center", padding: "4px 0" }}>
               {qrLoading ? (
-                <div style={{ height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ height: 160, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <p className="muted small">Génération du QR code sécurisé...</p>
                 </div>
               ) : qrToken ? (
                 <div className="stack" style={{ alignItems: "center" }}>
-                  <QrCodeView value={getActivationUrl(qrToken)} size={220} alt={`QR Code pour ${qrChild.name}`} />
-                  <p className="muted small" style={{ margin: "8px 0 0", maxWidth: 320 }}>
+                  <QrCodeView value={getActivationUrl(qrToken)} size={160} alt={`QR Code pour ${qrChild.name}`} />
+                  <p className="muted small" style={{ margin: "4px 0 0", maxWidth: 320 }}>
                     {qrPurpose === "activation"
                       ? hasAcceptedParentLink(qrChild)
                         ? "Après avoir scanné ce QR code, l'élève choisit un nouveau mot de passe secret."
