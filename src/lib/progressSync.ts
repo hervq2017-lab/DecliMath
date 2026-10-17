@@ -79,6 +79,16 @@ export function mergeRows<T extends { id: string; studentId: string }>(local: T[
   return [...keep, ...server];
 }
 
+/** Fusionne une réponse serveur sans confondre les lignes locales en attente avec celles déjà enregistrées. */
+export function mergeFetchedRows<T extends { id: string; studentId: string }>(local: T[], server: T[], studentIds: string[]) {
+  const ids = new Set(studentIds);
+  const fetched = server.filter((row) => ids.has(row.studentId));
+  return {
+    rows: mergeRows(local, fetched, studentIds),
+    serverIds: fetched.map((row) => row.id),
+  };
+}
+
 // ---------- Suivi de ce que le serveur connaît déjà ----------
 const known: Record<string, Set<string>> = {};
 const knownSet = (table: string) => (known[table] ??= new Set());
@@ -86,12 +96,6 @@ const signatures = new Map<string, string>(); // « table|clé » -> dernière l
 let knownValidated = new Set<string>();
 
 const memKey = (m: MemItem) => `${m.studentId}|${m.key}`;
-
-/** Actualise le suivi après une réception : ces lignes sont chez le serveur, il ne faut pas les renvoyer. */
-function markKnown(s: State, studentIds: string[]) {
-  const ids = new Set(studentIds);
-  for (const t of APPEND_ONLY) for (const r of s[t.field] as { id: string; studentId: string }[]) if (ids.has(r.studentId)) knownSet(t.table).add(r.id);
-}
 
 // ---------- Envoi ----------
 let flushing: Promise<void> | null = null;
@@ -236,7 +240,9 @@ async function pullProgressNow(): Promise<void> {
     const next: State = { ...st };
     APPEND_ONLY.forEach((t, i) => {
       const server = append[i].map((r) => (t.fromRow as (x: Row) => { id: string; studentId: string })(r));
-      (next as unknown as Record<string, unknown>)[t.field] = mergeRows(st[t.field] as { id: string; studentId: string }[], server, studentIds);
+      const merged = mergeFetchedRows(st[t.field] as { id: string; studentId: string }[], server, studentIds);
+      (next as unknown as Record<string, unknown>)[t.field] = merged.rows;
+      merged.serverIds.forEach((id) => knownSet(t.table).add(id));
     });
     const serverExams = exams.map(examFrom);
     next.exams = mergeRows(st.exams, serverExams, studentIds);
@@ -244,7 +250,6 @@ async function pullProgressNow(): Promise<void> {
     const memory = { ...(st.memory ?? {}) };
     for (const r of mem) { const m = memFrom(r); memory[`${m.studentId}|${m.key}`] = m; signatures.set(`mem|${memKey(m)}`, JSON.stringify(memRow(m))); }
     next.memory = memory;
-    markKnown(next, studentIds);
     return next;
   });
 }

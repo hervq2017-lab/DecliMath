@@ -95,6 +95,7 @@ const kid = addUser("kid@test.com", "x", { role: "student", name: "Eleve" }, {},
 const T = tokenOf(awa);
 
 ok((await call({ action: "create", children: [{ name: "Bola", level: "3e" }] })).status === 401, "sans connexion : refusé");
+ok((await call({ action: "provision", userId: awa.id })).status === 401, "la création publique de comptes sans session est refusée");
 ok((await call({ action: "create", children: [{ name: "Bola", level: "3e" }] }, tokenOf(kid))).status === 403, "un élève ne peut pas créer d'accès");
 
 const made = await call({ action: "create", children: [{ name: "Bola", level: "3e" }, { name: "Sosthène", level: "4e", serie: "" }, { name: "Bola", level: "6e" }] }, T);

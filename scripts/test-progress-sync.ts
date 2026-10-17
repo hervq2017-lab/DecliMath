@@ -48,6 +48,8 @@ const l1 = { id: "L1", studentId: s }, l2 = { id: "L2", studentId: s }, lo = { i
 const merged = P.mergeRows([l1, l2, lo], [{ id: "L1", studentId: s }, { id: "S9", studentId: s }], [s]);
 ok(merged.map((r) => r.id).sort().join() === "L1,L2,LO,S9", "fusion : local non envoyé gardé, ligne serveur ajoutée, pas de doublon");
 ok(P.mergeRows([lo], [], [s]).length === 1, "fusion : les données d'un autre compte ne sont pas touchées");
+const fetched = P.mergeFetchedRows([l1, l2, lo], [{ id: "L1", studentId: s }, { id: "S9", studentId: s }, { id: "OTHER", studentId: other }], [s]);
+ok(fetched.rows.map((r) => r.id).sort().join() === "L1,L2,LO,S9" && fetched.serverIds.sort().join() === "L1,S9", "fusion : seules les lignes effectivement reçues du serveur sont marquées connues");
 
 console.log(fails ? `\n${fails} échec(s)` : "\n0 échec(s)");
 process.exit(fails ? 1 : 0);

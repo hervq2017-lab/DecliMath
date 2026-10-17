@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, CheckCircle2, ChevronDown, ChevronRight, Clock, FileText, FlaskConical, Gem, GraduationCap, Languages, LucideIcon, Pi, Search, Settings, SlidersHorizontal, Star, Trophy } from "lucide-react";
+import { BarChart3, BookOpen, Brain, CheckCircle2, ChevronDown, ChevronRight, Clock, FileText, FlaskConical, Gem, GraduationCap, Languages, LucideIcon, Pi, Search, Settings, SlidersHorizontal, Star, Trophy } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { examName, levelById, notionVisible } from "../curriculum";
@@ -119,6 +119,17 @@ export default function Catalogue({ studentId }: { studentId?: string }) {
           return <Chip key={s} active={subject === s} onClick={() => setSubject(s)}><I size={18} aria-hidden="true" /> {SUBJECT_LABEL[s]}</Chip>;
         })}
       </div>
+
+      {(admin || levelIndex(level) >= levelIndex("2nde")) && (
+        <Link to="/philosophie" className="card philosophy-entry no-print">
+          <span className="icon-tile sq"><Brain size={26} aria-hidden="true" /></span>
+          <span className="grow">
+            <b>Philosophie · citations et exercices</b>
+            <span className="muted small">Seconde à Terminale · comprendre, analyser, discuter et préparer une dissertation</span>
+          </span>
+          <ChevronRight size={22} aria-hidden="true" />
+        </Link>
+      )}
 
       {found && skillHits.length > 0 && !readOnly && (
         <section className="card stack-sm" aria-labelledby="skills-found">

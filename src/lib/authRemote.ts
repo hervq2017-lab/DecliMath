@@ -250,21 +250,11 @@ export async function remoteSignUp(i: SignUpInput): Promise<AuthResult> {
   if (!data.session) {
     const base = "Compte créé. Ouvre le message que nous t'avons envoyé, clique sur le lien pour confirmer ton adresse, puis connecte-toi.";
     const kids = i.children?.filter((k) => k.name.trim());
-    if (i.role !== "parent" || !kids?.length || !data.user) return { error: null, info: base };
-    // Les profils enfants attendent l'acceptation du QR code avant tout partage de progression.
-    try {
-      const r = await fetch("/api/children", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "provision", userId: data.user.id }) });
-      const j = await r.json().catch(() => ({}));
-      const made = (j.created ?? []) as (Access & { name: string })[];
-      if (!r.ok || !made.length) return { error: null, info: base };
-      update((s) => ({
-        ...s,
-        users: [...s.users.filter((u) => !made.some((m) => m.id === u.id)), ...made.map((m, n): User => ({
-          id: m.id, role: "student", name: m.name, email: m.login ?? "", password: "", country: i.country, level: kids[n]?.level, serie: kids[n]?.serie, parentId: data.user!.id,
-        }))],
-      }));
-      return { error: null, info: `${base}\n\nAprès confirmation et connexion, vous pourrez envoyer à chaque enfant son QR code d'invitation. Il choisira son mot de passe et devra accepter le partage de sa progression.` };
-    } catch { return { error: null, info: base }; }
+    if (i.role !== "parent" || !kids?.length) return { error: null, info: base };
+    return {
+      error: null,
+      info: `${base}\n\nAprès confirmation et connexion, vous pourrez envoyer à chaque enfant son QR code d'invitation. Il choisira son mot de passe et devra accepter le partage de sa progression.`,
+    };
   }
   return { error: await hydrate(true) };
 }

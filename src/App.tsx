@@ -35,6 +35,7 @@ import Verbes from "./pages/Verbes";
 import Progress from "./pages/Progress";
 import Session from "./pages/Session";
 import Sujet, { SujetParent } from "./pages/Sujet";
+import Philosophie from "./pages/Philosophie";
 import { stopPreview } from "./adminActions";
 import { currentUser, DEFAULT_PREFS, restoreParentSession, THEMES, themeOf, useStore } from "./store";
 
@@ -81,6 +82,7 @@ function AppInner() {
         <Routes>
           <Route path="/" element={<Admin />} />
           <Route path="/exercices" element={<Catalogue />} />
+          <Route path="/philosophie" element={<Philosophie />} />
           <Route path="/notion/:id" element={<NotionPage />} />
           <Route path="/serie/:id" element={<Session />} />
           <Route path="/controle/:id" element={<Check />} />
@@ -141,6 +143,7 @@ function AppInner() {
         <Route path="/" element={<Home />} />
         <Route path="/onboard" element={<OnboardStudent />} />
         <Route path="/exercices" element={<Catalogue />} />
+        <Route path="/philosophie" element={<Philosophie />} />
         <Route path="/progres" element={<Progress />} />
         <Route path="/methodes" element={<Methodes />} />
         <Route path="/rappel" element={<Revision mode="rappel" />} />

@@ -475,6 +475,64 @@ a.hist-row:hover { border-color: var(--primary); }
 @media (max-width: 767px) { .cat-tools { flex-wrap: wrap; } .filter-btn { min-height: 48px; } }
 .draft-badge { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--yellow-soft); color: var(--yellow-ink); font-weight: 700; font-size: .8rem; }
 
+/* ---- Philosophie : citations, entraînement guidé et fiches imprimables ---- */
+.philosophy-entry { display: flex; align-items: center; gap: 16px; border-color: #6250bd; background: linear-gradient(120deg, rgba(113, 60, 255, .16), rgba(22, 139, 255, .08)); }
+.philosophy-entry .grow { display: grid; gap: 4px; }
+.philosophy-page { max-width: 980px; }
+.philosophy-intro { border-color: rgba(113, 60, 255, .45); }
+.philosophy-controls { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; padding-top: 8px; }
+.philosophy-controls > label:not(.philosophy-check) { display: grid; gap: 5px; font-weight: 700; }
+.philosophy-controls select { min-height: 44px; border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; color: var(--text); background: var(--surface); }
+.philosophy-check { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+.philosophy-print-heading { display: none; }
+.philosophy-instructions h2 { display: flex; align-items: center; gap: 8px; font-size: 1.05rem; }
+.philosophy-instructions ol { margin: 10px 0 0; padding-left: 24px; }
+.philosophy-instructions li + li { margin-top: 6px; }
+.philosophy-list { display: grid; gap: 18px; }
+.philosophy-card { padding: clamp(18px, 3vw, 30px); }
+.philosophy-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.philosophy-number { font-size: 1.2rem; font-weight: 800; color: var(--primary-ink); }
+.philosophy-theme { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: .9rem; font-weight: 700; }
+.philosophy-card blockquote { margin: 18px 0 10px; padding-left: 16px; border-left: 4px solid var(--primary-ink); font-family: Georgia, serif; font-size: clamp(1.2rem, 2.4vw, 1.55rem); line-height: 1.5; font-weight: 600; }
+.philosophy-attribution { font-size: .95rem; }
+.philosophy-exercise { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.philosophy-exercise h3 { font-size: 1rem; }
+.philosophy-prompt { margin: 8px 0; }
+.philosophy-level-target { margin: 8px 0; padding-left: 10px; border-left: 2px solid var(--primary-ink); font-size: .9rem; font-weight: 650; }
+.philosophy-answer-label { display: block; margin: 10px 0 5px; font-size: .9rem; font-weight: 700; }
+.philosophy-answer { display: block; width: 100%; min-height: 100px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; color: var(--text); background: var(--surface); font: inherit; resize: vertical; }
+.philosophy-answer-print { display: none; }
+.philosophy-guide { margin-top: 18px; border: 1px dashed var(--line); border-radius: 10px; padding: 12px 14px; }
+.philosophy-guide h3 { display: flex; align-items: center; gap: 6px; font-size: .92rem; }
+.philosophy-guide p { margin-top: 6px; }
+.philosophy-source-note { color: var(--muted); font-size: .8rem; }
+@media (max-width: 600px) {
+  .philosophy-entry { align-items: flex-start; }
+  .philosophy-entry .muted { line-height: 1.45; }
+  .philosophy-controls { align-items: stretch; flex-direction: column; }
+  .philosophy-controls .btn { justify-content: center; }
+}
+@media print {
+  .philosophy-page { max-width: none !important; gap: 10px !important; }
+  .philosophy-print-heading { display: block; text-align: center; margin-bottom: 8px; }
+  .philosophy-print-heading h1 { margin: 5px 0; font-size: 18pt; }
+  .philosophy-print-heading p { margin: 3px 0; }
+  .philosophy-intro, .philosophy-instructions, .philosophy-card { color: #111 !important; background: #fff !important; box-shadow: none !important; border: 1px solid #777; }
+  .philosophy-intro { padding: 10px 14px; }
+  .philosophy-intro p { color: #111 !important; }
+  .philosophy-card { padding: 16px 18px; break-inside: auto; page-break-inside: auto; }
+  .philosophy-card blockquote { color: #111; border-color: #333; }
+  .philosophy-theme, .philosophy-number, .philosophy-card .muted, .philosophy-source-note { color: #333 !important; }
+  .philosophy-level-target { border-color: #333; }
+  .philosophy-exercise { break-inside: avoid-page; page-break-inside: avoid; }
+  .philosophy-answer-print { display: block; min-height: 85px; margin-top: 8px; border-bottom: 1px solid #999; }
+  .philosophy-answer-print span { display: block; height: 82px; background: repeating-linear-gradient(to bottom, transparent 0, transparent 26px, #aaa 27px, transparent 28px); }
+  .philosophy-answer-print p { white-space: pre-wrap; }
+  .philosophy-guide { color: #111; border-color: #777; }
+  .philosophy-guide svg { display: none; }
+  .philosophy-source-note { font-size: 9pt; }
+}
+
 /* ---- Tableau des verbes ---- */
 .verbs-wrap { padding: 8px 12px; overflow-x: auto; }
 .verbs { width: 100%; border-collapse: collapse; font-size: .95rem; }
@@ -686,3 +744,45 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 .cat-hero { min-height: 180px; padding: 22px 24px; }
 .cat-hero h1 { font-size: clamp(1.4rem, 2.4vw, 1.9rem); } .cat-hero-tile { width: 78px; height: 78px; border-radius: 22px; } .cat-hero-main { gap: 16px; max-width: 70%; }
 .cat-hero-feats { gap: 8px 14px; font-size: .84rem; max-width: 70%; }
+
+/* ---- Espace parent : cartes d'accès des enfants ---- */
+.child-access-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 5%, var(--card)), var(--card) 62%);
+  box-shadow: 0 5px 18px rgba(28, 21, 69, .06);
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+.child-access-card:hover { border-color: color-mix(in srgb, var(--primary) 45%, var(--line)); box-shadow: 0 8px 24px rgba(28, 21, 69, .1); }
+.child-access-card.is-suspended { border-color: color-mix(in srgb, var(--err) 32%, var(--line)); }
+.child-access-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.child-access-identity { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.child-access-avatar { width: 48px; height: 48px; border: 3px solid var(--card); background: linear-gradient(135deg, var(--primary), var(--blue)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 25%, var(--line)); font-size: 1.15rem; }
+.child-access-name { display: grid; gap: 3px; min-width: 0; }
+.child-access-name b { color: var(--ink); font: 800 1.08rem/1.2 var(--font-head); overflow-wrap: anywhere; }
+.child-access-status { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: none; min-height: 34px; padding: 4px 12px; border: 1px solid transparent; border-radius: 999px; font-size: .82rem; font-weight: 800; }
+.child-access-status.pending { border-color: var(--yellow-line); background: var(--yellow-soft); color: var(--yellow-ink); }
+.child-access-status.active { border-color: color-mix(in srgb, var(--green) 35%, var(--line)); background: var(--green-soft); color: var(--green-ink); }
+.child-access-status.suspended { border-color: color-mix(in srgb, var(--err) 35%, var(--line)); background: color-mix(in srgb, var(--err) 10%, var(--card)); color: var(--err); }
+.child-access-login { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 14px; background: color-mix(in srgb, var(--bg) 65%, var(--card)); }
+.child-access-login-label { color: var(--muted); font-size: .8rem; font-weight: 700; }
+.child-access-login code { color: var(--ink); font: 700 .95rem var(--font-mono); overflow-wrap: anywhere; }
+.child-access-copy.btn { min-height: 34px; margin-left: auto; padding: 0 12px; border-radius: 10px; font-size: .85rem; }
+.child-access-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; padding-top: 14px; border-top: 1px solid var(--line); }
+.child-access-actions .btn { min-height: 46px; padding: 0 15px; border-radius: 14px; font-size: .92rem; }
+.child-access-actions .btn.primary { box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 22%, transparent); }
+.child-access-actions .btn.ghost { background: var(--card); }
+.child-access-actions .btn.child-access-danger { border: 1px solid color-mix(in srgb, var(--err) 28%, var(--line)); background: color-mix(in srgb, var(--err) 6%, var(--card)); color: var(--err); }
+.child-access-actions .btn.child-access-toggle { color: var(--orange-ink); }
+.child-access-actions .btn.child-access-toggle.is-suspended { color: var(--green-ink); }
+@media (max-width: 600px) {
+  .child-access-card { padding: 14px; border-radius: 17px; }
+  .child-access-head { align-items: flex-start; }
+  .child-access-status { max-width: 46%; white-space: normal; text-align: center; }
+  .child-access-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .child-access-actions .btn { min-width: 0; min-height: 46px; padding: 6px 8px; font-size: .82rem; line-height: 1.2; }
+  .child-access-copy.btn { margin-left: 0; }
+}

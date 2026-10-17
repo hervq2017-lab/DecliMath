@@ -117,26 +117,11 @@ export default async function handler(req: Req, res: Res) {
   }
 
   const admin = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-  const rawBody = (typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body ?? {}) as Body & { userId?: string };
+  const rawBody = (typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body ?? {}) as Body;
 
   // =========================================================================
   // ACTIONS PUBLIQUES (Ne requièrent pas de session parent : vérification et utilisation du jeton QR)
   // =========================================================================
-
-  // 1. Inscription rapide lors de l'enregistrement du parent
-  if (rawBody.action === "provision") {
-    const { data: u } = await admin.auth.admin.getUserById(String(rawBody.userId ?? ""));
-    const user = u?.user;
-    const pending = user?.user_metadata?.pending_children as Kid[] | undefined;
-    if (!user || user.user_metadata?.role !== "parent" || !pending?.length || Date.now() - Date.parse(user.created_at) > 30 * 60_000) return res.status(403).json({ error: "Création refusée." });
-    const kids = pending.filter((k) => typeof k.name === "string" && k.name.trim()).slice(0, MAX_CHILDREN);
-    const { data: parent } = await admin.from("profiles").select("id, country, name").eq("id", user.id).single();
-    if (!parent) return res.status(404).json({ error: "Profil du parent introuvable." });
-    const result = await createKids(admin, parent, kids);
-    if (!result.created.length) return res.status(500).json({ error: result.error ?? "Création impossible." });
-    await admin.auth.admin.updateUserById(user.id, { user_metadata: { ...user.user_metadata, pending_children: [] } });
-    return res.status(200).json({ created: result.created, error: result.error });
-  }
 
   if (rawBody.action === "verify-qr" || rawBody.action === "consume-qr") {
     const fwd = req.headers["x-forwarded-for"];

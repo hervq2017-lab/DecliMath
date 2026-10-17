@@ -37,3 +37,7 @@
 2. Séries du lycée (A, C, D, S…) et profils d'examen par pays (épreuves, coefficients, durées officielles).
 3. Pipeline de génération IA + file de validation enseignant.
 4. Remplir les 45 notions « bientôt disponibles » ; physique-chimie 6ème–5ème si les programmes locaux l'incluent.
+
+## Philosophie (Seconde–Terminale)
+
+La rubrique Exercices propose un parcours autonome dans `src/content/philosophie.ts` et `src/pages/Philosophie.tsx`. Chaque fiche présente une citation courte, son auteur, son œuvre et un repère de localisation, suivis d'activités de compréhension, d'analyse, de discussion et de préparation à la dissertation. Les attentes méthodologiques augmentent de la Seconde à la Terminale. Les fiches et les réponses saisies à l'écran sont imprimables ; les pistes de correction peuvent être ajoutées au tirage. Les traductions et références de fragments doivent être comparées à l'édition utilisée par l'enseignant.

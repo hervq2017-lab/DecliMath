@@ -206,56 +206,53 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
           return (
             <li
               key={c.id}
-              className="stack-sm"
-              style={{
-                padding: "14px 16px",
-                borderRadius: 12,
-                border: "1px solid var(--line, #8883)",
-                background: isSuspended ? "rgba(239, 68, 68, 0.04)" : "var(--card-bg, #ffffff)",
-                transition: "border-color 0.2s ease",
-              }}
+              className={`child-access-card${isSuspended ? " is-suspended" : ""}`}
             >
-              <div className="row between" style={{ flexWrap: "wrap", gap: 8 }}>
-                <span className="row" style={{ alignItems: "center", gap: 10 }}>
-                  <span className="avatar" style={{ width: 34, height: 34, fontSize: "1rem" }}>
+              <div className="child-access-head">
+                <div className="child-access-identity">
+                  <span className="avatar child-access-avatar">
                     {c.name[0]?.toUpperCase()}
                   </span>
-                  <b>{c.name}</b>
-                  <span className="muted small">
-                    • {levelById(c.level ?? "tle").label}{c.serie ? ` ${c.serie}` : ""}
-                  </span>
-                </span>
+                  <div className="child-access-name">
+                    <b>{c.name}</b>
+                    <span className="muted small">
+                      {levelById(c.level ?? "tle").label}{c.serie ? ` · Série ${c.serie}` : ""}
+                    </span>
+                  </div>
+                </div>
 
                 {/* Badge de statut */}
-                <span className="row" style={{ gap: 6, alignItems: "center" }}>
-                  {isSuspended ? (
-                    <span className="badge" style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #f87171" }}>
-                      <ShieldAlert size={13} style={{ verticalAlign: "-2px" }} /> Suspendu
-                    </span>
-                  ) : isPending ? (
-                    <span className="badge" style={{ background: "#fef3c7", color: "#d97706", border: "1px solid #fcd34d" }}>
-                      Invitation à accepter
-                    </span>
-                  ) : (
-                    <span className="badge" style={{ background: "#dcfce7", color: "#15803d", border: "1px solid #86efac" }}>
-                      <Check size={13} style={{ verticalAlign: "-2px" }} /> Actif
-                    </span>
-                  )}
-                </span>
+                {isSuspended ? (
+                  <span className="child-access-status suspended">
+                    <ShieldAlert size={15} aria-hidden="true" /> Suspendu
+                  </span>
+                ) : isPending ? (
+                  <span className="child-access-status pending">Invitation à accepter</span>
+                ) : (
+                  <span className="child-access-status active">
+                    <Check size={15} aria-hidden="true" /> Actif
+                  </span>
+                )}
               </div>
 
               {/* L'identifiant n'est communiqué qu'après acceptation de l'invitation. */}
-              {!isPending && <div className="stack-sm" style={{ padding: "6px 0", fontSize: "0.95rem" }}>
-                <div>
-                  Identifiant élève : <code style={{ fontSize: "1.05rem", userSelect: "all", fontWeight: 700 }}>{c.email}</code>{" "}
-                  <button type="button" className="btn link" style={{ padding: "2px 6px" }} aria-label={`Copier l'identifiant de ${c.name}`} onClick={() => copyText(`${c.id}-l`, c.email)}>
+              {!isPending && (
+                <div className="child-access-login">
+                  <span className="child-access-login-label">Identifiant élève</span>
+                  <code>{c.email}</code>
+                  <button
+                    type="button"
+                    className="btn link child-access-copy"
+                    aria-label={`Copier l'identifiant de ${c.name}`}
+                    onClick={() => copyText(`${c.id}-l`, c.email)}
+                  >
                     {copied === `${c.id}-l` ? "Copié" : "Copier"}
                   </button>
                 </div>
-              </div>}
+              )}
 
               {/* Actions rapides */}
-              <div className="row" style={{ flexWrap: "wrap", gap: 8, paddingTop: 6, borderTop: "1px dashed var(--line, #8883)" }}>
+              <div className="child-access-actions">
                 <button
                   type="button"
                   className="btn primary"
@@ -278,9 +275,8 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
 
                 {isPending && <button
                   type="button"
-                  className="btn link"
+                  className="btn child-access-danger"
                   disabled={busy}
-                  style={{ color: "var(--danger, #ff6b6b)" }}
                   onClick={() => void handleRevokeInvitation(c)}
                 >
                   <ShieldAlert size={15} aria-hidden="true" /> Révoquer l'invitation
@@ -301,8 +297,7 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
 
                 <button
                   type="button"
-                  className="btn ghost"
-                  style={{ color: isSuspended ? "var(--green, #2e9e5b)" : "var(--amber, #d97706)" }}
+                  className={`btn ghost child-access-toggle${isSuspended ? " is-suspended" : ""}`}
                   disabled={busy}
                   onClick={() => handleToggleSuspend(c)}
                 >
@@ -315,9 +310,8 @@ export default function ChildAccess({ parentId }: { parentId: string }) {
 
                 <button
                   type="button"
-                  className="btn link"
+                  className="btn child-access-danger"
                   disabled={busy}
-                  style={{ color: "var(--danger, #ff6b6b)", marginLeft: "auto" }}
                   onClick={() => removeAccess(c.id, c.name)}
                 >
                   <Trash2 size={15} aria-hidden="true" style={{ verticalAlign: "-2px" }} /> Supprimer
