@@ -3,13 +3,14 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { examName, levelById, notionVisible } from "../curriculum";
 import { isExitLevel } from "../engine";
-import { ChapterIcon, Chip, ProgressBar, ReadLink, toneOf } from "../components/ui";
+import { ChapterIcon, Chip, ProgressBar, toneOf } from "../components/ui";
 import { LEVELS, LevelId, levelIndex, NOTIONS, Subject, SUBJECT_LABEL, subjectsAt } from "../curriculum";
 import { hasContent } from "../engine";
 import { lessonFor } from "../content/lessons";
 import { attemptsOf, itemsFor, notionPercent, SKILL_ROUND } from "../lib/stats";
 import { norm as normSearch, searchAll } from "../lib/search";
-import { currentUser, isAdmin, masteryFor, useStore } from "../store";
+import { currentUser, hasAcceptedParentLink, isAdmin, masteryFor, useStore } from "../store";
+import { createExerciseAssignment } from "../lib/exerciseAssignments";
 
 type StatusFilter = "all" | "new" | "going" | "done";
 const SUBJECT_ICON: Record<Subject, LucideIcon> = { maths: Pi, physique: FlaskConical, anglais: Languages };
@@ -24,7 +25,9 @@ const norm = normSearch;
 export default function Catalogue({ studentId }: { studentId?: string }) {
   const state = useStore();
   const readOnly = !!studentId;
+  const viewer = currentUser(state);
   const me = (studentId ? state.users.find((u) => u.id === studentId) : currentUser(state))!;
+  const canAssign = !!studentId && viewer?.role === "parent" && me.parentId === viewer.id && hasAcceptedParentLink(me);
   const admin = !studentId && isAdmin(me); // seul l'administrateur voit toutes les classes
   const mine = attemptsOf(state, me.id);
   const level = me.level ?? "tle";
@@ -34,6 +37,8 @@ export default function Catalogue({ studentId }: { studentId?: string }) {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState<StatusFilter>("all");
   const [open, setOpen] = useState(false);
+  const [assigning, setAssigning] = useState<string | null>(null);
+  const [assignmentMessage, setAssignmentMessage] = useState<string | null>(null);
 
   const subjects: Subject[] = admin && lv === "all" ? ["maths", "physique", "anglais"] : subjectsAt(admin ? (lv as LevelId) : level);
   const baseList = NOTIONS.filter((n) => (admin || notionVisible(n, me.serie)) && (admin ? lv === "all" || n.level === lv : n.level === level) && (subject === "all" || n.subject === subject));
@@ -45,6 +50,20 @@ export default function Catalogue({ studentId }: { studentId?: string }) {
     .sort((a, b) => (found ? (rank.get(a.id) ?? 0) - (rank.get(b.id) ?? 0) : Number(hasContent(b.id)) * 2 + Number(!!lessonFor(b.id)) - (Number(hasContent(a.id)) * 2 + Number(!!lessonFor(a.id)))));
   const allowed = new Set(baseList.map((n) => n.id));
   const skillHits = (found?.skills ?? []).filter((h) => allowed.has(h.notion.id)).slice(0, 8);
+  const assignSkill = async (templateId: string, notionId: string, title: string) => {
+    if (!viewer || !canAssign) return;
+    setAssigning(templateId);
+    setAssignmentMessage(null);
+    const error = await createExerciseAssignment({
+      parentId: viewer.id,
+      studentId: me.id,
+      notionId,
+      templateId,
+      title,
+    });
+    setAssignmentMessage(error ?? `Série de 10 exercices assignée à ${me.name}.`);
+    setAssigning(null);
+  };
 
   const STATUS: Record<StatusFilter, string> = { all: "Tous les statuts", new: "Nouveau", going: "En cours", done: "Maîtrisé" };
   const statusOf = (id: string): StatusFilter => {
@@ -121,7 +140,7 @@ export default function Catalogue({ studentId }: { studentId?: string }) {
       </div>
 
       {(admin || levelIndex(level) >= levelIndex("2nde")) && (
-        <Link to="/philosophie" className="card philosophy-entry no-print">
+        <Link to={readOnly ? `/enfant/${studentId}/philosophie` : "/philosophie"} className="card philosophy-entry no-print">
           <span className="icon-tile sq"><Brain size={26} aria-hidden="true" /></span>
           <span className="grow">
             <b>Philosophie · citations et exercices</b>
@@ -131,18 +150,26 @@ export default function Catalogue({ studentId }: { studentId?: string }) {
         </Link>
       )}
 
-      {found && skillHits.length > 0 && !readOnly && (
+      {assignmentMessage && <p className={assignmentMessage.startsWith("Série") ? "callout" : "auth-error"} role={assignmentMessage.startsWith("Série") ? "status" : "alert"}>{assignmentMessage}</p>}
+
+      {found && skillHits.length > 0 && (!readOnly || canAssign) && (
         <section className="card stack-sm" aria-labelledby="skills-found">
           <h2 id="skills-found" style={{ fontSize: "1.1rem" }}>Compétences trouvées</h2>
-          <p className="muted small">Choisis une compétence pour t'exercer à fond : séries de {SKILL_ROUND} exercices jusqu'à la maîtrise.</p>
+          <p className="muted small">{canAssign ? `Choisis une compétence à faire travailler à ${me.name} :` : "Choisis une compétence pour t'exercer à fond :"} séries de {SKILL_ROUND} exercices jusqu'à la maîtrise.</p>
           {skillHits.map((h) => (
             <div key={h.templateId} style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
               <div className="grow" style={{ minWidth: 200 }}>
                 <h3 style={{ fontSize: "1rem" }}>{h.label}</h3>
                 <p className="muted small">{levelById(h.notion.level).label} • {h.notion.title}</p>
               </div>
-              <Link className="btn ghost" to={`/notion/${encodeURIComponent(h.notion.id)}`}>Voir la notion</Link>
-              <Link className="btn primary" to={`/serie/${encodeURIComponent(h.notion.id)}?t=${encodeURIComponent(h.templateId)}&drill=1`}>{SKILL_ROUND} exercices</Link>
+              <Link className="btn ghost" to={canAssign ? `/enfant/${studentId}/exercices/notion/${encodeURIComponent(h.notion.id)}` : `/notion/${encodeURIComponent(h.notion.id)}`}>Voir la notion</Link>
+              {canAssign ? (
+                <button type="button" className="btn primary" disabled={assigning !== null} onClick={() => void assignSkill(h.templateId, h.notion.id, h.label)}>
+                  {assigning === h.templateId ? "Envoi…" : `Assigner à ${me.name}`}
+                </button>
+              ) : (
+                <Link className="btn primary" to={`/serie/${encodeURIComponent(h.notion.id)}?t=${encodeURIComponent(h.templateId)}&drill=1`}>{SKILL_ROUND} exercices</Link>
+              )}
             </div>
           ))}
         </section>
@@ -186,7 +213,11 @@ export default function Catalogue({ studentId }: { studentId?: string }) {
             );
             const cls = `chap rich${i === 0 && ready ? " glow" : ""}`;
             return ready || lessonOnly ? (
-              <ReadLink key={n.id} readOnly={readOnly} to={`/notion/${encodeURIComponent(n.id)}`} className={cls}>{inner}</ReadLink>
+              readOnly ? (
+                <Link key={n.id} to={`/enfant/${studentId}/exercices/notion/${encodeURIComponent(n.id)}`} className={cls}>{inner}</Link>
+              ) : (
+                <Link key={n.id} to={`/notion/${encodeURIComponent(n.id)}`} className={cls}>{inner}</Link>
+              )
             ) : (
               <div key={n.id} className={`${cls} disabled`} aria-disabled="true">{inner}</div>
             );

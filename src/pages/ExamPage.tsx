@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { AnswerInput } from "../components/AnswerInput";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { BackButton } from "../components/ui";
 import { checkAnswer } from "../content/core";
 import { examName, levelById, notionById, Subject, SUBJECT_LABEL } from "../curriculum";
@@ -41,6 +42,7 @@ export function ExamStart() {
     <main className="shell no-nav stack">
       <BackButton to="/exercices" />
       <h1>{label}</h1>
+      <ExerciseActions title={label} url={`/epreuve/${spec.subject}/${kind}`} />
       <section className="card stack">
         <p>{built.items.length} questions · {built.durationMin} minutes · notée sur {built.outOf}</p>
         <ul>
@@ -117,6 +119,7 @@ export function ExamRunPage() {
       <main className="shell no-nav stack">
         <BackButton to="/exercices" />
         <h1>{exam.label}</h1>
+        <ExerciseActions title={exam.label} url={`/epreuve/${exam.subject}/${exam.kind}`} />
         <section className="card center"><span className="big">{exam.score}/{exam.outOf}</span><p className="muted">Un point de repère, pas un jugement : regarde surtout les notions à revoir.</p></section>
         <section className="card stack">
           <h2>Par notion</h2>
@@ -147,10 +150,12 @@ export function ExamRunPage() {
         <h1>{exam.label}</h1>
         <span className="big" role="timer" aria-live="off">{mm}:{ss}</span>
       </div>
+      <ExerciseActions title={exam.label} url={`/epreuve/${exam.subject}/${exam.kind}`} />
       {exam.items.map((it, i) => (
         <section key={i} className="card stack">
           <strong>Question {i + 1} ({it.points} pt)</strong>
           <p className="statement">{prepared[i].inst.statement}</p>
+          <div className="exercise-print-answer" aria-hidden="true" />
           <AnswerInput
             answer={prepared[i].inst.answer} name={`q${i}`} value={exam.answers[i] ?? ""}
             onChange={(v) => update((s) => ({ ...s, exams: s.exams.map((e) => (e.id === exam.id ? { ...e, answers: { ...e.answers, [i]: v } } : e)) }))}

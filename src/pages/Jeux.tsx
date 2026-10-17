@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { AnswerInput } from "../components/AnswerInput";
 import { BackButton, ChevronRight } from "../components/ui";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { checkAnswer, rng, shuffle } from "../content/core";
 import { levelIndex, nid, notionById } from "../curriculum";
 import { buildChallenge, Task, taskOf } from "../engine";
@@ -79,6 +80,7 @@ export default function Jeux() {
 const Shell = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <main className="shell wide no-nav stack">
     <div className="row" style={{ flexWrap: "nowrap" }}><BackButton to="/jeux" /><h1 style={{ fontSize: "1.4rem" }}>{title}</h1></div>
+    <ExerciseActions title={title} url={`${window.location.pathname}${window.location.search}`} />
     {children}
   </main>
 );

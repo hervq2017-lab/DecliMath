@@ -88,6 +88,8 @@ function AppInner() {
           <Route path="/controle/:id" element={<Check />} />
           <Route path="/enfant/:id" element={<ParentChild tab="accueil" />} />
           <Route path="/enfant/:id/exercices" element={<ParentChild tab="exercices" />} />
+          <Route path="/enfant/:id/exercices/notion/:notionId" element={<ParentChild tab="exercise" />} />
+          <Route path="/enfant/:id/philosophie" element={<ParentChild tab="philosophie" />} />
           <Route path="/enfant/:id/progres" element={<ParentChild tab="progres" />} />
           <Route path="/enfant/:id/reponses" element={<ParentChild tab="reponses" />} />
         <Route path="/enfant/:id/sujets" element={<ParentChild tab="sujets" />} />
@@ -103,6 +105,8 @@ function AppInner() {
       <Routes>
         <Route path="/enfant/:id" element={<ParentChild tab="accueil" />} />
         <Route path="/enfant/:id/exercices" element={<ParentChild tab="exercices" />} />
+        <Route path="/enfant/:id/exercices/notion/:notionId" element={<ParentChild tab="exercise" />} />
+        <Route path="/enfant/:id/philosophie" element={<ParentChild tab="philosophie" />} />
         <Route path="/enfant/:id/progres" element={<ParentChild tab="progres" />} />
         <Route path="/enfant/:id/reponses" element={<ParentChild tab="reponses" />} />
         <Route path="/enfant/:id/sujets" element={<ParentChild tab="sujets" />} />

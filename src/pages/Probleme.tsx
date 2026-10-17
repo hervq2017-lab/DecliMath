@@ -3,6 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { AnswerInput } from "../components/AnswerInput";
 import { NotebookGate, useNotebook, WrittenCheck } from "../components/Notebook";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { ProgressBar } from "../components/ui";
 import { Answer, checkAnswer, parseNumeric } from "../content/core";
 import { instancierProbleme, problemeById, QuestionPb, Statut } from "../content/problemes-situes";
@@ -166,6 +167,7 @@ function ProblemeInner() {
         <button className="icon-btn" aria-label="Quitter le problème" onClick={() => nav(back)}><X size={22} aria-hidden="true" /></button>
         <ProgressBar value={((qi + (answered && okNow ? 1 : 0)) / inst.questions.length) * 100} label="Avancement du problème" />
       </div>
+      <ExerciseActions title={p.titre} url={`/probleme/${encodeURIComponent(p.id)}?seed=${seed}`} />
 
       <section className="card stack">
         <p className="eyebrow">{p.titre} • {levelById(notion.level).label} • {notion.title}</p>
@@ -193,6 +195,7 @@ function ProblemeInner() {
       <section className="card stack">
         <p className="eyebrow">Question {qi + 1} / {inst.questions.length} • {q.points} pt{q.points > 1 ? "s" : ""}</p>
         <p className="statement">{q.texte}</p>
+        <div className="exercise-print-answer" aria-hidden="true" />
       </section>
 
       {!answered && (

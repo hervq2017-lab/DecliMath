@@ -149,6 +149,17 @@ export interface PaperRecord {
   ts: number;
 }
 
+export interface ExerciseAssignment {
+  id: string;
+  parentId: string;
+  studentId: string;
+  notionId: string;
+  templateId: string;
+  title: string;
+  createdAt: number;
+  completedAt?: number;
+}
+
 export type PaymentStatus = "pending" | "approved" | "rejected";
 export interface Payment {
   id: string;
@@ -190,6 +201,7 @@ export interface State {
   checks: CheckResult[];
   exams: ExamRun[];
   papers: PaperRecord[];
+  exerciseAssignments: ExerciseAssignment[];
   /** Traces des méthodes d'apprentissage (cartes, rappel, jeux, bilans, simulations, tuteur). */
   evidence: Evidence[];
   /** Révisions espacées : « élève|clé » → planning. */
@@ -207,7 +219,7 @@ export interface State {
 }
 
 const KEY = "reussite-terminale-v2";
-const empty: State = { users: [], sessionId: null, attempts: [], checks: [], exams: [], papers: [], evidence: [], memory: {}, bilans: [], validated: {}, solutionMode: {}, goals: {}, payments: [], audit: [], qrTokens: [] };
+const empty: State = { users: [], sessionId: null, attempts: [], checks: [], exams: [], papers: [], exerciseAssignments: [], evidence: [], memory: {}, bilans: [], validated: {}, solutionMode: {}, goals: {}, payments: [], audit: [], qrTokens: [] };
 
 function load(): State {
   try {

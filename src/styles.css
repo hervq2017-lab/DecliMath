@@ -786,3 +786,21 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
   .child-access-actions .btn { min-width: 0; min-height: 46px; padding: 6px 8px; font-size: .82rem; line-height: 1.2; }
   .child-access-copy.btn { margin-left: 0; }
 }
+
+/* ---- Partage et impression des exercices ---- */
+.exercise-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.exercise-actions .btn { min-height: 44px; padding: 8px 14px; border-radius: 13px; font-size: .9rem; }
+.exercise-actions .exercise-whatsapp { border-color: #168a4a; background: #1eaa5b; color: #fff; }
+.exercise-actions .muted { flex: 1 1 100%; }
+.exercise-skill-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.exercise-sample { margin-top: 7px; padding: 10px 12px; border-left: 3px solid var(--primary); border-radius: 0 10px 10px 0; background: var(--primary-soft); color: var(--text); }
+.exercise-print-answer { display: none; }
+@media print {
+  .exercise-actions, .no-print { display: none !important; }
+  .shell { max-width: none !important; min-height: 0 !important; padding: 0 !important; background: #fff !important; box-shadow: none !important; }
+  .card, .hero-card, .statement, .mt-flash, .mt-step { color: #111 !important; background: #fff !important; box-shadow: none !important; }
+  .hero-card { border: 1px solid #777 !important; }
+  .hero-card h1, .hero-card p, .hero-card .eyebrow { color: #111 !important; }
+  button, input, textarea, select, .bottom-nav, .topbar { display: none !important; }
+  .exercise-print-answer { display: block; min-height: 105px; margin-top: 12px; background: repeating-linear-gradient(to bottom, transparent 0, transparent 25px, #aaa 26px, transparent 27px); }
+}

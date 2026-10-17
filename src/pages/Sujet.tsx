@@ -1,7 +1,8 @@
-import { Printer, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import { BackButton } from "../components/ui";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { levelById, notionById, Subject } from "../curriculum";
 import { hasContent } from "../engine";
 import { buildPaper, Paper, PaperSpec } from "../paper";
@@ -101,9 +102,9 @@ export default function Sujet({ mode }: { mode: "notion" | "examen" }) {
         <section className="card stack-sm">
           <p>Imprime le sujet et compose-le sur feuille, comme en classe. Le corrigé complet est réservé à tes parents : montre-leur ta copie.</p>
           <div className="row">
-            <button type="button" className="btn primary" onClick={() => window.print()}><Printer size={20} aria-hidden="true" /> Imprimer le sujet</button>
             <button type="button" className="btn ghost" onClick={() => setQs({ s: String(1 + Math.floor(Math.random() * 1e6)) })}><RefreshCw size={18} aria-hidden="true" /> Autre sujet</button>
           </div>
+          <ExerciseActions title={paper.title} url={`/sujet/${mode === "notion" ? `notion/${encodeURIComponent(id)}` : `examen/${subject}/${kind}`}?s=${seed}`} />
         </section>
       </div>
       <Sheet paper={paper} corrige={false} />
@@ -128,9 +129,9 @@ export function SujetParent() {
         <section className="card stack-sm">
           <p>Corrigé type complet, avec toutes les réponses et les démarches. Réservé aux parents.</p>
           <div className="row">
-            <button type="button" className="btn primary" onClick={() => window.print()}><Printer size={20} aria-hidden="true" /> Imprimer</button>
             <button type="button" className="btn ghost" aria-pressed={corrige} onClick={() => setCorrige(!corrige)}>{corrige ? "Voir le sujet seul" : "Voir le corrigé"}</button>
           </div>
+          <ExerciseActions title={paper.title} url={window.location.pathname} message={`Sujet à consulter sur DeclickMath : ${paper.title}`} />
         </section>
       </div>
       <Sheet paper={paper} corrige={corrige} />

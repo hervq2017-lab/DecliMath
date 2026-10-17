@@ -2,6 +2,7 @@ import { Check, Lightbulb } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { BackButton } from "../components/ui";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { defaults, sampleCurve, simulationById } from "../content/simulations";
 import type { Point, Simulation } from "../content/simulations";
 import { notionById } from "../curriculum";
@@ -68,6 +69,7 @@ export default function SimulationPage() {
   return (
     <main className="shell wide no-nav stack mt-sim">
       <div className="row" style={{ flexWrap: "nowrap" }}><BackButton to="/situations" /><h1 style={{ fontSize: "1.4rem" }}>{sim.title}</h1></div>
+      <ExerciseActions title={sim.title} url={`/simulation/${encodeURIComponent(sim.id)}`} />
       <p className="callout">{sim.scene}</p>
 
       <section className="card stack-sm" aria-labelledby="s1">

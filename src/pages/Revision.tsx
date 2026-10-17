@@ -2,6 +2,7 @@ import { Brain, Check, Layers, Repeat } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { BackButton, ProgressBar } from "../components/ui";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { notionById } from "../curriculum";
 import { CARD_KIND_LABEL, cardsForLevel, recallOverlap } from "../lib/cards";
 import type { Card } from "../lib/cards";
@@ -132,6 +133,7 @@ function RevisionInner({ mode }: { mode: Mode }) {
       {header}
       <ProgressBar value={(i / queue.length) * 100} label="Avancement de la séance" />
       <p className="muted small">Carte {i + 1} sur {queue.length}{n ? ` • ${n.title}` : ""}</p>
+      <ExerciseActions title={`${TITLE[mode]}${n ? ` — ${n.title}` : ""}`} url={`${window.location.pathname}${window.location.search}`} />
 
       <section className="mt-flash" aria-live="polite">
         <span className="kind">{CARD_KIND_LABEL[card.kind]}{mem ? ` • revue ${mem.reps + mem.lapses} fois` : " • nouvelle"}</span>

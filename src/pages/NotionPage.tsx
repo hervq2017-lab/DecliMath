@@ -1,41 +1,66 @@
 import { Check, ChevronDown, ChevronUp, Play, Printer, Target } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { BackButton, ChapterIcon, ChevronRight, ProgressBar } from "../components/ui";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { lessonFor } from "../content/lessons";
 import { PROPRIETES_CI } from "../content/cours-ci";
 import { PROPRIETES_CIAM } from "../content/proprietes-ciam";
 import { levelById, notionById } from "../curriculum";
 import { problemesFor } from "../content/problemes-situes";
-import { hasContent } from "../engine";
+import { buildDrill, hasContent, taskOf } from "../engine";
 import { etapesFor } from "../content/etapes";
 import { attemptsOf, itemsFor, notionPercent, SKILL_GOAL, SKILL_ROUND, skillProgress, skillsFor } from "../lib/stats";
 import { canAccessNotion, currentUser, MASTERY_LABEL, masteryFor, recommendation, useStore } from "../store";
+import { createExerciseAssignment } from "../lib/exerciseAssignments";
 
-export default function NotionPage() {
-  const { id = "" } = useParams();
-  const notion = notionById(id);
+export default function NotionPage({ studentId }: { studentId?: string } = {}) {
+  const { id = "", notionId } = useParams();
+  const notionKey = notionId ?? id;
+  const notion = notionById(notionKey);
   const state = useStore();
-  const me = currentUser(state)!;
+  const viewer = currentUser(state)!;
+  const me = studentId ? state.users.find((u) => u.id === studentId) : viewer;
   const [open, setOpen] = useState(true);
-  if (!notion || !(hasContent(id) || lessonFor(id)) || !canAccessNotion(me, notion)) return <Navigate to="/exercices" replace />;
+  const [assignmentBusy, setAssignmentBusy] = useState<string | null>(null);
+  const [assignmentMessage, setAssignmentMessage] = useState<string | null>(null);
+  const skills = skillsFor(notionKey);
+  const sampleStatements = useMemo(
+    () => new Map(skills.map((skill) => {
+      const task = buildDrill(skill.templateId, 1)[0];
+      return [skill.templateId, task ? taskOf(task).inst.statement : ""];
+    })),
+    [notionKey],
+  );
+  if (!me || !notion || !(hasContent(notionKey) || lessonFor(notionKey)) || !canAccessNotion(me, notion)) return <Navigate to="/exercices" replace />;
 
   const mine = attemptsOf(state, me.id);
-  const m = masteryFor(state, me.id, id);
-  const lesson = lessonFor(id);
+  const m = masteryFor(state, me.id, notionKey);
+  const lesson = lessonFor(notionKey);
   // Propriétés du manuel de la classe quand il est disponible ; sinon celles du programme.
-  const ciam = (PROPRIETES_CIAM[notion.level]?.chapitres ?? []).filter((c) => c.notionId === id);
+  const ciam = (PROPRIETES_CIAM[notion.level]?.chapitres ?? []).filter((c) => c.notionId === notionKey);
   const proprietes: { titre: string; enonce: string; page?: string }[] = ciam.length
     ? ciam.flatMap((c) => c.items)
-    : Object.values(PROPRIETES_CI).flat().filter((c) => c.notionId === id).flatMap((c) => c.items);
-  const items = itemsFor(id);
-  const skills = skillsFor(id);
-  const pct = notionPercent(mine, id);
+    : Object.values(PROPRIETES_CI).flat().filter((c) => c.notionId === notionKey).flatMap((c) => c.items);
+  const items = itemsFor(notionKey);
+  const pct = notionPercent(mine, notionKey);
+  const canAssign = viewer.role === "parent" && !!studentId && me.parentId === viewer.id;
+  const returnPath = studentId ? `/enfant/${studentId}/exercices` : "/exercices";
+  const seriesUrl = (templateId: string, assignmentId?: string) =>
+    `/serie/${encodeURIComponent(notionKey)}?t=${encodeURIComponent(templateId)}&drill=1&n=${SKILL_ROUND}${assignmentId ? `&assignment=${encodeURIComponent(assignmentId)}` : ""}`;
+  const assignSkill = async (templateId: string, title: string) => {
+    if (!canAssign || !studentId) return;
+    setAssignmentBusy(templateId);
+    setAssignmentMessage(null);
+    const error = await createExerciseAssignment({ parentId: viewer.id, studentId, notionId: notionKey, templateId, title });
+    setAssignmentMessage(error ?? `Série de ${SKILL_ROUND} exercices assignée à ${me.name}.`);
+    setAssignmentBusy(null);
+  };
 
   return (
     <main className="shell no-nav stack">
       <div className="row" style={{ flexWrap: "nowrap" }}>
-        <BackButton to="/exercices" />
+        <BackButton to={returnPath} />
         <span className="muted" style={{ fontWeight: 700 }}>{levelById(notion.level).label} • {notion.chapter}</span>
       </div>
 
@@ -47,15 +72,16 @@ export default function NotionPage() {
           <ProgressBar value={pct} tone="onnavy" label="Progression" />
         </div>
       </section>
+      {assignmentMessage && <p className={assignmentMessage.startsWith("Série") ? "callout" : "auth-error"} role={assignmentMessage.startsWith("Série") ? "status" : "alert"}>{assignmentMessage}</p>}
       <p className="muted" style={{ fontWeight: 600 }}>{recommendation(m.status)}</p>
-      {items.length > 0 && <Link to={`/sujet/notion/${encodeURIComponent(id)}`} className="btn ghost block"><Printer size={20} aria-hidden="true" /> Imprimer une interrogation complète (situation + problèmes)</Link>}
+      {items.length > 0 && !studentId && <Link to={`/sujet/notion/${encodeURIComponent(notionKey)}`} className="btn ghost block"><Printer size={20} aria-hidden="true" /> Imprimer une interrogation complète (situation + problèmes)</Link>}
 
-      <nav className="row" aria-label="Aller plus loin" style={{ gap: 8 }}>
-        <Link className="pill" to={`/cartes?notion=${encodeURIComponent(id)}`}>Cartes mémoire</Link>
-        <Link className="pill" to={`/rappel?notion=${encodeURIComponent(id)}`}>Rappel actif</Link>
-        <Link className="pill" to={`/tuteur?notion=${encodeURIComponent(id)}`}>Tuteur</Link>
-        {etapesFor(id).map((e) => <Link key={e.id} className="pill yellow" to={`/etapes/${e.id}`}>Pas à pas : {e.title}</Link>)}
-      </nav>
+      {!studentId && <nav className="row" aria-label="Aller plus loin" style={{ gap: 8 }}>
+        <Link className="pill" to={`/cartes?notion=${encodeURIComponent(notionKey)}`}>Cartes mémoire</Link>
+        <Link className="pill" to={`/rappel?notion=${encodeURIComponent(notionKey)}`}>Rappel actif</Link>
+        <Link className="pill" to={`/tuteur?notion=${encodeURIComponent(notionKey)}`}>Tuteur</Link>
+        {etapesFor(notionKey).map((e) => <Link key={e.id} className="pill yellow" to={`/etapes/${e.id}`}>Pas à pas : {e.title}</Link>)}
+      </nav>}
 
       <section className="card lesson stack-sm">
         <h3 className="row" style={{ flexWrap: "nowrap" }}><Play size={20} aria-hidden="true" /> {lesson ? "Mini-cours" : "Cours"}</h3>
@@ -68,7 +94,7 @@ export default function NotionPage() {
                 <div className="callout"><strong>Exemple.</strong> {lesson.example.problem}<br />{lesson.example.solution}</div>
                 {lesson.more?.map((e, k) => <div key={k} className="callout"><strong>Exemple {k + 2}.</strong> {e.problem}<br />{e.solution}</div>)}
                 <p className="muted"><strong>Piège :</strong> {lesson.pitfalls}</p>
-                {lesson.status === "draft" && !state.validated?.[id] && <p className="draft-badge">Brouillon — en attente de validation par un enseignant</p>}
+                {lesson.status === "draft" && !state.validated?.[notionKey] && <p className="draft-badge">Brouillon — en attente de validation par un enseignant</p>}
               </>
             )}
             <button className="btn link" style={{ justifyContent: "flex-start", padding: 0 }} aria-expanded={open} onClick={() => setOpen(!open)}>
@@ -89,14 +115,16 @@ export default function NotionPage() {
         </details>
       )}
 
-      {problemesFor(id).length > 0 && (
+      {problemesFor(notionKey).length > 0 && (
         <section className="stack-sm" aria-labelledby="pb-title">
           <h2 id="pb-title">Problèmes de situation</h2>
           <p className="muted small" style={{ marginTop: -8 }}>Un énoncé complet, puis des questions qui s'enchaînent. Les valeurs changent à chaque essai.</p>
-          {problemesFor(id).map((pb) => (
+          {problemesFor(notionKey).map((pb) => (
             <div key={pb.id} className="card" style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
               <div className="grow"><strong>{pb.titre}</strong><div className="muted small">{pb.contexteLabel} • difficulté {pb.difficulte}/3</div></div>
-              <Link className="btn primary" to={`/probleme/${encodeURIComponent(pb.id)}`}>Résoudre</Link>
+              {canAssign
+                ? <ExerciseActions title={pb.titre} url={`/probleme/${encodeURIComponent(pb.id)}?seed=1`} />
+                : <Link className="btn primary" to={`/probleme/${encodeURIComponent(pb.id)}`}>Résoudre</Link>}
             </div>
           ))}
         </section>
@@ -112,11 +140,14 @@ export default function NotionPage() {
       <div className="stack-sm">
         {skills.map((sk) => {
           const pr = skillProgress(mine, sk.templateId);
+          const sampleStatement = sampleStatements.get(sk.templateId) ?? "";
           return (
             <div key={sk.templateId} className="card" style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
               <span className={`step-ic${pr.mastered ? " done" : ""}`}>{pr.mastered ? <Check size={22} aria-hidden="true" /> : <Target size={22} aria-hidden="true" />}</span>
               <div className="grow" style={{ minWidth: 200 }}>
                 <h3>{sk.label}</h3>
+                <p className="small exercise-sample"><b>Exemple d’exercice :</b> {sampleStatement}</p>
+                <div className="exercise-print-answer" aria-hidden="true" />
                 <div aria-hidden="true" style={{ display: "flex", gap: 4, margin: "6px 0" }}>
                   {Array.from({ length: SKILL_ROUND }, (_, k) => {
                     const r = pr.results[k];
@@ -128,14 +159,28 @@ export default function NotionPage() {
                 </p>
                 {sk.ref && <p className="muted small">Travaillé dans : {sk.ref}</p>}
               </div>
-              <Link className="btn primary" to={`/serie/${encodeURIComponent(id)}?t=${encodeURIComponent(sk.templateId)}&drill=1`}>{pr.started ? `${SKILL_ROUND} de plus` : `${SKILL_ROUND} exercices`}</Link>
+              {canAssign ? (
+                <div className="exercise-skill-tools">
+                  <button type="button" className="btn primary" disabled={assignmentBusy !== null} onClick={() => void assignSkill(sk.templateId, sk.label)}>
+                    {assignmentBusy === sk.templateId ? "Envoi…" : `Assigner à ${me.name}`}
+                  </button>
+                  <ExerciseActions title={`${sk.label} — ${notion.title}`} url={seriesUrl(sk.templateId)} />
+                </div>
+              ) : (
+                <div className="exercise-skill-tools">
+                  <Link className="btn primary" to={seriesUrl(sk.templateId)}>{pr.started ? `${SKILL_ROUND} de plus` : `${SKILL_ROUND} exercices`}</Link>
+                  <ExerciseActions title={`${sk.label} — ${notion.title}`} url={seriesUrl(sk.templateId)} />
+                </div>
+              )}
             </div>
           );
         })}
       </div>
 
-      <Link className="btn primary block" to={`/serie/${encodeURIComponent(id)}`}>S'entraîner sur mes points faibles</Link>
-      <Link className="btn ghost block" to={`/controle/${encodeURIComponent(id)}`}>Ai-je vraiment compris ?</Link>
+      {!canAssign && <>
+        <Link className="btn primary block" to={`/serie/${encodeURIComponent(notionKey)}`}>S'entraîner sur mes points faibles</Link>
+        <Link className="btn ghost block" to={`/controle/${encodeURIComponent(notionKey)}`}>Ai-je vraiment compris ?</Link>
+      </>}
       </>}
     </main>
   );

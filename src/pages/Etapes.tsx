@@ -4,6 +4,7 @@ import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import { AnswerInput } from "../components/AnswerInput";
 import { NotebookGate, useNotebook, WrittenCheck } from "../components/Notebook";
 import { BackButton, ChevronRight, ProgressBar } from "../components/ui";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { Answer } from "../content/core";
 import { errInfo } from "../content/erreurs";
 import { checkStep, ETAPES, etapeById, instancierEtape } from "../content/etapes";
@@ -115,6 +116,7 @@ function EtapesInner() {
     return (
       <main className="shell wide no-nav stack">
         <div className="row" style={{ flexWrap: "nowrap" }}><BackButton to={back} /><h1 style={{ fontSize: "1.4rem" }}>{e.title}</h1></div>
+        <ExerciseActions title={e.title} url={`/etapes/${encodeURIComponent(e.id)}?seed=${seed}`} />
         <section className="fb ok" role="status">
           <header><span className="ic"><Check size={28} aria-hidden="true" /></span><div><h2>Exercice terminé</h2><p>{inst.conclusion}</p></div></header>
         </section>
@@ -143,6 +145,7 @@ function EtapesInner() {
     <main className="shell wide no-nav stack">
       <div className="topline"><BackButton to={back} label="Quitter" /><ProgressBar value={(done.length / total) * 100} label="Étapes réussies" /></div>
       <p className="eyebrow">{e.title} • étape {k + 1} sur {total}</p>
+      <ExerciseActions title={e.title} url={`/etapes/${encodeURIComponent(e.id)}?seed=${seed}`} />
       <section className="card"><p className="statement">{inst.statement}</p></section>
 
       {done.length > 0 && (

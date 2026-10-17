@@ -1,6 +1,9 @@
 import { CalendarDays, Play, ScanLine, Sparkles, Target } from "lucide-react";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { ChapterIcon, ChevronRight, ProgressBar, ReadLink, StreakChip } from "../components/ui";
+import { refreshExerciseAssignments } from "../lib/exerciseAssignments";
 import { lessonFor } from "../content/lessons";
 import { notionsOf, subjectsAt } from "../curriculum";
 import { hasContent } from "../engine";
@@ -14,6 +17,17 @@ export default function Home({ studentId }: { studentId?: string }) {
   const state = useStore();
   const readOnly = !!studentId;
   const me = (studentId ? state.users.find((u) => u.id === studentId) : currentUser(state))!;
+  const viewer = currentUser(state);
+  const [assignmentError, setAssignmentError] = useState<string | null>(null);
+  useEffect(() => {
+    const owner = readOnly && viewer?.role === "parent" ? viewer : me;
+    if (!owner || (owner.role !== "parent" && owner.role !== "student")) return;
+    const role = owner.role;
+    const refresh = () => { void refreshExerciseAssignments(owner.id, role).then(setAssignmentError); };
+    refresh();
+    const timer = readOnly && owner.role === "parent" ? window.setInterval(refresh, 15_000) : undefined;
+    return () => { if (timer !== undefined) window.clearInterval(timer); };
+  }, [me.id, readOnly, viewer?.id]);
   const level = me.level ?? "tle";
   const mine = attemptsOf(state, me.id);
   const days = weekDays(mine);
@@ -28,6 +42,7 @@ export default function Home({ studentId }: { studentId?: string }) {
   const heroPct = hero ? notionPercent(mine, hero.id) : 0;
   const todo = nextActions(state, me.id, level, 3);
   const heroItems = hero ? Math.max(0, 6 - mine.filter((a) => a.notionId === hero.id && a.correct).length) : 0;
+  const assignments = state.exerciseAssignments.filter((assignment) => assignment.studentId === me.id).sort((a, b) => b.createdAt - a.createdAt);
 
   return (
     <main className="shell stack">
@@ -49,6 +64,26 @@ export default function Home({ studentId }: { studentId?: string }) {
           </div>
         ))}
       </div>
+
+      {(assignments.length > 0 || assignmentError) && (
+        <section className="card stack-sm" aria-labelledby="assigned-exercises">
+          <h2 id="assigned-exercises" className="row" style={{ fontSize: "1.1rem" }}><Target size={20} aria-hidden="true" /> Exercices proposés</h2>
+          {assignmentError && <p className="auth-error" role="alert">{assignmentError}</p>}
+          {assignments.map((assignment) => {
+            const to = `/serie/${encodeURIComponent(assignment.notionId)}?t=${encodeURIComponent(assignment.templateId)}&drill=1&n=10&assignment=${encodeURIComponent(assignment.id)}`;
+            return (
+              <Link key={assignment.id} to={to} className={`list-card${assignment.completedAt ? " assignment-done" : ""}`}>
+                <span className={`icon-tile ${assignment.completedAt ? "green" : "yellow"} sm`}><Target size={22} aria-hidden="true" /></span>
+                <div className="grow">
+                  <h3>{assignment.title}</h3>
+                  <p className="muted small">{assignment.completedAt ? "Série terminée" : "Série de 10 exercices à faire"} · {new Date(assignment.createdAt).toLocaleDateString("fr-FR")}</p>
+                </div>
+                <ChevronRight size={22} aria-hidden="true" />
+              </Link>
+            );
+          })}
+        </section>
+      )}
 
       {hero && (
         <>

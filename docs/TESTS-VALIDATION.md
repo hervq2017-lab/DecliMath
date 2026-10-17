@@ -14,12 +14,14 @@ Le build Vite émet les avertissements déjà constatés : usage de `eval` dans 
 
 - `scripts/test-children-api.ts` : un appel sans session demandant l’action historique `provision` reçoit désormais `401`.
 - `scripts/test-progress-sync.ts` : une ligne locale conservée pendant la fusion n’est pas incluse parmi les identifiants effectivement récupérés du serveur ; seules les lignes serveur peuvent être marquées connues.
+- `scripts/test-exercise-assignments.ts` : création locale d'un devoir, refus d'achèvement par un autre élève et achèvement idempotent de la série.
 
 ## Non exécutés intentionnellement
 
 - `npm run check:deploy`, `npm run e2e:prod` : ces scripts appellent le site public. Le cahier des charges interdit tout changement/déploiement de production sans validation explicite ; aucun test de production n’était nécessaire pour les corrections locales.
 - `npm run e2e:browser` : aucun parcours avec projet Supabase de test et comptes dédiés n’a été configuré.
 - SQL réel, migrations, RLS et opérations Auth : évalués sur les migrations versionnées et par des faux serveurs de test, pas sur une base distante.
+- La migration `20261017100000_exercise_assignments.sql` doit être appliquée au projet Supabase avant d'utiliser les devoirs assignés en ligne ; elle n'a pas été exécutée sur une base distante.
 - Tests fournisseur OCR/tuteur et paiement : aucun secret ni service de test n’a été utilisé.
 
 ## Suite de validation avant mise en ligne

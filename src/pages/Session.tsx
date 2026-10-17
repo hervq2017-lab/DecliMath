@@ -1,7 +1,8 @@
 import { Check, Heart, Lightbulb, Medal, RotateCw, Sparkles, Target, Trophy, X } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { AnswerInput } from "../components/AnswerInput";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { NotebookGate, useNotebook, WrittenCheck } from "../components/Notebook";
 import { ProgressBar, StreakChip } from "../components/ui";
 import { Answer, checkAnswer, parseNumeric } from "../content/core";
@@ -10,6 +11,7 @@ import { lessonFor } from "../content/lessons";
 import { levelById, notionById, serieOfNotion } from "../curriculum";
 import { buildChallenge, buildDrill, buildSession, Task, taskOf } from "../engine";
 import { dueLabel, recordAttempt } from "../lib/knowledge";
+import { completeExerciseAssignment, refreshExerciseAssignments } from "../lib/exerciseAssignments";
 import { playFeedback } from "../lib/sound";
 import { attemptsOf, notionTitle, SKILL_GOAL, SKILL_ROUND, skillProgress, streak } from "../lib/stats";
 import { canAccessNotion, canViewSolution, currentUser, modeFor, uid, update, useStore } from "../store";
@@ -40,12 +42,12 @@ function SessionInner() {
   const nav = useNavigate();
   const isChallenge = id === "defi";
   const notion = isChallenge ? null : notionById(id);
-  const drillId = params.get("drill") ? params.get("t") : null; // série de 10 sur une seule compétence
+  const drillId = params.has("assignment") ? params.get("t") : params.get("drill") ? params.get("t") : null; // série de 10 sur une seule compétence
 
   const tasks: Task[] = useMemo(() => {
     const mine = attemptsOf(state, me.id);
     if (isChallenge) return buildChallenge(mine, "maths", me.level ?? "tle");
-    if (drillId) return buildDrill(drillId, Number(params.get("n")) || SKILL_ROUND);
+    if (drillId) return buildDrill(drillId, params.has("assignment") ? SKILL_ROUND : Number(params.get("n")) || SKILL_ROUND);
     const t = params.get("t"), c = params.get("c");
     return buildSession(mine, id, t && c ? { templateId: t, ctx: c } : undefined);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -59,8 +61,26 @@ function SessionInner() {
   const [results, setResults] = useState<Result[]>([]);
   const [lastAttempt, setLastAttempt] = useState<string | null>(null);
   const [written, setWritten] = useState(false);
+  const [assignmentSyncError, setAssignmentSyncError] = useState<string | null>(null);
+  const completionStarted = useRef(false);
   const busy = useRef(false); // évite la double soumission (Entrée répétée, double clic)
   const nb = useNotebook();
+  const assignmentId = params.get("assignment");
+
+  useEffect(() => {
+    if (assignmentId) void refreshExerciseAssignments(me.id, "student").then(setAssignmentSyncError);
+  }, [assignmentId, me.id]);
+  useEffect(() => {
+    if (phase !== "done" || !assignmentId || completionStarted.current) return;
+    if (!state.exerciseAssignments.some((assignment) =>
+      assignment.id === assignmentId
+      && assignment.studentId === me.id
+      && assignment.templateId === drillId
+      && assignment.notionId === id
+    )) return;
+    completionStarted.current = true;
+    void completeExerciseAssignment(assignmentId, me.id).then(setAssignmentSyncError);
+  }, [assignmentId, me.id, phase, state.exerciseAssignments]);
 
   if (!tasks.length || (!isChallenge && (!notion || !canAccessNotion(me, notion)))) return <Navigate to="/exercices" replace />;
   if (!nb.ready) return <NotebookGate onReady={nb.confirm} back={() => nav(-1)} />;
@@ -151,6 +171,11 @@ function SessionInner() {
         <main className="shell no-nav stack center" style={{ paddingTop: 48 }}>
           <div className="hero-mark" style={{ margin: "0 auto" }}>{sk?.mastered ? <Target size={64} aria-hidden="true" /> : <Trophy size={64} aria-hidden="true" />}</div>
           <h1>{sk?.mastered ? "Compétence maîtrisée !" : "Série terminée !"}</h1>
+          {assignmentId && <p className="lead">{assignmentSyncError ?? "Exercice assigné terminé."}</p>}
+          <ExerciseActions
+            title={`${tpl.skill ?? tNotion.title} — série de ${tasks.length} exercices`}
+            url={`/serie/${encodeURIComponent(id)}?t=${encodeURIComponent(tpl.id)}&drill=1&n=${tasks.length}${assignmentId ? `&assignment=${encodeURIComponent(assignmentId)}` : ""}`}
+          />
           <p className="lead">{good} bonne{good > 1 ? "s" : ""} réponse{good > 1 ? "s" : ""} • +{pts} pts d'effort</p>
           <section className="card stack" style={{ background: "#fff", borderColor: "#fff", textAlign: "left" }}>
             <div className="stats3">
@@ -219,11 +244,17 @@ function SessionInner() {
         <p className="eyebrow">{subjectLabel(tNotion.subject)} · {levelById(tNotion.level).label}{serieOfNotion(tNotion) ?? (tNotion.level === me.level ? me.serie : undefined) ? ` · série ${serieOfNotion(tNotion) ?? me.serie}` : ""}</p>
         <p className="eyebrow">Exercice {i + 1} sur {tasks.length} — {drillId ? (tpl.skill ?? tNotion.title) : tNotion.title}</p>
         <p className="statement">{inst.statement}</p>
+        <div className="exercise-print-answer" aria-hidden="true" />
         <div className="row" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <span className="pill">{tpl.contexts.find((c) => c.id === t.ctx)?.label}</span>
           {t.ctx === "pur" && <span className="pill yellow">Application directe</span>}
         </div>
       </section>
+      <ExerciseActions
+        title={`${tpl.skill ?? tNotion.title} — exercice ${i + 1}`}
+        url={`/serie/${encodeURIComponent(id)}?t=${encodeURIComponent(tpl.id)}&drill=1&n=${SKILL_ROUND}${assignmentId ? `&assignment=${encodeURIComponent(assignmentId)}` : ""}`}
+      />
+      {assignmentSyncError && <p className="auth-error" role="alert">{assignmentSyncError}</p>}
 
       {!answered && (
         <>

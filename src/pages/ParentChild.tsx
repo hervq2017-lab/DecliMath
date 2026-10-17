@@ -10,8 +10,10 @@ import { acceptedStudentsOf, currentUser, DEFAULT_PREFS, useStore } from "../sto
 import Catalogue from "./Catalogue";
 import Home from "./Home";
 import Progress from "./Progress";
+import NotionPage from "./NotionPage";
+import Philosophie from "./Philosophie";
 
-type Tab = "accueil" | "exercices" | "progres" | "reponses" | "sujets" | "profil";
+type Tab = "accueil" | "exercices" | "exercise" | "philosophie" | "progres" | "reponses" | "sujets" | "profil";
 
 /** Le parent voit exactement les écrans de son enfant, en lecture seule. */
 export default function ParentChild({ tab }: { tab: Tab }) {
@@ -32,6 +34,8 @@ export default function ParentChild({ tab }: { tab: Tab }) {
       <TopBar name={me.name} sub={`Vous consultez l'espace de ${child.name}, en lecture seule.`} />
       {tab === "accueil" && <Home studentId={id} />}
       {tab === "exercices" && <Catalogue studentId={id} />}
+      {tab === "exercise" && <NotionPage studentId={id} />}
+      {tab === "philosophie" && <Philosophie studentId={id} />}
       {tab === "progres" && <Progress studentId={id} />}
       {tab === "reponses" && <ChildAnswers id={id} />}
       {tab === "sujets" && <ChildPapers id={id} />}

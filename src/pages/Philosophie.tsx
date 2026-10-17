@@ -1,6 +1,7 @@
-import { BookOpen, CheckCircle2, Lightbulb, Printer, Scale } from "lucide-react";
+import { BookOpen, CheckCircle2, Lightbulb, Scale } from "lucide-react";
 import { useState } from "react";
 import { BackButton } from "../components/ui";
+import { ExerciseActions } from "../components/ExerciseActions";
 import {
   PHILOSOPHIE_CITATIONS,
   PHILOSOPHIE_EXERCISE_TYPES,
@@ -33,9 +34,10 @@ const LEVEL_EXPECTATIONS: Record<PhilosophieLevel, Record<PhilosophieExerciseTyp
   },
 };
 
-export default function Philosophie() {
+export default function Philosophie({ studentId }: { studentId?: string } = {}) {
   const state = useStore();
-  const me = currentUser(state);
+  const viewer = currentUser(state);
+  const me = studentId ? state.users.find((user) => user.id === studentId) : viewer;
   const [level, setLevel] = useState<PhilosophieLevel>(
     PHILOSOPHIE_LEVELS.some((item) => item.id === me?.level) ? me!.level as PhilosophieLevel : "2nde",
   );
@@ -51,7 +53,7 @@ export default function Philosophie() {
   return (
     <main className="shell wide stack philosophy-page">
       <div className="no-print row" style={{ gap: 12 }}>
-        <BackButton to="/exercices" label="Retour aux exercices" />
+        <BackButton to={studentId ? `/enfant/${studentId}/exercices` : "/exercices"} label="Retour aux exercices" />
         <div>
           <p className="eyebrow"><BookOpen size={16} aria-hidden="true" /> Parcours de philosophie</p>
           <h1>Penser les citations, construire sa réflexion</h1>
@@ -83,9 +85,7 @@ export default function Philosophie() {
             <input type="checkbox" checked={includeGuide} onChange={(event) => setIncludeGuide(event.target.checked)} />
             Ajouter les pistes de correction à l’impression
           </label>
-          <button type="button" className="btn primary" onClick={() => window.print()}>
-            <Printer size={18} aria-hidden="true" /> Imprimer {exerciseType === "all" ? "le dossier complet" : "les exercices"}
-          </button>
+          <ExerciseActions title={`Philosophie — ${PHILOSOPHIE_LEVELS.find((item) => item.id === level)?.label}`} url="/philosophie" />
         </div>
       </section>
 

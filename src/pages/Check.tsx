@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { AnswerInput } from "../components/AnswerInput";
 import { NotebookGate, useNotebook } from "../components/Notebook";
+import { ExerciseActions } from "../components/ExerciseActions";
 import { BackButton } from "../components/ui";
 import { checkAnswer } from "../content/core";
 import { notionById } from "../curriculum";
@@ -56,10 +57,12 @@ export default function Check() {
     <main className="shell no-nav stack">
       <div className="topline"><BackButton to={back} /><h1 style={{ fontSize: "1.4rem" }}>Ai-je compris ?</h1></div>
       <p className="muted">Fais tes calculs sur ton cahier. 4 questions sans aide, dans 2 situations différentes. Sans note, sans pression.</p>
+      <ExerciseActions title={`Contrôle de compréhension — ${notion.title}`} url={`/controle/${encodeURIComponent(id)}`} />
       {prepared.map((p, i) => (
         <section key={i} className="card stack">
           <span className="pill" style={{ alignSelf: "flex-start" }}>{p.tpl.contexts.find((c) => c.id === tasks[i].ctx)?.label}</span>
           <p className="statement">{p.inst.statement}</p>
+          <div className="exercise-print-answer" aria-hidden="true" />
           <AnswerInput answer={p.inst.answer} value={answers[i] ?? ""} name={`c${i}`} onChange={(v) => setAnswers((a) => { const n = [...a]; n[i] = v; return n; })} />
         </section>
       ))}
